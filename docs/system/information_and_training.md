@@ -1,6 +1,6 @@
 
 
-*** 📝 Nội dung các file quan trọng ***
+# 📝 Nội dung các file quan trọng 
 
 Welcome to Dev-Storm!
 
@@ -11,7 +11,7 @@ Welcome to Dev-Storm!
 ## IDE: VS Code (khuyến nghị), WebStorm hoặc editor bất kỳ mà bạn quen dùng.
 - Công cụ bắt buộc:
 - Node.js 20.9+
-- npm 10+ (hoặc pnpm/yarn tùy team)
+- npm 10+ (hoặc pnpm/yarn)
 - Git 2.30+
 
 
@@ -207,10 +207,12 @@ npm run dev -- -p 3001
 
 🧪 Scripts hữu ích khác
 ```bash
-npm run dev      # Chạy môi trường phát triển
+npm run dev      # Development server (port 3000)
 npm run build    # Build production
-npm run start    # Chạy build production
-npm run lint     # Chạy ESLint
+npm run start    # Run production build
+npm run lint     # Run ESLint
+npm run setup    # Setup project lần đầu
+npm run clean    # Xóa node_modules + build files
 ```
 
 ## 🤝 Quy ước phát triển
