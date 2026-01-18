@@ -7,7 +7,6 @@ const itemsToDelete = [
   'node_modules',
   '.next',
   'package-lock.json',
-  '.env.local',
 ];
 
 itemsToDelete.forEach(item =>{

@@ -4,8 +4,6 @@ Frontend ứng dụng **Authentication / Dashboard** xây bằng **Next.js + Rea
 
 ---
 
----
-
 ## Quick Start
 
 # Clone project
@@ -22,8 +20,7 @@ npm run setup
 npm run dev
 ```
 
-Mở trình duyệt tại:
-http://localhost:3000
+- Mở trình duyệt tại: http://localhost:3000
 
 ---
 
@@ -52,20 +49,6 @@ Chi tiết xem trong folder docs/:
 - Profile Management
 - Role-based Access Control
 
-## Scripts
-```bash
-npm run dev      # Development server (port 3000)
-npm run build    # Build production
-npm run start    # Run production build
-npm run lint     # Run ESLint
-npm run setup    # Setup project lần đầu
-npm run clean    # Xóa node_modules + build files
-```
-
-## Requirements
-- Node.js 20.9+
-- npm 10+
-- Backend Spring Boot đang chạy tại http://localhost:8080
 
 
 
