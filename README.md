@@ -6,16 +6,16 @@ Frontend ứng dụng **Authentication / Dashboard** xây bằng **Next.js + Rea
 
 ## Quick Start
 
-# Clone project
+### Clone project
 ```bash
 git clone https://github.com/Shinx99/OneClick-authService-fe.git
 cd OneClick-authService-fe
 ```
-# Setup tự động (cài dependencies + tạo .env.local)
+### Setup tự động (cài dependencies + tạo .env.local)
 ```bash
 npm run setup
 ```
-# Chạy development server
+### Chạy development server
 ```bash
 npm run dev
 ```
