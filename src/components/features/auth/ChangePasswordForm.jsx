@@ -1,22 +1,12 @@
 "use client";
-
-import { useState } from "react";
+import { FaLock, FaKey, FaCheckCircle } from "react-icons/fa";
+import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 
 export default function ChangePasswordForm() {
-  const [showPasswords, setShowPasswords] = useState({
-    current: false,
-    new: false,
-    confirm: false,
-  });
-
-  const toggleVisibility = (field) => {
-    setShowPasswords((prev) => ({ ...prev, [field]: !prev[field] }));
-  };
-
   return (
     <div className="max-w-md mx-auto p-8 bg-white rounded-[40px] shadow-sm border border-gray-50 text-center">
-      {/* Icon Header */}
+      {/* Icon Header Gốc */}
       <div className="flex justify-center mb-6">
         <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center">
           <svg
@@ -42,78 +32,52 @@ export default function ChangePasswordForm() {
         Vui lòng nhập mật khẩu hiện tại và mật khẩu mới của bạn bên dưới.
       </p>
 
-      <form className="space-y-6 text-left">
-        {/* Mật khẩu hiện tại */}
+      <form className="space-y-4 text-left">
+        {/* Dùng thẳng type="password", trình duyệt sẽ tự lo phần hiển thị con mắt */}
+
         <div>
-          <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-            <span className="text-green-600">🔑</span> Mật khẩu hiện tại
+          <label className="block text-sm font-semibold text-slate-700 mb-2 ml-1">
+            Mật khẩu hiện tại
           </label>
-          <div className="relative">
-            <input
-              type={showPasswords.current ? "text" : "password"}
-              placeholder="Nhập mật khẩu hiện tại"
-              className="w-full bg-gray-50 border-none rounded-2xl py-4 px-4 pr-12 focus:ring-2 focus:ring-green-500 outline-none transition-all"
-            />
-            <button
-              type="button"
-              onClick={() => toggleVisibility("current")}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
-            >
-              {showPasswords.current ? "👁️" : "👁️‍🗨️"}
-            </button>
-          </div>
+          <Input
+            icon={<FaKey />}
+            type="password"
+            placeholder="Nhập mật khẩu hiện tại"
+            name="currentPassword"
+          />
         </div>
 
-        {/* Mật khẩu mới */}
         <div>
-          <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-            <span className="text-green-600">🔒</span> Mật khẩu mới
+          <label className="block text-sm font-semibold text-slate-700 mb-2 ml-1">
+            Mật khẩu mới
           </label>
-          <div className="relative">
-            <input
-              type={showPasswords.new ? "text" : "password"}
-              placeholder="Nhập mật khẩu mới (tối thiểu 8 ký tự)"
-              className="w-full bg-gray-50 border-none rounded-2xl py-4 px-4 pr-12 focus:ring-2 focus:ring-green-500 outline-none transition-all"
-            />
-            <button
-              type="button"
-              onClick={() => toggleVisibility("new")}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
-            >
-              {showPasswords.new ? "👁️" : "👁️‍🗨️"}
-            </button>
-          </div>
+          <Input
+            icon={<FaLock />}
+            type="password"
+            placeholder="Nhập mật khẩu mới (tối thiểu 8 ký tự)"
+            name="newPassword"
+          />
         </div>
 
-        {/* Xác nhận mật khẩu */}
         <div>
-          <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-            <span className="text-green-600">✅</span> Xác nhận mật khẩu mới
+          <label className="block text-sm font-semibold text-slate-700 mb-2 ml-1">
+            Xác nhận mật khẩu
           </label>
-          <div className="relative">
-            <input
-              type={showPasswords.confirm ? "text" : "password"}
-              placeholder="Nhập lại mật khẩu mới"
-              className="w-full bg-gray-50 border-none rounded-2xl py-4 px-4 pr-12 focus:ring-2 focus:ring-green-500 outline-none transition-all"
-            />
-            <button
-              type="button"
-              onClick={() => toggleVisibility("confirm")}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
-            >
-              {showPasswords.confirm ? "👁️" : "👁️‍🗨️"}
-            </button>
-          </div>
+          <Input
+            icon={<FaCheckCircle />}
+            type="password"
+            placeholder="Nhập lại mật khẩu mới"
+            name="confirmPassword"
+          />
         </div>
 
-        {/* Nút bấm */}
-        <div className="pt-4">
+        <div className="pt-2">
           <Button className="w-full bg-[#288a24] hover:bg-[#1e6b1b] text-white py-4 rounded-2xl font-bold shadow-lg shadow-green-100 transition-all">
             Cập nhật mật khẩu
           </Button>
           <button
             type="button"
-            className="w-full mt-6 text-sky-400 text-sm font-medium hover:underline"
+            className="w-full mt-6 text-sky-400 text-sm font-medium hover:underline cursor-pointer transition-all"
           >
             Hủy bỏ
           </button>
