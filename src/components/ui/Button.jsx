@@ -7,8 +7,7 @@ const Button = ({
   disabled,
   ...props
 }) => {
-  // Thêm 'cursor-pointer' cho trạng thái bình thường
-  // Thêm 'disabled:cursor-not-allowed' và bỏ các hiệu ứng hover khi nút bị disable
+  // Giữ nguyên phần baseStyle
   const baseStyle = `
     w-full py-3 rounded-full font-bold text-sm transition-all duration-300 ease-in-out 
     flex items-center justify-center gap-2 active:scale-95 
@@ -16,10 +15,12 @@ const Button = ({
   `;
 
   const variants = {
-    // Thêm 'disabled:hover:...' để khi disable thì không bị nảy lên hay đổi màu nữa
+    // [ĐÃ SỬA] Đổi từ bg-black sang bg-green-600, hover sang màu xanh đậm hơn (green-700)
+    // Tôi cũng đổi bóng (shadow) sang màu xanh mờ (shadow-green-600/30) để tạo hiệu ứng phát sáng đẹp mắt!
     primary:
-      "bg-black text-white hover:bg-[#222222] hover:-translate-y-1 hover:shadow-lg hover:shadow-gray-500/30 disabled:hover:translate-y-0 disabled:hover:shadow-none disabled:hover:bg-black",
+      "bg-green-600 text-white hover:bg-green-700 hover:-translate-y-1 hover:shadow-lg hover:shadow-green-600/30 disabled:hover:translate-y-0 disabled:hover:shadow-none disabled:hover:bg-green-600",
 
+    // Nút social giữ nguyên màu trắng viền xám để làm nền, làm nổi bật nút Primary lên
     social:
       "bg-white text-black border border-gray-200 hover:border-gray-400 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md disabled:hover:translate-y-0 disabled:hover:shadow-none disabled:hover:bg-white disabled:hover:border-gray-200",
   };
