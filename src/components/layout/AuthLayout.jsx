@@ -1,4 +1,4 @@
-"use client"; // Chứa state và animation nên phải là client component
+"use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
@@ -58,9 +58,9 @@ const AuthLayout = ({ loginForm, registerForm, initialIsRegister = false }) => {
 
         {/* --- LỚP PHỦ ẢNH TRƯỢT (OVERLAY) --- */}
         <div
-          className={`hidden md:block absolute top-0 left-0 w-1/2 h-full z-50 overflow-hidden transition-transform duration-700 ease-in-out
-            ${isRegister ? "translate-x-0" : "translate-x-full"}
-          `}
+          className={`hidden md:block absolute top-0 left-0 w-1/2 h-full z-50 overflow-hidden transition-all duration-700 ease-in-out
+    ${isRegister ? "translate-x-0 rounded-r-[50px]" : "translate-x-full rounded-l-[50px]"}
+  `}
         >
           <div className="absolute inset-0 bg-black/20 z-10"></div>
 

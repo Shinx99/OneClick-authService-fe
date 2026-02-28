@@ -1,66 +1,28 @@
 "use client";
 import React from "react";
-import Link from "next/link";
-// Import thêm các icon cần thiết
-import {
-  FaUser,
-  FaLock,
-  FaGoogle,
-  FaFacebookF,
-  FaEnvelope,
-  FaPhone,
-  FaIdCard,
-} from "react-icons/fa";
+import { FaUser, FaLock, FaFacebook, FaIdCard } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 
 const RegisterForm = () => {
   return (
-    <div className="w-full max-w-[400px] mx-auto">
-      <h2 className="text-3xl font-black text-center mb-6 uppercase tracking-wide text-black">
-        REGISTER
+    <div className="w-full max-w-[380px] mx-auto">
+      {/* 1. Kéo Tiêu đề gần lại form: Giảm từ mb-10 -> mb-6 */}
+      <h2 className="text-3xl font-bold text-center mb-6 text-slate-800">
+        Create account
       </h2>
 
-      <form className="mb-6">
-        {/* 1. Họ và tên */}
-        <Input
-          icon={<FaIdCard />}
-          placeholder="Full Name (Họ và tên)"
-          name="fullName"
-        />
-
-        {/* 2. Tên đăng nhập (hoặc có thể bỏ nếu hệ thống chỉ dùng Email để login) */}
-        <Input
-          icon={<FaUser />}
-          placeholder="User-name (Tên đăng nhập)"
-          name="username"
-        />
-
-        {/* 3. Email */}
-        {/* <Input
-          icon={<FaEnvelope />}
-          placeholder="Email address"
-          type="email"
-          name="email"
-        /> */}
-
-        {/* 4. Số điện thoại
-        <Input
-          icon={<FaPhone />}
-          placeholder="Phone Number"
-          type="tel"
-          name="phone"
-        /> */}
-
-        {/* 5. Mật khẩu */}
+      <form>
+        {/* Các Input tự động có sẵn margin chuẩn từ component */}
+        <Input icon={<FaIdCard />} placeholder="Full Name" name="fullName" />
+        <Input icon={<FaUser />} placeholder="Username" name="username" />
         <Input
           icon={<FaLock />}
           placeholder="Password"
           type="password"
           name="password"
         />
-
-        {/* 6. Xác nhận mật khẩu */}
         <Input
           icon={<FaLock />}
           placeholder="Confirm Password"
@@ -68,17 +30,17 @@ const RegisterForm = () => {
           name="confirmPassword"
         />
 
-        {/* 7. Checkbox Điều khoản & Chính sách */}
-        <div className="flex items-start gap-2 mt-2 mb-6 px-1">
+        {/* 2. Ép Checkbox sát vào Input trên và Nút dưới: Giảm từ mt-2/mb-6 -> mt-0/mb-5 */}
+        <div className="flex items-start gap-2 mt-0 mb-5 px-1">
           <input
             type="checkbox"
             id="terms"
-            className="mt-1 w-4 h-4 text-black bg-gray-100 border-gray-300 rounded focus:ring-black cursor-pointer"
+            className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2 cursor-pointer transition-all"
             required
           />
           <label
             htmlFor="terms"
-            className="text-xs text-gray-600 cursor-pointer leading-tight"
+            className="text-xs text-gray-600 cursor-pointer leading-tight mt-[1px]"
           >
             I agree to the{" "}
             <span className="text-[#0056b3] font-semibold hover:underline">
@@ -92,43 +54,40 @@ const RegisterForm = () => {
           </label>
         </div>
 
-        {/* Nút Đăng ký */}
-        <Button variant="primary" className="w-[180px] mx-auto block">
+        {/* 3. Nút đăng ký: Bỏ margin thừa, giữ khối gọn gàng */}
+        <Button
+          variant="primary"
+          className="w-[180px] mx-auto bg-green-600 hover:bg-green-700 hover:shadow-green-600/30"
+        >
           Create Account
         </Button>
+
+        {/* 4. Thanh chia cắt (Divider): Dùng my-5 (cách đều trên dưới 20px) thay vì lộn xộn mt-4/mb-6 */}
+        <div className="flex items-center gap-3 my-5">
+          <div className="h-[1px] bg-gray-200 flex-1"></div>
+          <span className="text-sm text-gray-500 font-bold px-2">
+            Or register with social platforms
+          </span>
+          <div className="h-[1px] bg-gray-200 flex-1"></div>
+        </div>
+
+        {/* 5. Ép nhẹ 2 nút Social gần nhau hơn một xíu: Dùng space-y-2.5 (10px) thay vì 3 (12px) */}
+        <div className="space-y-2.5">
+          <Button variant="social">
+            <FcGoogle className="text-[22px]" />
+            <span className="text-sm font-semibold text-gray-700">
+              Register with Google
+            </span>
+          </Button>
+
+          <Button variant="social">
+            <FaFacebook className="text-[#1877F2] text-[22px]" />
+            <span className="text-sm font-semibold text-gray-700">
+              Register with Facebook
+            </span>
+          </Button>
+        </div>
       </form>
-
-      {/* Divider */}
-      <div className="flex items-center gap-3 mb-6">
-        <div className="h-[1px] bg-gray-200 flex-1"></div>
-        <span className="text-sm text-gray-500 font-bold px-2">
-          Or register with
-        </span>
-        <div className="h-[1px] bg-gray-200 flex-1"></div>
-      </div>
-
-      {/* Nút đăng nhập mạng xã hội */}
-      <div className="flex gap-4 mb-6">
-        <Button variant="social" className="w-1/2 !py-2.5">
-          <FaGoogle className="text-[#EA4335] text-xl" />{" "}
-          <span className="text-xs font-bold">Google</span>
-        </Button>
-        <Button variant="social" className="w-1/2 !py-2.5">
-          <FaFacebookF className="text-[#1877F2] text-xl" />{" "}
-          <span className="text-xs font-bold">Facebook</span>
-        </Button>
-      </div>
-
-      {/* Link quay lại trang Login */}
-      <div className="text-center mt-2">
-        <span className="text-sm text-gray-600">Already have an account? </span>
-        <Link
-          href="/login"
-          className="text-sm text-[#0056b3] font-bold hover:underline transition-all"
-        >
-          Sign in
-        </Link>
-      </div>
     </div>
   );
 };
