@@ -10,7 +10,7 @@ const RegisterForm = () => {
     <div className="w-full max-w-[380px] mx-auto">
       {/* 1. Kéo Tiêu đề gần lại form: Giảm từ mb-10 -> mb-6 */}
       <h2 className="text-3xl font-bold text-center mb-6 text-slate-800">
-        Create account
+        Đăng ký tài khoản
       </h2>
 
       <form>
@@ -19,13 +19,13 @@ const RegisterForm = () => {
         <Input icon={<FaUser />} placeholder="Username" name="username" />
         <Input
           icon={<FaLock />}
-          placeholder="Password"
+          placeholder="Mật khẩu"
           type="password"
           name="password"
         />
         <Input
           icon={<FaLock />}
-          placeholder="Confirm Password"
+          placeholder="Xác nhận mật khẩu"
           type="password"
           name="confirmPassword"
         />
@@ -42,13 +42,13 @@ const RegisterForm = () => {
             htmlFor="terms"
             className="text-xs text-gray-600 cursor-pointer leading-tight mt-[1px]"
           >
-            I agree to the{" "}
+            Tôi đã đọc và đồng ý với{" "}
             <span className="text-[#0056b3] font-semibold hover:underline">
-              Terms of Service
+              Điều khoản dịch vụ
             </span>{" "}
-            and{" "}
+            và{" "}
             <span className="text-[#0056b3] font-semibold hover:underline">
-              Privacy Policy
+              Chính sách bảo mật
             </span>
             .
           </label>
@@ -59,14 +59,14 @@ const RegisterForm = () => {
           variant="primary"
           className="w-[180px] mx-auto bg-green-600 hover:bg-green-700 hover:shadow-green-600/30"
         >
-          Create Account
+          Đăng ký tài khoản
         </Button>
 
         {/* 4. Thanh chia cắt (Divider): Dùng my-5 (cách đều trên dưới 20px) thay vì lộn xộn mt-4/mb-6 */}
         <div className="flex items-center gap-3 my-5">
           <div className="h-[1px] bg-gray-200 flex-1"></div>
           <span className="text-sm text-gray-500 font-bold px-2">
-            Or register with social platforms
+            Hoặc đăng ký với
           </span>
           <div className="h-[1px] bg-gray-200 flex-1"></div>
         </div>
@@ -75,15 +75,13 @@ const RegisterForm = () => {
         <div className="space-y-2.5">
           <Button variant="social">
             <FcGoogle className="text-[22px]" />
-            <span className="text-sm font-semibold text-gray-700">
-              Register with Google
-            </span>
+            <span className="text-sm font-semibold text-gray-700">Google</span>
           </Button>
 
           <Button variant="social">
             <FaFacebook className="text-[#1877F2] text-[22px]" />
             <span className="text-sm font-semibold text-gray-700">
-              Register with Facebook
+              Facebook
             </span>
           </Button>
         </div>
