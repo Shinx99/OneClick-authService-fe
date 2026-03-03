@@ -14,6 +14,7 @@
     "@hookform/resolvers": "^5.2.2",
     "axios": "^1.13.4",
     "next": "16.1.2",
+    "next-themes": "^0.4.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-icons": "^5.5.0",
