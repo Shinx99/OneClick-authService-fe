@@ -15,8 +15,8 @@ const RegisterForm = () => {
 
       <form>
         {/* Các Input tự động có sẵn margin chuẩn từ component */}
-        <Input icon={<FaIdCard />} placeholder="Full Name" name="fullName" />
-        <Input icon={<FaUser />} placeholder="Username" name="username" />
+        <Input icon={<FaIdCard />} placeholder="Họ và tên" name="fullName" />
+        <Input icon={<FaUser />} placeholder="Email" name="username" />
         <Input
           icon={<FaLock />}
           placeholder="Mật khẩu"

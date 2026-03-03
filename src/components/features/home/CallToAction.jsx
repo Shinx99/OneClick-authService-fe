@@ -2,33 +2,21 @@ import React from "react";
 
 const CallToAction = () => {
   return (
-    /* py-8: Giảm khoảng cách bên ngoài của toàn bộ Section */
-    <section className="py-5 px-4">
-      {/* - max-w-5xl: Thu hẹp chiều rộng một chút để cân đối với chiều cao mới.
-         - py-10 md:py-12: Đây là chìa khóa để chỉnh CHIỀU CAO NHỎ LẠI. 
-         - rounded-[30px]: Bo góc nhỏ hơn một chút cho hợp với kích thước mới.
-      */}
-      <div className="max-w-7xl mx-auto bg-[#00c853] rounded-[30px] py-5 md:py-3 text-center text-white shadow-xl shadow-green-100/50 relative overflow-hidden">
-        {/* Trang trí vòng tròn mờ phía sau - cũng thu nhỏ lại */}
+    <section className=" bg-white dark:bg-[#121212] transition-colors">
+      <div className="max-w-9xl mx-auto bg-green-600 rounded-[30px] py-5 md:py-3 text-center text-white shadow-xl shadow-green-100/50 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
 
         <div className="relative z-10">
-          {/* Giảm cỡ chữ tiêu đề và margin-bottom */}
-          <h2 className="text-xl md:text-2xl font-extrabold mb-3 leading-tight uppercase tracking-tight">
+          <h2 className="text-xl md:text-2xl font-bold mb-3 leading-tight uppercase tracking-tight">
             Sẵn sàng để bắt đầu hành trình mới?
           </h2>
 
-          {/* Giảm cỡ chữ mô tả và thu hẹp mb-8 */}
           <p className="text-sm md:text-base opacity-90 mb-8 max-w-lg mx-auto font-medium leading-relaxed">
             Tham gia cùng hơn 100,000 ứng viên đã tìm thấy công việc mơ ước qua
             One-Click.
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-3">
-            {/* CHỈNH BUTTON NHỎ LẠI:
-               - px-6 py-2.5: Giảm padding của nút.
-               - text-sm: Giảm cỡ chữ nút.
-            */}
             <button className="bg-white text-[#00c853] px-6 py-2.5 rounded-full font-bold text-sm hover:bg-gray-50 transition-all cursor-pointer shadow-md active:scale-95">
               Đăng ký ứng tuyển ngay
             </button>

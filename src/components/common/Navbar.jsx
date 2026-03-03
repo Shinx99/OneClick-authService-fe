@@ -1,16 +1,17 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-console.log("Navbar component rendered");
+import { FaSun, FaMoon } from "react-icons/fa";
+import { fa } from "zod/v4/locales";
+
 const Header = () => {
-  // Danh sách các mục menu để dễ quản lý và render
   const navLinks = [
     { name: "Việc làm", href: "/jobs" },
     { name: "Công ty", href: "/companies" },
     { name: "Hồ sơ", href: "/profile" },
     { name: "Thông báo", href: "/notifications" },
   ];
-
+  // const seasion = true;
   return (
     <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,7 +22,6 @@ const Header = () => {
             className="flex items-center gap-2 cursor-pointer group"
           >
             <div className="w-9 h-9 bg-[#e8f5e9] rounded-full flex items-center justify-center transition-transform group-hover:scale-110">
-              {/* Icon lá cây đặc trưng của One-Click */}
               <svg
                 className="w-6 h-6 text-[#00c853]"
                 fill="currentColor"
@@ -51,18 +51,26 @@ const Header = () => {
           </nav>
 
           {/* 3. KHỐI ACTION BUTTONS (Phải) */}
+
           <div className="flex items-center gap-4">
+            {/* {seasion ? (
+              <button className="px-6 py-2.5 text-[#0091ff] font-bold border border-[#e3f2fd] rounded-full hover:bg-[#f5faff] transition-all text-sm flex items-center justify-center">
+                Đăng xuất
+              </button>
+            ) : (
+              <Link
+                href="/login"
+                className="px-6 py-2.5 text-[#0091ff] font-bold border border-[#e3f2fd] rounded-full hover:bg-[#f5faff] transition-all text-sm flex items-center justify-center"
+              >
+                Đăng nhập
+              </Link>
+            )} */}
+
             <Link
               href="/login"
               className="px-6 py-2.5 text-[#0091ff] font-bold border border-[#e3f2fd] rounded-full hover:bg-[#f5faff] transition-all text-sm flex items-center justify-center"
             >
               Đăng nhập
-            </Link>
-            <Link
-              href="/register"
-              className="px-6 py-2.5 bg-[#00e676] text-white font-bold rounded-full hover:bg-[#00c853] transition-all shadow-md shadow-green-100 cursor-pointer text-sm"
-            >
-              Đăng ký
             </Link>
           </div>
         </div>

@@ -73,8 +73,8 @@ const JobForYou = () => {
   ];
 
   return (
-    <section className="py-12 bg-[#f4f7f6]">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className="py-0">
+      <div className="max-w-8xl mx-auto px-">
         {/* Tiêu đề phần */}
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-bold text-gray-800 border-l-4 border-green-500 pl-4">
