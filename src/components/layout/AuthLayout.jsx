@@ -58,7 +58,7 @@ const AuthLayout = ({ loginForm, registerForm, initialIsRegister = false }) => {
 
         {/* --- LỚP PHỦ ẢNH TRƯỢT (OVERLAY) --- */}
         <div
-          className={`hidden md:block absolute top-0 left-0 w-1/2 h-full z-50 overflow-hidden transition-all duration-700 ease-in-out
+          className={`hidden md:block absolute top-0 left-0 w-1/2 h-full z-30 overflow-hidden transition-all duration-700 ease-in-out
     ${isRegister ? "translate-x-0 rounded-r-[50px]" : "translate-x-full rounded-l-[50px]"}
   `}
         >
@@ -78,16 +78,16 @@ const AuthLayout = ({ loginForm, registerForm, initialIsRegister = false }) => {
               className={`transition-all duration-700 absolute flex flex-col items-center ${isRegister ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"}`}
             >
               <h2 className="text-4xl font-black mb-4 uppercase">
-                Welcome Back!
+                Chào mừng trở lại!
               </h2>
               <p className="mb-8 text-sm font-medium opacity-90">
                 Để tiếp tục kết nối với mạng lưới công việc, vui lòng đăng nhập.
               </p>
               <button
                 onClick={toggleMode}
-                className="border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-black transition-colors"
+                className="border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-black transition-colors cursor-pointer"
               >
-                Sign In
+                Đăng nhập
               </button>
             </div>
 
@@ -96,16 +96,16 @@ const AuthLayout = ({ loginForm, registerForm, initialIsRegister = false }) => {
               className={`transition-all duration-700 absolute flex flex-col items-center ${isRegister ? "opacity-0 translate-y-10 pointer-events-none" : "opacity-100 translate-y-0"}`}
             >
               <h2 className="text-4xl font-black mb-4 uppercase">
-                Hello, Friend!
+                Chào mừng bạn!
               </h2>
               <p className="mb-8 text-sm font-medium opacity-90">
                 Tạo tài khoản ngay để bắt đầu hành trình sự nghiệp của bạn.
               </p>
               <button
                 onClick={toggleMode}
-                className="border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-black transition-colors"
+                className="border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-black transition-colors cursor-pointer"
               >
-                Create Account
+                Tạo tài khoản
               </button>
             </div>
           </div>
