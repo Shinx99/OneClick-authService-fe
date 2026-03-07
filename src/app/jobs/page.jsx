@@ -1,6 +1,6 @@
 import React from "react";
 import JobForYou from "@/components/features/home/JobForYou";
-import JobFilter from "@/components/jobs/JobFilter";
+import JobFilter from "@/components/features/jobs/JobFilter";
 
 const JobsPage = () => {
   return (
