@@ -1,18 +1,22 @@
 "use client"; // Client Component vì có nhập liệu
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation"; // 1. Import useRouter để chuyển trang
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema } from "@/lib/validators/auth"; // Import bộ luật Zod
+import { authService } from "@/services/auth.service"; // Import trạm gọi API
 import { FaUser, FaLock, FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import toast from "react-hot-toast";
+
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter(); // 2. Khởi tạo router
 
-  // 1. Khởi tạo form với Zod
+  // Khởi tạo form với Zod
   const {
     register,
     handleSubmit,
@@ -26,22 +30,41 @@ const LoginForm = () => {
     },
   });
 
-  // 2. Hàm xử lý gửi dữ liệu (Chỉ chạy khi pass qua luật Zod)
+  // Hàm xử lý gửi dữ liệu (Chỉ chạy khi pass qua luật Zod)
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      console.log("🚀 Payload gửi lên API /api/auth/login:", data);
+      // 3. Gọi API thật tới Backend
+      const result = await authService.login({
+        username: data.username,
+        password: data.password,
+      });
 
-      // Giả lập call API mất 1 giây
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log("🚀 Quà Backend trả về:", result);
 
-      // ❌ BỎ CÁI NÀY: alert("Validation thành công! Bấm F12 xem Console.");
-      // ✅ THAY BẰNG CÁI NÀY:
-      toast.success("Dữ liệu hợp lệ! Đang kết nối tới Server...");
+      // Tùy thuộc vào JSON của Backend trả về, biến chứa khóa có thể tên là token hoặc accessToken
+      const token = result.token || result.accessToken;
+
+      if (token) {
+        // 4. Lưu chìa khóa vào két sắt của trình duyệt
+        localStorage.setItem("token", token);
+
+        toast.success("Đăng nhập thành công!");
+
+        // 5. Đá người dùng về trang chủ
+        router.push("/");
+      } else {
+        toast.error("Đăng nhập thành công nhưng không lấy được Token!");
+      }
     } catch (error) {
       console.error("Lỗi đăng nhập:", error);
-      // Báo lỗi bằng toast đỏ
-      toast.error("Có lỗi xảy ra, vui lòng thử lại!");
+
+      // Lấy câu thông báo lỗi từ Backend trả về (nếu có)
+      const errorMessage =
+        error.response?.data?.message || "Sai tài khoản hoặc mật khẩu!";
+
+      // Báo lỗi bằng Toast đỏ
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -53,18 +76,16 @@ const LoginForm = () => {
         Đăng nhập tài khoản
       </h2>
 
-      {/* 3. Bọc form bằng handleSubmit */}
+      {/* Bọc form bằng handleSubmit */}
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* --- Input Email --- */}
-        {/* FIX: Thêm relative và đổi mb-4 thành mb-6 */}
         <div className="mb-6 relative">
           <Input
             icon={<FaUser />}
             placeholder="Email"
             autoComplete="username"
-            {...register("username")} // Cắm vòi lấy dữ liệu username
+            {...register("username")}
           />
-          {/* FIX: Thêm absolute để chữ lơ lửng */}
           {errors.username && (
             <p className="absolute top-full left-2 mt-1 text-red-500 text-[11px] font-semibold">
               {errors.username.message}
@@ -73,16 +94,14 @@ const LoginForm = () => {
         </div>
 
         {/* --- Input Mật khẩu --- */}
-        {/* FIX: Thêm relative và đổi mb-4 thành mb-6 */}
         <div className="mb-6 relative">
           <Input
             icon={<FaLock />}
             type="password"
             placeholder="Mật khẩu"
             autoComplete="current-password"
-            {...register("password")} // Cắm vòi lấy dữ liệu password
+            {...register("password")}
           />
-          {/* FIX: Thêm absolute để chữ lơ lửng */}
           {errors.password && (
             <p className="absolute top-full left-2 mt-1 text-red-500 text-[11px] font-semibold">
               {errors.password.message}
@@ -92,12 +111,11 @@ const LoginForm = () => {
 
         {/* --- Hàng Remember Me và Forget Password --- */}
         <div className="flex items-center justify-between mb-6 px-1">
-          {/* Checkbox Remember Me */}
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
               id="remember"
-              {...register("remember")} // Cắm vòi lấy trạng thái checkbox
+              {...register("remember")}
               className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2 cursor-pointer transition-all"
             />
             <label
@@ -108,7 +126,6 @@ const LoginForm = () => {
             </label>
           </div>
 
-          {/* Link Forget Password */}
           <Link
             href="/forget-password"
             className="text-sm font-semibold text-[#0056b3] hover:underline transition-all"
@@ -119,7 +136,7 @@ const LoginForm = () => {
 
         {/* --- Nút Submit --- */}
         <Button
-          type="submit" // Phải là submit để kích hoạt form
+          type="submit"
           variant="primary"
           className="mb-4 w-[160px] mx-auto bg-green-600 hover:bg-green-700 hover:shadow-green-600/30 disabled:opacity-70 disabled:cursor-not-allowed"
           disabled={isLoading}
