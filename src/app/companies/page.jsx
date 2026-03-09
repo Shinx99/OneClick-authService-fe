@@ -23,7 +23,7 @@ const CompaniesPage = () => {
       industry: "Tài chính - Ngân hàng",
       location: "TP.HCM",
       size: "500+ nhân viên",
-      logo: "/images/ecofinance.png",
+      logo: "/images/ecofinance-logo.png",
       isTop: false,
     },
     {
@@ -33,7 +33,7 @@ const CompaniesPage = () => {
       industry: "Y tế & Dược phẩm",
       location: "Đà Nẵng",
       size: "201 - 500 nhân viên",
-      logo: "/images/health.png",
+      logo: "/images/health-logo.png",
       isTop: false,
     },
     {
@@ -43,7 +43,7 @@ const CompaniesPage = () => {
       industry: "Công nghệ thông tin",
       location: "Hà Nội",
       size: "201 - 500 nhân viên",
-      logo: "/images/greentech.png",
+      logo: "/images/greentech-logo.png",
       isTop: true,
     },
   ];
