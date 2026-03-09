@@ -35,7 +35,7 @@ const AuthLayout = ({ loginForm, registerForm, initialIsRegister = false }) => {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-8">
-      <div className="bg-gray-100 relative w-full max-w-[1100px] min-h-[650px] rounded-[30px] shadow-2xl overflow-hidden">
+      <div className="bg-gray-100 relative w-full max-w-[1100px] min-h-[740px] rounded-[30px] shadow-2xl overflow-hidden">
         {/* --- KHU VỰC TRÁI: Chứa Form Đăng Nhập --- */}
         <div
           className={`absolute top-0 left-0 w-full md:w-1/2 h-full flex flex-col justify-center items-center p-8 transition-all duration-700 ease-in-out z-10
@@ -77,7 +77,7 @@ const AuthLayout = ({ loginForm, registerForm, initialIsRegister = false }) => {
             <div
               className={`transition-all duration-700 absolute flex flex-col items-center ${isRegister ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"}`}
             >
-              <h2 className="text-4xl font-black mb-4 uppercase">
+              <h2 className="text-3xl md:text-4xl font-sans font-bold mb-4 uppercase tracking-wider drop-shadow-md">
                 Chào mừng trở lại!
               </h2>
               <p className="mb-8 text-sm font-medium opacity-90">
@@ -95,7 +95,7 @@ const AuthLayout = ({ loginForm, registerForm, initialIsRegister = false }) => {
             <div
               className={`transition-all duration-700 absolute flex flex-col items-center ${isRegister ? "opacity-0 translate-y-10 pointer-events-none" : "opacity-100 translate-y-0"}`}
             >
-              <h2 className="text-4xl font-black mb-4 uppercase">
+              <h2 className="text-3xl md:text-4xl font-sans font-bold mb-4 uppercase tracking-wider drop-shadow-md">
                 Chào mừng bạn!
               </h2>
               <p className="mb-8 text-sm font-medium opacity-90">
