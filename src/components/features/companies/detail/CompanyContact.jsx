@@ -1,8 +1,8 @@
-"use client";
 import React from "react";
 import { FaGlobe, FaUsers, FaMapMarkerAlt } from "react-icons/fa";
 
-// Nhận object contact từ trang cha [slug]/page.jsx
+// Chuyển thành Server Component (Xóa "use client")
+// Component này nhận object contact từ trang cha thông qua props
 const CompanyContact = ({ contact = {} }) => {
   return (
     <div className="bg-white dark:bg-[#1e1e1e] p-6 rounded-3xl border border-gray-100 dark:border-gray-800 space-y-6 transition-all shadow-sm hover:shadow-md">
@@ -20,14 +20,18 @@ const CompanyContact = ({ contact = {} }) => {
             <p className="text-[10px] text-gray-400 font-black uppercase tracking-wider">
               Website
             </p>
-            <a
-              href={`https://${contact.website}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-[#00c853] font-bold hover:underline block truncate"
-            >
-              {contact.website || "Đang cập nhật..."}
-            </a>
+            {contact.website ? (
+              <a
+                href={`https://${contact.website}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-[#00c853] font-bold hover:underline block truncate"
+              >
+                {contact.website}
+              </a>
+            ) : (
+              <p className="text-sm text-gray-400 italic">Đang cập nhật...</p>
+            )}
           </div>
         </div>
 

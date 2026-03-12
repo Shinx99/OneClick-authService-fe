@@ -1,7 +1,5 @@
-"use client";
 import React from "react";
 
-// Nhận description từ props truyền xuống
 const CompanyOverview = ({ description = "" }) => {
   return (
     <div className="space-y-8">
@@ -11,15 +9,16 @@ const CompanyOverview = ({ description = "" }) => {
           Giới thiệu công ty
         </h3>
 
-        {/* Render description động */}
+        {/* Khu vực nội dung giới thiệu */}
         <div className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed space-y-4 font-medium">
           {description ? (
-            /* Tách đoạn văn dựa trên dấu xuống dòng nếu cần, hoặc render trực tiếp */
-            <p className="whitespace-pre-line">{description}</p>
+            <p className="whitespace-pre-line text-justify">{description}</p>
           ) : (
-            <p className="italic text-gray-400">
-              Thông tin giới thiệu đang được cập nhật...
-            </p>
+            <div className="py-4">
+              <p className="italic text-gray-400 text-center">
+                Thông tin giới thiệu đang được cập nhật...
+              </p>
+            </div>
           )}
         </div>
       </div>

@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,7 +7,6 @@ const CompanyCard = ({ company = {} }) => {
   return (
     <Link href={`/companies/${company.slug}`} className="block group">
       <div className="bg-white dark:bg-[#1e1e1e] p-6 rounded-3xl border border-gray-100 dark:border-gray-800 hover:border-[#00c853] transition-all duration-300 flex flex-col items-center text-center shadow-sm hover:shadow-xl relative overflow-hidden h-full">
-        {/* TOP RATE Badge */}
         {company.isTop && (
           <span className="absolute top-4 right-4 bg-[#00c853] text-white text-[10px] px-2 py-1 rounded-lg font-bold shadow-lg z-10">
             TOP RATE
@@ -19,7 +17,7 @@ const CompanyCard = ({ company = {} }) => {
         <div className="relative w-24 h-24 mb-5 bg-gray-50 dark:bg-[#252525] rounded-2xl p-4 transition-transform group-hover:scale-110">
           <Image
             src={company.logo || "/images/company-placeholder.png"}
-            alt={company.name}
+            alt={company.name || "Company Logo"}
             fill
             className="object-contain p-2"
           />

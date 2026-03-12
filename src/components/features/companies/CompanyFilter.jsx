@@ -1,19 +1,23 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaFilter, FaChevronDown, FaCheckCircle } from "react-icons/fa";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 
-// Thêm các props để giao tiếp với trang cha (CompaniesPage)
 const CompanyFilter = ({
   onFilterChange,
   onReset,
   selectedIndustries = [],
-  selectedScale = "",
+  selectedScale = [],
+  currentLocation = "Tất cả địa điểm",
 }) => {
   const [isLocOpen, setIsLocOpen] = useState(false);
-  const [selectedLoc, setSelectedLoc] = useState("TP.HCM");
+  const [selectedLoc, setSelectedLoc] = useState(currentLocation);
 
-  // Dữ liệu mẫu - Sau này có thể nhận từ Props nếu muốn động hoàn toàn
+  // Cập nhật local state nếu prop currentLocation thay đổi (ví dụ khi Reset)
+  useEffect(() => {
+    setSelectedLoc(currentLocation);
+  }, [currentLocation]);
+
   const industryOptions = [
     "Bất động sản",
     "Tài chính - Ngân hàng",
@@ -37,6 +41,11 @@ const CompanyFilter = ({
     "Cần Thơ",
   ];
 
+  const handleResetClick = () => {
+    setSelectedLoc("Tất cả địa điểm");
+    onReset?.();
+  };
+
   return (
     <div className="bg-white dark:bg-[#1e1e1e] p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 transition-all">
       {/* Tiêu đề Bộ lọc */}
@@ -45,8 +54,8 @@ const CompanyFilter = ({
           <FaFilter size={18} /> Bộ lọc
         </h2>
         <button
-          onClick={onReset}
-          className="text-xs text-gray-400 hover:text-red-500 transition-colors font-bold uppercase tracking-wider"
+          onClick={handleResetClick}
+          className="text-xs text-gray-400 hover:text-red-500 transition-colors font-bold uppercase tracking-wider cursor-pointer"
         >
           Xóa hết
         </button>
@@ -67,7 +76,8 @@ const CompanyFilter = ({
                 <input
                   type="checkbox"
                   className="peer appearance-none w-5 h-5 rounded-full border-2 border-gray-200 checked:border-[#00c853] checked:bg-[#00c853] transition-all cursor-pointer"
-                  // Kiểm tra xem item này có đang được chọn không (dựa trên props)
+                  // Kiểm tra trạng thái từ props để đồng bộ giao diện
+                  checked={selectedIndustries.includes(item)}
                   onChange={(e) =>
                     onFilterChange?.("industry", item, e.target.checked)
                   }
@@ -97,6 +107,8 @@ const CompanyFilter = ({
                 <input
                   type="checkbox"
                   className="peer appearance-none w-5 h-5 rounded-full border-2 border-gray-200 checked:border-[#00c853] checked:bg-[#00c853] transition-all cursor-pointer"
+                  // Kiểm tra trạng thái từ props
+                  checked={selectedScale.includes(item)}
                   onChange={(e) =>
                     onFilterChange?.("scale", item, e.target.checked)
                   }
@@ -132,7 +144,7 @@ const CompanyFilter = ({
           />
         </div>
 
-        {/* Dropdown Menu */}
+        {/* Dropdown Menu Địa điểm */}
         {isLocOpen && (
           <div className="absolute z-50 w-full mt-2 bg-white dark:bg-[#2a2a2a] border border-gray-100 dark:border-gray-700 rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             {locations.map((loc, idx) => (
@@ -141,7 +153,7 @@ const CompanyFilter = ({
                 onClick={() => {
                   setSelectedLoc(loc);
                   setIsLocOpen(false);
-                  onFilterChange?.("location", loc); // Thông báo cho cha khi đổi địa điểm
+                  onFilterChange?.("location", loc);
                 }}
                 className={`px-4 py-3 text-sm cursor-pointer transition-colors
                   ${selectedLoc === loc ? "bg-[#00c853] text-white font-bold" : "text-gray-600 dark:text-gray-400 hover:bg-green-50 dark:hover:bg-green-900/10"}`}
