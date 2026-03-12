@@ -1,15 +1,15 @@
-"use client";
-import React, { use } from "react";
+import React from "react";
 import CompanyBanner from "@/components/features/companies/detail/CompanyBanner";
 import CompanyOverview from "@/components/features/companies/detail/CompanyOverview";
 import CompanyContact from "@/components/features/companies/detail/CompanyContact";
 import CompanyJobs from "@/components/features/companies/detail/CompanyJobs";
 import CompanyReviews from "@/components/features/companies/detail/CompanyReviews";
+import { notFound } from "next/navigation";
 
-const CompanyDetailPage = ({ params }) => {
-  const { slug } = use(params); // Unwrapped params cho Next.js 15+
+export default async function CompanyDetailPage({ params }) {
+  const { slug } = await params;
 
-  // MẢNG DỮ LIỆU MẪU (Sẵn sàng để thay thế bằng API Spring Boot sau này)
+  // DỮ LIỆU MẪU
   const companies = [
     {
       id: 1,
@@ -177,16 +177,22 @@ const CompanyDetailPage = ({ params }) => {
       ],
     },
   ];
-  // Trong phần return của trang cha:
-  const companyData = companies.find((c) => c.slug === slug) || companies[0];
+
+  // Tìm kiếm công ty dựa trên slug
+  const companyData = companies.find((c) => c.slug === slug);
+
+  if (!companyData) {
+    notFound();
+  }
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#121212] pt-6 pb-20 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* TRUYỀN DỮ LIỆU QUA PROPS */}
+        {/* TRUYỀN DỮ LIỆU QUA PROPS CHO CÁC SERVER COMPONENTS CON */}
         <CompanyBanner company={companyData} />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-24">
+          {/* Cột trái: Chi tiết nội dung */}
           <div className="lg:col-span-2 space-y-8">
             <CompanyOverview description={companyData.description} />
             <CompanyReviews
@@ -194,6 +200,8 @@ const CompanyDetailPage = ({ params }) => {
               rating={companyData.rating}
             />
           </div>
+
+          {/* Cột phải: Thông tin liên hệ & Việc làm */}
           <div className="lg:col-span-1 space-y-8">
             <div className="sticky top-24 space-y-8">
               <CompanyContact contact={companyData} />
@@ -204,6 +212,4 @@ const CompanyDetailPage = ({ params }) => {
       </div>
     </div>
   );
-};
-
-export default CompanyDetailPage;
+}

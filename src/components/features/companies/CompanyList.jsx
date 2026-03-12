@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import CompanyCard from "./CompanyCard";
 
@@ -20,7 +19,7 @@ const CompanyList = ({ companies = [] }) => {
         </div>
       )}
 
-      {/* Phân trang (Pagination) - Giữ nguyên UX bo góc chuẩn Figma */}
+      {/* Phân trang  */}
       {companies.length > 0 && (
         <div className="flex justify-center items-center gap-2 pt-8">
           {[1, 2, 3, "...", 12].map((p, i) => (

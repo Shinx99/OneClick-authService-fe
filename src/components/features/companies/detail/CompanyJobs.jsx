@@ -1,16 +1,14 @@
-"use client";
 import React from "react";
 
-// Nhận mảng jobs từ trang [slug]/page.jsx truyền xuống
 const CompanyJobs = ({ jobs = [] }) => {
   return (
-    <div className="bg-white dark:bg-[#1e1e1e] p-6 rounded-3xl border border-gray-100 dark:border-gray-800 transition-all">
+    <div className="bg-white dark:bg-[#1e1e1e] p-6 rounded-3xl border border-gray-100 dark:border-gray-800 transition-all shadow-sm">
       <div className="flex justify-between items-center mb-6">
         <h3 className="font-bold text-lg text-gray-900 dark:text-white">
           Vị trí đang tuyển
         </h3>
         {jobs.length > 0 && (
-          <span className="text-[10px] bg-green-50 text-[#00c853] px-2 py-0.5 rounded-full font-bold">
+          <span className="text-[10px] bg-green-50 dark:bg-green-900/30 text-[#00c853] px-2 py-0.5 rounded-full font-bold uppercase">
             {jobs.length} MỚI
           </span>
         )}
@@ -33,9 +31,11 @@ const CompanyJobs = ({ jobs = [] }) => {
             </div>
           ))
         ) : (
-          <p className="text-sm text-gray-400 text-center py-4 italic">
-            Hiện chưa có vị trí nào đang tuyển.
-          </p>
+          <div className="py-6 text-center">
+            <p className="text-sm text-gray-400 italic">
+              Hiện chưa có vị trí nào đang tuyển.
+            </p>
+          </div>
         )}
       </div>
 

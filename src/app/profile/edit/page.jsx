@@ -54,15 +54,6 @@ const EditProfilePage = () => {
     }
   };
 
-  // Tính toán % hoàn thiện dựa trên số lượng thông tin có trong State
-  const completionPercentage = useMemo(() => {
-    let score = 50; // Mặc định có thông tin cá nhân
-    if (profileData.experiences?.length > 0) score += 15;
-    if (profileData.education?.length > 0) score += 15;
-    if (profileData.skills?.length > 3) score += 20;
-    return score;
-  }, [profileData]);
-
   return (
     <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#121212] pt-10 pb-20 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
