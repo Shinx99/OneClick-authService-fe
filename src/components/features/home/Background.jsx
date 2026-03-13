@@ -8,7 +8,7 @@ const Background = () => {
         className="absolute inset-0 bg-cover bg-center -z-10"
         style={{ backgroundImage: "url('/images/thienNhien.jpg')" }}
       >
-        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute inset-0 bg-white/20"></div>
       </div>
 
       <div className="w-full max-w-5xl px-4 z-10">
