@@ -1,10 +1,16 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+// 1. Nhúng Modal chọn Role vào đây
+import RoleSelectionModal from "@/components/features/auth/RoleSelectionModal";
 
 const Header = () => {
+  // State quản lý hiệu ứng cuộn chuột (Bạn đã viết)
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+
+  // 2. Thêm State để quản lý việc Ẩn/Hiện Modal Đăng Ký
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,7 +37,6 @@ const Header = () => {
   ];
 
   return (
-    // Bọc toàn bộ vào một Fragment
     <>
       {/* KHỐI TÀNG HÌNH (SPACER): Cao đúng 80px (h-20) bằng với Header để chống đè nội dung */}
       <div className="h-20 w-full"></div>
@@ -78,17 +83,31 @@ const Header = () => {
             </nav>
 
             {/* 3. KHỐI ACTION BUTTONS */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <Link
                 href="/login"
                 className="px-6 py-2.5 text-[#0091ff] font-bold border border-[#e3f2fd] rounded-full hover:bg-green-100 transition-all text-sm flex items-center justify-center"
               >
                 Đăng nhập
               </Link>
+
+              {/* 3. NÚT ĐĂNG KÝ (Gọi hàm mở Popup) */}
+              <button
+                onClick={() => setIsRoleModalOpen(true)}
+                className="px-6 py-2.5 bg-[#00c853] text-white font-bold rounded-full hover:bg-[#00b04a] transition-all text-sm flex items-center justify-center shadow-md active:scale-95"
+              >
+                Đăng ký
+              </button>
             </div>
           </div>
         </div>
       </header>
+
+      {/* 4. CHÈN POPUP MODAL VÀO ĐÂY */}
+      <RoleSelectionModal
+        isOpen={isRoleModalOpen}
+        onClose={() => setIsRoleModalOpen(false)}
+      />
     </>
   );
 };

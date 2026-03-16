@@ -1,0 +1,129 @@
+OneClick-authService-fe
+├── README.md
+├── docs
+│   ├── deploy
+│   │   └── vercel
+│   └── system
+│       ├── github.md
+│       └── information_and_training.md
+├── eslint.config.mjs
+├── jsconfig.json
+├── next.config.mjs
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── public
+│   ├── file.svg
+│   ├── globe.svg
+│   ├── images
+│   │   ├── avatar-placeholder.jpg
+│   │   ├── banner.png
+│   │   ├── ecofinance-logo.png
+│   │   ├── greentech-logo.png
+│   │   ├── health-logo.png
+│   │   ├── login-bg.jpg
+│   │   ├── one-click-logo.png
+│   │   └── thienNhien.jpg
+│   ├── next.svg
+│   ├── vercel.svg
+│   └── window.svg
+├── scripts
+│   ├── clean.js
+│   └── setup.js
+├── src
+│   ├── app
+│   │   ├── (auth)
+│   │   │   ├── change-password
+│   │   │   │   └── page.jsx
+│   │   │   ├── forget-password
+│   │   │   │   └── page.jsx
+│   │   │   ├── login
+│   │   │   │   └── page.jsx
+│   │   │   ├── otp-verify
+│   │   │   │   └── page.js
+│   │   │   ├── register
+│   │   │   │   └── page.jsx
+│   │   │   └── register-employer
+│   │   │       └── page.jsx
+│   │   ├── api
+│   │   │   └── auth
+│   │   │       └── router.js
+│   │   ├── companies
+│   │   │   ├── [slug]
+│   │   │   │   └── page.jsx
+│   │   │   └── page.jsx
+│   │   ├── favicon.ico
+│   │   ├── globals.css
+│   │   ├── jobs
+│   │   │   ├── (list)
+│   │   │   │   ├── layout.jsx
+│   │   │   │   └── page.jsx
+│   │   │   └── [id]
+│   │   │       └── page.jsx
+│   │   ├── layout.jsx
+│   │   ├── not-found.jsx
+│   │   ├── page.jsx
+│   │   └── profile
+│   │       ├── edit
+│   │       │   └── page.jsx
+│   │       └── page.jsx
+│   ├── components
+│   │   ├── common
+│   │   │   ├── Footer.jsx
+│   │   │   ├── Navbar.jsx
+│   │   │   └── Not-found.jsx
+│   │   ├── features
+│   │   │   ├── auth
+│   │   │   │   ├── ChangePasswordForm.jsx
+│   │   │   │   ├── EmployerRegisterForm.jsx
+│   │   │   │   ├── ForgetPasswordForm.jsx
+│   │   │   │   ├── LoginForm.jsx
+│   │   │   │   ├── RegisterForm.jsx
+│   │   │   │   └── RoleSelectionModal.jsx
+│   │   │   ├── companies
+│   │   │   │   ├── CompanyCard.jsx
+│   │   │   │   ├── CompanyContent.jsx
+│   │   │   │   ├── CompanyFilter.jsx
+│   │   │   │   ├── CompanyList.jsx
+│   │   │   │   └── detail
+│   │   │   │       ├── CompanyBanner.jsx
+│   │   │   │       ├── CompanyContact.jsx
+│   │   │   │       ├── CompanyJobs.jsx
+│   │   │   │       ├── CompanyOverview.jsx
+│   │   │   │       └── CompanyReviews.jsx
+│   │   │   ├── edit-profile
+│   │   │   │   ├── AvatarUpload.jsx
+│   │   │   │   ├── EditSidebar.jsx
+│   │   │   │   ├── PersonalInfoForm.jsx
+│   │   │   │   └── SectionHeader.jsx
+│   │   │   ├── home
+│   │   │   │   ├── Background.jsx
+│   │   │   │   ├── CallToAction.jsx
+│   │   │   │   ├── CompanyHot.jsx
+│   │   │   │   ├── Features.jsx
+│   │   │   │   └── JobForYou.jsx
+│   │   │   ├── jobs
+│   │   │   │   ├── JobContent.jsx
+│   │   │   │   ├── JobFilter.jsx
+│   │   │   │   ├── JobSidebar.jsx
+│   │   │   │   └── SimilarJobs.jsx
+│   │   │   ├── profile
+│   │   │   │   ├── DocumentSidebar.jsx
+│   │   │   │   ├── EducationList.jsx
+│   │   │   │   ├── ExperienceList.jsx
+│   │   │   │   ├── ProfileHeader.jsx
+│   │   │   │   └── SkillList.jsx
+│   │   │   └── user
+│   │   ├── layout
+│   │   │   └── AuthLayout.jsx
+│   │   └── ui
+│   │       ├── Button.jsx
+│   │       ├── Input.jsx
+│   │       └── SearchBar.jsx
+│   ├── lib
+│   │   └── validators
+│   │       └── auth.jsx
+│   └── services
+│       ├── api.config.js
+│       └── auth.service.js
+└── tree.txt
