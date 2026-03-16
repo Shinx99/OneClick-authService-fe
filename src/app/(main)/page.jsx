@@ -9,15 +9,13 @@ export default function Home() {
     <div className=" transition-colors duration-300">
       <Background />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-4 py-4">
-        
         <JobForYou />
-        
-        <CallToAction />
-        
-        <CompanyHot />
-        
-        <Features />
 
+        <CallToAction />
+
+        <CompanyHot />
+
+        <Features />
       </main>
     </div>
   );

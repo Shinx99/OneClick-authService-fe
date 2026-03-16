@@ -1,44 +1,59 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
 import { Toaster } from "react-hot-toast";
+import "./globals.css";
+
+// Cấu hình Font chữ
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+// export const metadata = {
+//   title: "One-Click | Nền tảng tuyển dụng hàng đầu",
+//   description:
+//     "Khám phá hàng ngàn cơ hội việc làm và kết nối với những nhân tài hàng đầu.",
+// };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased text-slate-800`}
+      >
+        {/* TOASTER ĐẶT Ở ĐÂY ĐỂ TRANG NÀO CŨNG GỌI ĐƯỢC */}
         <Toaster
           position="top-right"
           reverseOrder={false}
           toastOptions={{
-            // Thiết kế mặc định cho cái khung Toast
             className: "",
             style: {
               background: "#ffffff",
-              color: "#334155", // slate-700
+              color: "#334155",
               fontFamily: "inherit",
               fontSize: "14px",
               fontWeight: "600",
               padding: "16px 20px",
-              borderRadius: "16px", // Bo góc tròn hiện đại
+              borderRadius: "16px",
               boxShadow:
-                "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)", // Đổ bóng 3D nổi bật
-              border: "1px solid #f1f5f9", // slate-100 viền siêu mỏng
+                "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
+              border: "1px solid #f1f5f9",
             },
-            // Thiết kế riêng cho thông báo Thành công
             success: {
               duration: 3000,
               iconTheme: {
-                primary: "#10B94F", // Xanh lá chuẩn của nút Đăng nhập One-Click
+                primary: "#10B94F",
                 secondary: "#ffffff",
               },
             },
-            // Thiết kế riêng cho thông báo Lỗi
             error: {
               duration: 4000,
               iconTheme: {
-                primary: "#ef4444", // Đỏ chuẩn của Tailwind
+                primary: "#ef4444",
                 secondary: "#ffffff",
               },
             },
@@ -49,11 +64,8 @@ export default function RootLayout({ children }) {
           }}
         />
 
-        <Navbar />
-
+        {/* Nơi nhúng các Layout con */}
         {children}
-
-        <Footer />
       </body>
     </html>
   );
