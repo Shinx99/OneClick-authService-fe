@@ -1,6 +1,9 @@
 import React from "react";
 import CompanyCard from "./CompanyCard";
 
+{
+  /* Chưa có phân trang */
+}
 const CompanyList = ({ companies = [] }) => {
   return (
     <div className="space-y-8">
