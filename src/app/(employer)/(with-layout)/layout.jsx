@@ -1,10 +1,10 @@
 import React from "react";
-import EmployerNavbar from "@/components/common/EmployerNavbar";
-import EmployerFooter from "@/components/common/EmployerFooter";
+import EmployerNavbar from "@/components/common/employer/EmployerNavbar";
+import EmployerFooter from "@/components/common/employer/EmployerFooter";
 
-export default function EmployerLayout({ children }) {
+export default function WithLayoutLayout({ children }) {
   return (
-    <div className="flex flex-col min-h-screen">
+    <>
       {/* Thanh điều hướng Employer */}
       <EmployerNavbar />
 
@@ -13,6 +13,6 @@ export default function EmployerLayout({ children }) {
 
       {/* Chân trang Employer */}
       <EmployerFooter />
-    </div>
+    </>
   );
 }

@@ -24,7 +24,7 @@ const EmployerNavbar = () => {
 
   const navLinks = [
     { name: "Giới thiệu", href: "#" },
-    { name: "Việc làm", href: "/jobs" },
+    { name: "Báo giá", href: "#" },
     { name: "Dành tuyển dụng", href: "#" },
     { name: "Tư vấn tuyển dụng", href: "#" },
   ];
@@ -78,7 +78,9 @@ const EmployerNavbar = () => {
             {/* Action Buttons */}
             <div className="flex items-center gap-3">
               <div className="w-32">
-                <Button variant="primary">Đăng tin</Button>
+                <Link href="/employer-login" className="block w-full">
+                  <Button variant="primary">Đăng tin</Button>
+                </Link>
               </div>
               <div className="w-48">
                 <Button variant="social">Tư vấn tuyển dụng</Button>
