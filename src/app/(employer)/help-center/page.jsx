@@ -1,8 +1,8 @@
 "use client";
-import React, { useState, useEffect } from "react";import HeroArea from "@/components/features/employer/HeroArea";
-import AiTechnology from "@/components/features/employer/AiTechnology";
-import OutstandingFeatures from "@/components/features/employer/OutstandingFeatures";
-import PricingPlan from "@/components/features/employer/PricingPlan";
+import React, { useState, useEffect } from "react";import HeroArea from "@/components/features/employer/landing-page/HeroArea";
+import AiTechnology from "@/components/features/employer/landing-page/AiTechnology";
+import OutstandingFeatures from "@/components/features/employer/landing-page/OutstandingFeatures";
+import PricingPlan from "@/components/features/employer/landing-page/PricingPlan";
 
 export default function EmployerLandingPage() {
   return (

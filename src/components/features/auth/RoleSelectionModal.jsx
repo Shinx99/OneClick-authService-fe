@@ -81,7 +81,7 @@ const RoleSelectionModal = ({ isOpen, onClose }) => {
 
               {/* Card Nhà Tuyển Dụng */}
               <Link
-                href="/register-employer"
+                href="/help-center"
                 onClick={onClose}
                 className="group border-2 border-gray-100 rounded-2xl p-6 hover:border-blue-500 hover:bg-blue-50/30 transition-all cursor-pointer relative overflow-hidden"
               >
