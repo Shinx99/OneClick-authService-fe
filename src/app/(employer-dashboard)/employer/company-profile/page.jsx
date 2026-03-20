@@ -1,0 +1,24 @@
+import React from "react";
+import CompanyProfileForm from "@/components/features/employer/company-profile/CompanyProfileForm";
+import CompanyDescription from "@/components/features/employer/company-profile/CompanyDescription";
+import BenefitsPerks from "@/components/features/employer/company-profile/BenefitsPerks";
+import CulturePhotos from "@/components/features/employer/company-profile/CulturePhotos";
+
+export default function CompanyProfilePage() {
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h2 className="text-2xl font-bold text-slate-800">Company Profile</h2>
+        <p className="text-sm text-slate-400 mt-1">
+          Manage your organization&apos;s public brand and recruitment identity.
+        </p>
+      </div>
+
+      <CompanyProfileForm />
+      <CompanyDescription />
+      <BenefitsPerks />
+      <CulturePhotos />
+    </div>
+  );
+}

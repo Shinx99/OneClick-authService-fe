@@ -25,8 +25,10 @@ const HeroArea = () => {
               Đăng tin tuyển dụng, sàng lọc ứng viên và quản lý tuyển dụng chỉ với một nền tảng duy nhất.
             </p>
             <div className="flex flex-wrap gap-4">
-              <div className="w-40">
-                <Button variant="primary">Đăng tin ngay</Button>
+              <div className="w-32">
+                <Link href="/employer-register" className="block w-full">
+                  <Button variant="primary">Đăng tin</Button>
+                </Link>
               </div>
               <div className="w-48">
                 <Button variant="social">Tư vấn tuyển dụng</Button>
