@@ -45,14 +45,6 @@ const AiTechnology = () => {
               phù hợp nhất với vị trí, giúp tiết kiệm tới 70% thời gian sàng lọc.
               Tất cả mọi thứ đều tự động và thông minh.
             </p>
-            <div className="flex flex-wrap gap-4">
-              <div className="w-40">
-                <Button variant="primary">Đăng tin ngay</Button>
-              </div>
-              <div className="w-48">
-                <Button variant="social">Tư vấn tuyển dụng</Button>
-              </div>
-            </div>
           </div>
         </div>
       </div>

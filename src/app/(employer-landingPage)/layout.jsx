@@ -1,6 +1,6 @@
 import React from "react";
-import EmployerNavbar from "@/components/common/EmployerNavbar";
-import EmployerFooter from "@/components/common/EmployerFooter";
+import EmployerNavbar from "@/components/common/employer-landingPage/EmployerNavbar";
+import EmployerFooter from "@/components/common/employer-landingPage/EmployerFooter";
 
 export default function EmployerLayout({ children }) {
   return (
