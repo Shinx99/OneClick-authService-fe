@@ -11,7 +11,7 @@ const demoPhotos = [
 const CulturePhotos = () => {
   return (
     <div className="bg-white rounded-xl border border-slate-100 p-6">
-      <h3 className="text-lg font-bold text-slate-800 mb-5">Company Culture & Office Photos</h3>
+      <h3 className="text-lg font-bold text-slate-800 mb-5">Văn hóa công ty & Hình ảnh văn phòng</h3>
 
       <div className="flex gap-3">
         {/* Demo photos */}
@@ -26,15 +26,15 @@ const CulturePhotos = () => {
         {/* Upload area */}
         <div className="flex-1 min-w-[140px] h-28 rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center gap-1 hover:border-emerald-400 hover:bg-emerald-50/30 transition-all cursor-pointer">
           <MdOutlineCloudUpload className="w-6 h-6 text-slate-400" />
-          <p className="text-xs font-medium text-slate-400">Drag and drop</p>
-          <p className="text-[10px] text-slate-300">or click to upload</p>
+          <p className="text-xs font-medium text-slate-400">Kéo và thả</p>
+          <p className="text-[10px] text-slate-300">hoặc nhấn để tải lên</p>
         </div>
       </div>
 
       {/* Tip */}
       <div className="flex items-center gap-2 mt-4 text-xs text-slate-400">
         <MdOutlineInfo className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-        <span>Tip: Profiles with at least 3 office photos receive 43% more candidate engagement.</span>
+        <span>Mẹo: Hồ sơ có ít nhất 3 ảnh văn phòng nhận được mức tương tác từ ứng viên cao hơn 43%.</span>
       </div>
     </div>
   );

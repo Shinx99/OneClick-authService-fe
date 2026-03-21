@@ -22,7 +22,7 @@ const EmployerRegisterForm = () => {
       email: "",
       password: "",
       confirmPassword: "",
-      genderIdentity: "Male",
+      genderIdentity: "Nam",
       phoneNumber: "",
       companyName: "",
       officeLocation: "",
@@ -51,8 +51,8 @@ const EmployerRegisterForm = () => {
       {/* Header / Logo */}
 
       <div className="mb-6">
-        <h1 className="text-3xl font-extrabold text-gray-900 mb-2">Employer Registration</h1>
-        <p className="text-gray-500 text-sm">Fill in the details to establish your institutional profile.</p>
+        <h1 className="text-3xl font-extrabold text-gray-900 mb-2">Đăng ký Nhà tuyển dụng</h1>
+        <p className="text-gray-500 text-sm">Điền thông tin chi tiết để thiết lập hồ sơ công ty của bạn.</p>
       </div>
 
       {/* Alert Box - Quy định */}
@@ -82,14 +82,14 @@ const EmployerRegisterForm = () => {
         {/* Row 1: Full Name & Email */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-2">
           <div className="relative mb-4">
-            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Full Name</span>
-            <Input icon={<FaUser />} placeholder="John Doe" {...register("fullName")} />
+            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Họ và tên</span>
+            <Input icon={<FaUser />} placeholder="Nguyễn Văn A" {...register("fullName")} />
             {errors.fullName && <p className="absolute -bottom-1 left-1 mt-1 text-red-500 text-[11px] font-semibold">{errors.fullName.message}</p>}
           </div>
 
           <div className="relative mb-4">
-            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Email Address</span>
-            <Input icon={<FaEnvelope />} placeholder="john@company.com" {...register("email")} />
+            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Địa chỉ Email</span>
+            <Input icon={<FaEnvelope />} placeholder="nguyenvana@congty.com" {...register("email")} />
             {errors.email && <p className="absolute -bottom-1 left-1 mt-1 text-red-500 text-[11px] font-semibold">{errors.email.message}</p>}
           </div>
         </div>
@@ -97,13 +97,13 @@ const EmployerRegisterForm = () => {
         {/* Row 2: Passwords */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-2">
           <div className="relative mb-4">
-            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Password</span>
+            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Mật khẩu</span>
             <Input type="password" icon={<FaLock />} placeholder="••••••••" {...register("password")} />
             {errors.password && <p className="absolute -bottom-1 left-1 mt-1 text-red-500 text-[11px] font-semibold">{errors.password.message}</p>}
           </div>
 
           <div className="relative mb-4">
-            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Confirm Password</span>
+            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Xác nhận Mật khẩu</span>
             <Input type="password" icon={<FaSyncAlt />} placeholder="••••••••" {...register("confirmPassword")} />
             {errors.confirmPassword && <p className="absolute -bottom-1 left-1 mt-1 text-red-500 text-[11px] font-semibold">{errors.confirmPassword.message}</p>}
           </div>
@@ -112,9 +112,9 @@ const EmployerRegisterForm = () => {
         {/* Row 3: Gender & Phone */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-2">
           <div className="relative mb-4 flex flex-col justify-center">
-            <span className="text-xs font-semibold text-gray-500 mb-3 block uppercase tracking-wider">Gender Identity</span>
+            <span className="text-xs font-semibold text-gray-500 mb-3 block uppercase tracking-wider">Giới tính</span>
             <div className="flex gap-4 px-1 pb-[10px] mt-2 h-full">
-              {["Male", "Female", "Other"].map((option) => (
+              {["Nam", "Nữ", "Khác"].map((option) => (
                 <label key={option} className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
@@ -130,8 +130,8 @@ const EmployerRegisterForm = () => {
           </div>
 
           <div className="relative mb-4">
-            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Phone Number</span>
-            <Input icon={<FaPhone />} placeholder="+1 (555) 000-0000" {...register("phoneNumber")} />
+            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Số điện thoại</span>
+            <Input icon={<FaPhone />} placeholder="+84 900 000 000" {...register("phoneNumber")} />
             {errors.phoneNumber && <p className="absolute -bottom-1 left-1 mt-1 text-red-500 text-[11px] font-semibold">{errors.phoneNumber.message}</p>}
           </div>
         </div>
@@ -139,14 +139,14 @@ const EmployerRegisterForm = () => {
         {/* Row 4: Company & Location */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-6">
           <div className="relative mb-4">
-            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Company Name</span>
-            <Input icon={<FaBuilding />} placeholder="Acme Corp" {...register("companyName")} />
+            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Tên công ty</span>
+            <Input icon={<FaBuilding />} placeholder="Tập đoàn ABC" {...register("companyName")} />
             {errors.companyName && <p className="absolute -bottom-1 left-1 mt-1 text-red-500 text-[11px] font-semibold">{errors.companyName.message}</p>}
           </div>
 
           <div className="relative mb-4">
-            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Office Location</span>
-            <Input icon={<FaMapMarkerAlt />} placeholder="San Francisco, CA" {...register("officeLocation")} />
+            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Địa chỉ văn phòng</span>
+            <Input icon={<FaMapMarkerAlt />} placeholder="TP. Hồ Chí Minh" {...register("officeLocation")} />
             {errors.officeLocation && <p className="absolute -bottom-1 left-1 mt-1 text-red-500 text-[11px] font-semibold">{errors.officeLocation.message}</p>}
           </div>
         </div>
@@ -158,14 +158,14 @@ const EmployerRegisterForm = () => {
           className="w-full bg-[#00D06A] hover:bg-green-600 text-white font-semibold py-4 rounded-xl shadow-[0_4px_14px_0_rgba(0,208,106,0.39)] transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
           disabled={isLoading}
         >
-          {isLoading ? "Processing..." : "Complete Registration"}
+          {isLoading ? "Đang xử lý..." : "Hoàn tất đăng ký"}
           <span className="text-lg">→</span>
         </Button>
         
         {/* Footer text */}
         <div className="text-center mt-6">
           <p className="text-xs text-gray-500">
-            By clicking complete, you agree to our <Link href="#" className="font-semibold text-[#00D06A] hover:underline">Terms of Service</Link> and <Link href="#" className="font-semibold text-[#00D06A] hover:underline">Privacy Policy</Link>.
+            Bằng cách nhấn hoàn tất, bạn đồng ý với <Link href="#" className="font-semibold text-[#00D06A] hover:underline">Điều khoản Dịch vụ</Link> và <Link href="#" className="font-semibold text-[#00D06A] hover:underline">Chính sách Bảo mật</Link> của chúng tôi.
           </p>
         </div>
       </form>

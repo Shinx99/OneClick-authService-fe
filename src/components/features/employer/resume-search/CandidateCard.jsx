@@ -28,9 +28,9 @@ const CandidateCard = ({ candidate }) => {
         </div>
         <span
           className={`px-2.5 py-1 rounded-full text-xs font-semibold flex-shrink-0 ${
-            candidate.matchLevel === "High"
+            candidate.matchLevel === "Cao"
               ? "bg-emerald-50 text-emerald-700"
-              : candidate.matchLevel === "Medium"
+              : candidate.matchLevel === "Trung bình"
               ? "bg-amber-50 text-amber-700"
               : "bg-slate-50 text-slate-600"
           }`}
@@ -58,10 +58,10 @@ const CandidateCard = ({ candidate }) => {
       {/* Action Buttons */}
       <div className="flex items-center gap-2">
         <button className="flex-1 px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-all">
-          View Resume & Proceed
+          Xem hồ sơ & Tiếp tục
         </button>
         <button className="px-4 py-2 bg-white border border-slate-200 text-slate-600 text-sm font-medium rounded-lg hover:bg-slate-50 transition-all">
-          Save
+          Lưu
         </button>
       </div>
     </div>

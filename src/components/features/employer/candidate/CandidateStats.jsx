@@ -9,7 +9,7 @@ import {
 
 const stats = [
   {
-    label: "Total Candidates",
+    label: "Tổng ứng viên",
     value: "1,284",
     icon: MdOutlinePeople,
     iconBg: "bg-emerald-50",
@@ -18,7 +18,7 @@ const stats = [
     changeColor: "text-emerald-600",
   },
   {
-    label: "New This Week",
+    label: "Mới trong tuần",
     value: "42",
     icon: MdOutlinePersonAdd,
     iconBg: "bg-blue-50",
@@ -27,7 +27,7 @@ const stats = [
     changeColor: "text-emerald-600",
   },
   {
-    label: "Match Rate",
+    label: "Tỷ lệ phù hợp",
     value: "78%",
     icon: MdOutlineAutoGraph,
     iconBg: "bg-violet-50",
@@ -36,7 +36,7 @@ const stats = [
     changeColor: "text-emerald-600",
   },
   {
-    label: "Interviews",
+    label: "Phỏng vấn",
     value: "12",
     icon: MdOutlineCalendarToday,
     iconBg: "bg-amber-50",

@@ -4,16 +4,16 @@ import { MdOutlineFilterList, MdOutlineLocationOn } from "react-icons/md";
 
 const filterSections = [
   {
-    title: "Job Role",
-    options: ["Frontend Developer", "Backend Developer", "Fullstack Engineer", "Product Designer", "QA Engineer", "Marketing"],
+    title: "Vai trò công việc",
+    options: ["Lập trình Frontend", "Lập trình Backend", "Kỹ sư Fullstack", "Thiết kế sản phẩm", "Kỹ sư QA", "Marketing"],
   },
   {
-    title: "Experience Level",
-    options: ["Entry Level (0-1 yr)", "Junior (1-3 yrs)", "Mid-Level (3-5 yrs)", "Senior (5-8 yrs)", "Lead/Expert (8+ yrs)"],
+    title: "Cấp độ kinh nghiệm",
+    options: ["Mới vào nghề (0-1 năm)", "Sơ cấp (1-3 năm)", "Trung cấp (3-5 năm)", "Cao cấp (5-8 năm)", "Chuyên gia (8+ năm)"],
   },
   {
-    title: "Employment Type",
-    options: ["Full-time", "Part-time", "Contract", "Remote"],
+    title: "Hình thức làm việc",
+    options: ["Toàn thời gian", "Bán thời gian", "Hợp đồng", "Làm việc từ xa"],
   },
 ];
 
@@ -33,7 +33,7 @@ const SearchFilters = () => {
       <div className="flex items-center justify-between mb-5">
         <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
           <MdOutlineFilterList className="w-5 h-5 text-emerald-600" />
-          Advanced Filters
+          Bộ lọc nâng cao
         </h3>
       </div>
 
@@ -70,12 +70,12 @@ const SearchFilters = () => {
 
         {/* Location */}
         <div>
-          <h4 className="text-sm font-semibold text-slate-600 mb-2.5">Location</h4>
+          <h4 className="text-sm font-semibold text-slate-600 mb-2.5">Địa điểm</h4>
           <div className="relative">
             <MdOutlineLocationOn className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
-              placeholder="City or region..."
+              placeholder="Thành phố hoặc khu vực..."
               className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
             />
           </div>
@@ -83,17 +83,17 @@ const SearchFilters = () => {
 
         {/* Salary Range */}
         <div>
-          <h4 className="text-sm font-semibold text-slate-600 mb-2.5">Salary Range</h4>
+          <h4 className="text-sm font-semibold text-slate-600 mb-2.5">Mức lương</h4>
           <div className="flex items-center gap-2">
             <input
               type="text"
-              placeholder="Min"
+              placeholder="Tối thiểu"
               className="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
             />
             <span className="text-slate-400 text-xs">—</span>
             <input
               type="text"
-              placeholder="Max"
+              placeholder="Tối đa"
               className="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
             />
           </div>
@@ -102,7 +102,7 @@ const SearchFilters = () => {
 
       {/* Apply Button */}
       <button className="w-full mt-6 px-4 py-2.5 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-all shadow-sm">
-        Apply Filters
+        Áp dụng bộ lọc
       </button>
     </div>
   );

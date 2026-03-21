@@ -21,7 +21,7 @@ export default function JobPostingPage() {
           }`}
         >
           <MdOutlineList className="w-5 h-5" />
-          List
+          Danh sách
         </Link>
         <Link
           href="/employer/job-posting/create"
@@ -32,7 +32,7 @@ export default function JobPostingPage() {
           }`}
         >
           <MdOutlineAdd className="w-5 h-5" />
-          Create
+          Tạo mới
         </Link>
       </div>
 

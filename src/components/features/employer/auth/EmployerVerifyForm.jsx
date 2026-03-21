@@ -42,18 +42,18 @@ const EmployerVerifyForm = () => {
         <div className="w-16 h-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
           <FaShieldAlt />
         </div>
-        <h2 className="text-3xl font-extrabold text-gray-900 mb-2">Check your email</h2>
+        <h2 className="text-3xl font-extrabold text-gray-900 mb-2">Kiểm tra email của bạn</h2>
         <p className="text-gray-500 text-sm">
-          We sent a 6-digit verification code to your email. Enter the code to continue.
+          Chúng tôi đã gửi mã xác minh gồm 6 chữ số đến email của bạn. Nhập mã để tiếp tục.
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="relative mb-6 flex flex-col justify-center text-left">
-          <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Verification Code</span>
+          <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Mã xác minh</span>
           <Input 
             icon={<FaShieldAlt />} 
-            placeholder="Enter 6-digit code" 
+            placeholder="Nhập mã 6 chữ số" 
             maxLength={6}
             {...register("otp")} 
           />
@@ -68,15 +68,15 @@ const EmployerVerifyForm = () => {
           className="w-full bg-[#00D06A] hover:bg-green-600 text-white font-semibold py-4 rounded-xl shadow-[0_4px_14px_0_rgba(0,208,106,0.39)] transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
           disabled={isLoading}
         >
-          {isLoading ? "Verifying..." : "Verify Code"}
+          {isLoading ? "Đang xác minh..." : "Xác minh mã"}
         </Button>
       </form>
 
       <div className="text-center mt-6">
         <p className="text-sm text-gray-500">
-          Didn't receive the code?{" "}
+          Chưa nhận được mã?{" "}
           <button className="font-semibold text-[#00D06A] hover:underline cursor-pointer">
-            Resend
+            Gửi lại
           </button>
         </p>
       </div>

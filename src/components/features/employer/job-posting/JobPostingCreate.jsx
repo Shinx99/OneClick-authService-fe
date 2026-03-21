@@ -6,44 +6,44 @@ import { MdOutlineSave, MdOutlinePublish, MdOutlineLocationOn } from "react-icon
 const formSections = [
   {
     number: 1,
-    title: "General Information",
+    title: "Thông tin chung",
     fields: [
-      { name: "jobTitle", label: "Job Title", placeholder: "e.g. Senior Java Backend Developer", colSpan: 2 },
-      { name: "industry", label: "Industry", type: "select", options: ["Information Technology", "Finance & Banking", "Marketing", "Healthcare", "Education"] },
-      { name: "sectorLevel", label: "Sector Level", type: "select", options: ["Junior", "Mid-Level", "Senior", "Lead", "Manager"] },
-      { name: "jobType", label: "Job Type", type: "select", options: ["Full-time", "Part-time", "Contract", "Remote"] },
-      { name: "salary", label: "Salary Range", placeholder: "e.g. $1,000 - $2,000" },
+      { name: "jobTitle", label: "Chức danh", placeholder: "VD: Senior Java Backend Developer", colSpan: 2 },
+      { name: "industry", label: "Ngành nghề", type: "select", options: ["Công nghệ thông tin", "Tài chính & Ngân hàng", "Marketing", "Y tế", "Giáo dục"] },
+      { name: "sectorLevel", label: "Cấp bậc", type: "select", options: ["Nhân viên mới", "Trung cấp", "Cao cấp", "Trưởng nhóm", "Quản lý"] },
+      { name: "jobType", label: "Hình thức làm việc", type: "select", options: ["Toàn thời gian", "Bán thời gian", "Hợp đồng", "Làm việc từ xa"] },
+      { name: "salary", label: "Mức lương", placeholder: "VD: 15.000.000 - 30.000.000 VNĐ" },
     ],
   },
   {
     number: 2,
-    title: "Job Details",
+    title: "Chi tiết công việc",
     fields: [
-      { name: "jobDescription", label: "Job Description", type: "textarea", placeholder: "Explain the role and its key responsibilities...", colSpan: 2 },
-      { name: "candidateRequirements", label: "Candidate Requirements", type: "textarea", placeholder: "List skills or experience you are looking for...", colSpan: 2 },
-      { name: "benefits", label: "Benefits", type: "textarea", placeholder: "List any incentives, benefits, or perks...", colSpan: 2 },
+      { name: "jobDescription", label: "Mô tả công việc", type: "textarea", placeholder: "Mô tả vai trò và các trách nhiệm chính...", colSpan: 2 },
+      { name: "candidateRequirements", label: "Yêu cầu ứng viên", type: "textarea", placeholder: "Liệt kê các kỹ năng hoặc kinh nghiệm yêu cầu...", colSpan: 2 },
+      { name: "benefits", label: "Phúc lợi", type: "textarea", placeholder: "Liệt kê các phúc lợi, đãi ngộ...", colSpan: 2 },
     ],
   },
   {
     number: 3,
-    title: "Requirements & Setup",
+    title: "Yêu cầu & Thiết lập",
     fields: [
-      { name: "startDate", label: "Start Date", type: "date" },
-      { name: "endDate", label: "End Date", type: "date" },
-      { name: "slots", label: "Slots", placeholder: "5 - 10 Slots", type: "number" },
-      { name: "jobTags", label: "Job Tags", placeholder: "e.g. React, Node.js, Python..." },
-      { name: "workersStaying", label: "Worker's Staying", type: "select", options: ["On-site", "Remote", "Hybrid"] },
+      { name: "startDate", label: "Ngày bắt đầu", type: "date" },
+      { name: "endDate", label: "Ngày kết thúc", type: "date" },
+      { name: "slots", label: "Số lượng", placeholder: "5 - 10 vị trí", type: "number" },
+      { name: "jobTags", label: "Từ khóa", placeholder: "VD: React, Node.js, Python..." },
+      { name: "workersStaying", label: "Hình thức làm việc", type: "select", options: ["Tại văn phòng", "Làm việc từ xa", "Kết hợp"] },
     ],
   },
   {
     number: 4,
-    title: "Location & Deadline",
+    title: "Địa điểm & Thời hạn",
     fields: [
-      { name: "publishedDate", label: "Published Date", type: "date" },
-      { name: "applicationDeadline", label: "Application Deadline", type: "date" },
-      { name: "country", label: "Country", type: "select", options: ["Vietnam", "United States", "Singapore", "Japan"] },
-      { name: "city", label: "City", type: "select", options: ["Ho Chi Minh City", "Ha Noi", "Da Nang"] },
-      { name: "address", label: "Address", placeholder: "e.g. 131 Mathis St, Suite 445", icon: true, colSpan: 2 },
+      { name: "publishedDate", label: "Ngày đăng", type: "date" },
+      { name: "applicationDeadline", label: "Hạn nộp hồ sơ", type: "date" },
+      { name: "country", label: "Quốc gia", type: "select", options: ["Việt Nam", "Hoa Kỳ", "Singapore", "Nhật Bản"] },
+      { name: "city", label: "Thành phố", type: "select", options: ["TP. Hồ Chí Minh", "Hà Nội", "Đà Nẵng"] },
+      { name: "address", label: "Địa chỉ", placeholder: "VD: 131 Đường Mathis, Phòng 445", icon: true, colSpan: 2 },
     ],
   },
 ];
@@ -55,7 +55,7 @@ const FormField = ({ field }) => {
   if (field.type === "select") {
     return (
       <select className={`${inputClass} text-slate-600`} defaultValue="">
-        <option value="">Select {field.label.toLowerCase()}</option>
+        <option value="">Chọn {field.label.toLowerCase()}</option>
         {field.options.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
       </select>
     );
@@ -78,15 +78,15 @@ const JobPostingForm = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800">Create New Job Posting</h2>
-          <p className="text-sm text-slate-400 mt-1">Fill in the details to post a new job opening</p>
+          <h2 className="text-2xl font-bold text-slate-800">Tạo tin tuyển dụng mới</h2>
+          <p className="text-sm text-slate-400 mt-1">Điền thông tin chi tiết để đăng tin tuyển dụng mới</p>
         </div>
         <div className="flex items-center gap-3">
           <button className="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 text-slate-600 text-sm font-semibold rounded-lg hover:bg-slate-50 transition-all">
-            <MdOutlineSave className="w-5 h-5" /> Save Draft
+            <MdOutlineSave className="w-5 h-5" /> Lưu nháp
           </button>
           <button className="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-all shadow-sm">
-            <MdOutlinePublish className="w-5 h-5" /> Publish Job
+            <MdOutlinePublish className="w-5 h-5" /> Đăng tin
           </button>
         </div>
       </div>
@@ -117,14 +117,14 @@ const JobPostingForm = () => {
           <div className="w-full h-40 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center justify-center">
             <div className="text-center">
               <MdOutlineLocationOn className="w-8 h-8 text-emerald-400 mx-auto mb-1" />
-              <p className="text-sm text-emerald-600 font-medium">Map Preview</p>
+              <p className="text-sm text-emerald-600 font-medium">Xem trước bản đồ</p>
             </div>
           </div>
         </div>
 
         <div className="flex justify-end">
           <button className="flex items-center gap-2 px-8 py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition-all shadow-md">
-            <MdOutlinePublish className="w-5 h-5" /> Publish Job Posting
+            <MdOutlinePublish className="w-5 h-5" /> Đăng tin tuyển dụng
           </button>
         </div>
       </div>
