@@ -11,7 +11,7 @@ const CompanyProfileForm = () => {
         <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.15\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"2\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')" }} />
         <button className="absolute bottom-3 right-3 flex items-center gap-1.5 px-3 py-1.5 bg-black/30 text-white text-xs font-medium rounded-lg hover:bg-black/50 transition-all backdrop-blur-sm">
           <MdOutlineCameraAlt className="w-4 h-4" />
-          Change Cover
+          Đổi ảnh bìa
         </button>
         {/* Logo */}
         <div className="absolute -bottom-8 left-6">
@@ -29,29 +29,29 @@ const CompanyProfileForm = () => {
       <div className="pt-14 px-6 pb-6">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Company Name</label>
+            <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Tên công ty</label>
             <input type="text" defaultValue="One-Click Technologies" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
           </div>
           <div>
-            <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Website URL</label>
+            <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Website</label>
             <input type="text" defaultValue="https://one-click.tech" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
           </div>
           <div>
-            <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Industry</label>
+            <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Ngành nghề</label>
             <select defaultValue="software" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
-              <option value="software">Software Development</option>
-              <option value="finance">Finance & Banking</option>
+              <option value="software">Phát triển phần mềm</option>
+              <option value="finance">Tài chính & Ngân hàng</option>
               <option value="marketing">Marketing</option>
-              <option value="healthcare">Healthcare</option>
+              <option value="healthcare">Y tế</option>
             </select>
           </div>
           <div>
-            <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Company Size</label>
+            <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Quy mô công ty</label>
             <select defaultValue="201-500" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
-              <option value="1-50">1-50 Employees</option>
-              <option value="51-200">51-200 Employees</option>
-              <option value="201-500">201-500 Employees</option>
-              <option value="500+">500+ Employees</option>
+              <option value="1-50">1-50 nhân viên</option>
+              <option value="51-200">51-200 nhân viên</option>
+              <option value="201-500">201-500 nhân viên</option>
+              <option value="500+">500+ nhân viên</option>
             </select>
           </div>
         </div>

@@ -12,11 +12,11 @@ import {
 } from "recharts";
 
 const data = [
-  { name: "W1", submissions: 45, fill: "#6ee7b7" },
-  { name: "W2", submissions: 130, fill: "#34d399" },
-  { name: "W3", submissions: 200, fill: "#10b981" },
-  { name: "W4", submissions: 95, fill: "#6ee7b7" },
-  { name: "W5", submissions: 160, fill: "#5e34d3ff" },
+  { name: "T1", submissions: 45, fill: "#6ee7b7" },
+  { name: "T2", submissions: 130, fill: "#34d399" },
+  { name: "T3", submissions: 200, fill: "#10b981" },
+  { name: "T4", submissions: 95, fill: "#6ee7b7" },
+  { name: "T5", submissions: 160, fill: "#5e34d3ff" },
 ];
 
 const CustomTooltip = ({ active, payload, label }) => {
@@ -24,7 +24,7 @@ const CustomTooltip = ({ active, payload, label }) => {
     return (
       <div className="bg-slate-800 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
         <p className="font-semibold">{label}</p>
-        <p className="text-emerald-300">{payload[0].value} submissions</p>
+        <p className="text-emerald-300">{payload[0].value} hồ sơ nộp</p>
       </div>
     );
   }
@@ -37,13 +37,13 @@ const CVSubmissionsChart = () => {
       {/* Header */}
       <div className="flex items-start justify-between mb-1">
         <div>
-          <h3 className="text-lg font-bold text-slate-800">CV Submissions</h3>
+          <h3 className="text-lg font-bold text-slate-800">CV đã nộp</h3>
           <p className="text-sm text-slate-400 mt-0.5">
-            Activity report for Oct 1 - Oct 30
+            Báo cáo hoạt động từ 01/10 - 30/10
           </p>
         </div>
         <button className="flex items-center gap-1.5 px-3 py-1.5 border border-slate-200 rounded-lg text-sm text-slate-600 hover:bg-slate-50 transition-colors">
-          Last 30 Days
+          30 ngày qua
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>

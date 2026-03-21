@@ -25,32 +25,32 @@ import {
 
 const navItems = [
   {
-    name: "Dasboard",
+    name: "Bảng điều khiển",
     href: "/employer/dashboard",
     icon: MdOutlineDashboard,
   },
   {
-    name: "Job Postings",
+    name: "Tin tuyển dụng",
     href: "/employer/job-posting",
     icon: MdOutlineWorkOutline,
   },
   {
-    name: "Candidate Management",
+    name: "Quản lý ứng viên",
     href: "/employer/candidate",
     icon: MdOutlinePeopleAlt,
   },
   {
-    name: "Resume Search",
+    name: "Tìm kiếm hồ sơ",
     href: "/employer/resume-search",
     icon: MdOutlineSearch,
   },
   {
-    name: "Company Profile",
+    name: "Hồ sơ công ty",
     href: "/employer/company-profile",
     icon: MdOutlineBusiness,
   },
   {
-    name: "Account Settings",
+    name: "Cài đặt tài khoản",
     href: "/employer/setting",
     icon: MdOutlineSettings,
   },
@@ -80,7 +80,7 @@ const Sidebar = () => {
                 One-Click
               </span>
               <span className="text-[10px] font-semibold text-slate-400 tracking-[0.15em] uppercase">
-                Recruitment Platform
+                Nền tảng tuyển dụng
               </span>
             </div>
           </Link>
@@ -124,21 +124,21 @@ const Sidebar = () => {
           className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all duration-200"
         >
           <MdOutlineHelpOutline className="w-5 h-5" />
-          <span>Support</span>
+          <span>Hỗ trợ</span>
         </Link>
 
         {/* System Status */}
         <div className="flex items-center gap-2 px-4 py-3">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
           <span className="text-xs font-semibold text-emerald-400 tracking-wide uppercase">
-            System Active
+            Hệ thống hoạt động
           </span>
         </div>
 
         {/* Logout */}
         <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all duration-200">
           <MdOutlineLogout className="w-5 h-5" />
-          <span>Logout</span>
+          <span>Đăng xuất</span>
         </button>
       </div>
     </aside>

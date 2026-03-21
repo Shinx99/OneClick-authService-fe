@@ -8,8 +8,8 @@ const candidates = [
     name: "Nguyen Van A",
     avatar: "NV",
     position: "Senior Java Developer",
-    department: "Engineering",
-    status: "Interview",
+    department: "Kỹ thuật",
+    status: "Phỏng vấn",
     match: 92,
     appliedDate: "2024-10-15",
   },
@@ -18,8 +18,8 @@ const candidates = [
     name: "Tran Thi B",
     avatar: "TT",
     position: "Product Designer",
-    department: "Design",
-    status: "Screening",
+    department: "Thiết kế",
+    status: "Sàng lọc",
     match: 85,
     appliedDate: "2024-10-14",
   },
@@ -29,7 +29,7 @@ const candidates = [
     avatar: "HT",
     position: "Marketing Manager",
     department: "Marketing",
-    status: "Offer",
+    status: "Đề xuất",
     match: 78,
     appliedDate: "2024-10-12",
   },
@@ -38,8 +38,8 @@ const candidates = [
     name: "Ngo Van D",
     avatar: "NV",
     position: "QA Engineer",
-    department: "Quality Assurance",
-    status: "New",
+    department: "Đảm bảo chất lượng",
+    status: "Mới",
     match: 70,
     appliedDate: "2024-10-16",
   },
@@ -48,8 +48,8 @@ const candidates = [
     name: "Pham Minh E",
     avatar: "PM",
     position: "Fullstack Engineer",
-    department: "Engineering",
-    status: "Interview",
+    department: "Kỹ thuật",
+    status: "Phỏng vấn",
     match: 88,
     appliedDate: "2024-10-13",
   },
@@ -58,19 +58,19 @@ const candidates = [
     name: "Le Thi F",
     avatar: "LT",
     position: "UX Researcher",
-    department: "Design",
-    status: "Rejected",
+    department: "Thiết kế",
+    status: "Từ chối",
     match: 45,
     appliedDate: "2024-10-10",
   },
 ];
 
 const statusColors = {
-  New: "bg-blue-50 text-blue-700",
-  Screening: "bg-amber-50 text-amber-700",
-  Interview: "bg-violet-50 text-violet-700",
-  Offer: "bg-emerald-50 text-emerald-700",
-  Rejected: "bg-red-50 text-red-600",
+  "Mới": "bg-blue-50 text-blue-700",
+  "Sàng lọc": "bg-amber-50 text-amber-700",
+  "Phỏng vấn": "bg-violet-50 text-violet-700",
+  "Đề xuất": "bg-emerald-50 text-emerald-700",
+  "Từ chối": "bg-red-50 text-red-600",
 };
 
 const CandidateTable = () => {
@@ -80,20 +80,20 @@ const CandidateTable = () => {
       <div className="flex items-center justify-between p-5 border-b border-slate-100">
         <div className="flex items-center gap-3">
           <button className="px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg">
-            All Candidates
+            Tất cả ứng viên
           </button>
           <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-500">
             <MdOutlineCalendarToday className="w-4 h-4" />
-            <span>Oct 1, 2024 - Oct 30, 2024</span>
+            <span>01/10/2024 - 30/10/2024</span>
           </div>
           <input
             type="text"
-            placeholder="Search a candidate name..."
+            placeholder="Tìm kiếm tên ứng viên..."
             className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all w-60"
           />
         </div>
         <button className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-emerald-600 border border-emerald-200 rounded-lg hover:bg-emerald-50 transition-all">
-          + Add Filter
+          + Thêm bộ lọc
         </button>
       </div>
 
@@ -103,25 +103,25 @@ const CandidateTable = () => {
           <thead>
             <tr className="border-b border-slate-100 bg-slate-50/50">
               <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Candidate
+                Ứng viên
               </th>
               <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Position
+                Vị trí
               </th>
               <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Department
+                Phòng ban
               </th>
               <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Status
+                Trạng thái
               </th>
               <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Match %
+                Phù hợp %
               </th>
               <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Applied
+                Ngày ứng tuyển
               </th>
               <th className="text-right text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Actions
+                Thao tác
               </th>
             </tr>
           </thead>
@@ -187,17 +187,17 @@ const CandidateTable = () => {
       {/* Footer */}
       <div className="flex items-center justify-between px-5 py-4 border-t border-slate-100">
         <p className="text-sm text-slate-400">
-          Showing 1 to {candidates.length} of 186 results
+          Hiển thị 1 đến {candidates.length} trong tổng số 186 kết quả
         </p>
         <div className="flex items-center gap-1">
           <button className="px-3 py-1.5 text-sm text-slate-400 hover:bg-slate-100 rounded-lg transition-all">
-            Previous
+            Trước
           </button>
           <button className="px-3 py-1.5 text-sm bg-emerald-600 text-white rounded-lg">1</button>
           <button className="px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-100 rounded-lg transition-all">2</button>
           <button className="px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-100 rounded-lg transition-all">3</button>
           <button className="px-3 py-1.5 text-sm text-slate-400 hover:bg-slate-100 rounded-lg transition-all">
-            Next
+            Tiếp
           </button>
         </div>
       </div>

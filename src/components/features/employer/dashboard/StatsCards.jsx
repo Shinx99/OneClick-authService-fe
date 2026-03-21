@@ -8,7 +8,7 @@ import {
 
 const stats = [
   {
-    label: "TOTAL CVS RECEIVED",
+    label: "TỔNG CV NHẬN ĐƯỢC",
     value: "2,150",
     change: "+5%",
     icon: MdOutlineDescription,
@@ -18,7 +18,7 @@ const stats = [
     barWidth: "w-3/5",
   },
   {
-    label: "ACTIVE JOB POSTS",
+    label: "TIN TUYỂN DỤNG ĐANG HOẠT ĐỘNG",
     value: "18",
     change: "+5%",
     icon: MdOutlineWorkOutline,
@@ -28,7 +28,7 @@ const stats = [
     barWidth: "w-2/5",
   },
   {
-    label: "RESUME VIEWS",
+    label: "LƯỢT XEM HỒ SƠ",
     value: "5,600",
     change: "+8%",
     icon: MdOutlineVisibility,

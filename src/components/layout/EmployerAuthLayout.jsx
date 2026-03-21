@@ -20,10 +20,10 @@ const EmployerAuthLayout = ({ children, backgroundImage = "/images/login-bg.jpg"
 
         <div className="absolute top-1/2 -translate-y-[60%] left-10 right-10 text-white z-10">
           <h2 className="text-4xl xl:text-5xl font-bold leading-tight mb-4">
-            Build your <span className="text-green-400">dream team</span>
+            Xây dựng <span className="text-green-400">đội ngũ mơ ước</span>
           </h2>
           <p className="text-base xl:text-lg text-gray-200">
-            Access a curated pool of institutional talent and streamline your entire hiring lifecycle with our intelligent dashboard.
+            Tiếp cận kho tàng ứng viên tài năng và tối ưu hóa toàn bộ quy trình tuyển dụng của bạn với bảng điều khiển thông minh.
           </p>
           <div className="mt-8 flex gap-2">
             <span className="w-6 h-1 bg-green-500 rounded-full"></span>

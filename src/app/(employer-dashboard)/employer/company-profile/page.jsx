@@ -9,9 +9,9 @@ export default function CompanyProfilePage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-slate-800">Company Profile</h2>
+        <h2 className="text-2xl font-bold text-slate-800">Hồ sơ công ty</h2>
         <p className="text-sm text-slate-400 mt-1">
-          Manage your organization&apos;s public brand and recruitment identity.
+          Quản lý thương hiệu công khai và nhận diện tuyển dụng của tổ chức.
         </p>
       </div>
 

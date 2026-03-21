@@ -15,7 +15,7 @@ const TopNav = () => {
           <MdOutlineSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
           <input
             type="text"
-            placeholder="Search jobs or candidates..."
+            placeholder="Tìm kiếm việc làm hoặc ứng viên..."
             className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-600 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
           />
         </div>
@@ -29,7 +29,7 @@ const TopNav = () => {
           className="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-all duration-200 shadow-sm hover:shadow-md whitespace-nowrap"
         >
           <MdAdd className="w-5 h-5" />
-          <span className="hidden sm:inline">Post New Job</span>
+          <span className="hidden sm:inline">Đăng tin mới</span>
         </Link>
 
         {/* Notification */}

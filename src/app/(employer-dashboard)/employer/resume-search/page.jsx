@@ -8,9 +8,9 @@ export default function ResumeSearchPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800">Resume Search</h2>
+          <h2 className="text-2xl font-bold text-slate-800">Tìm kiếm hồ sơ</h2>
           <p className="text-sm text-slate-400 mt-1">
-            Search and discover candidate resumes
+            Tìm kiếm và khám phá hồ sơ ứng viên
           </p>
         </div>
       </div>

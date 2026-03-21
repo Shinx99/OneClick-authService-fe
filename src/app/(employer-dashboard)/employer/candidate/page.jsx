@@ -8,9 +8,9 @@ export default function CandidatePage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800">Candidate Management</h2>
+          <h2 className="text-2xl font-bold text-slate-800">Quản lý ứng viên</h2>
           <p className="text-sm text-slate-400 mt-1">
-            Review and manage your candidate pipeline
+            Xem xét và quản lý quy trình ứng viên của bạn
           </p>
         </div>
       </div>

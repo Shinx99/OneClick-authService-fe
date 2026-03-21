@@ -43,15 +43,15 @@ const EmployerCompanyForm = () => {
     <div className="w-full max-w-xl mx-auto">
 
       <div className="mb-6">
-        <h1 className="text-3xl font-extrabold text-gray-900 mb-2">Company Profile</h1>
-        <p className="text-gray-500 text-sm">Tell us more about your company to attract the best talent.</p>
+        <h1 className="text-3xl font-extrabold text-gray-900 mb-2">Hồ sơ công ty</h1>
+        <p className="text-gray-500 text-sm">Cho chúng tôi biết thêm về công ty của bạn để thu hút nhân tài xuất sắc nhất.</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Row 1: Industry & Size */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-2">
           <div className="relative mb-4 flex flex-col justify-center">
-            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Industry</span>
+            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Ngành nghề</span>
             <div className="relative flex items-center bg-white border-[2px] border-gray-200 rounded-xl px-4 h-[56px] transition-all focus-within:border-green-500 mt-2">
               <span className="text-gray-400 mr-3 text-lg"><FaBuilding /></span>
               <select className="w-full bg-transparent border-none outline-none text-gray-800 text-[15px] font-semibold appearance-none" {...register("industry")}>
@@ -65,14 +65,14 @@ const EmployerCompanyForm = () => {
           </div>
 
           <div className="relative mb-4 flex flex-col justify-center">
-            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Company Size</span>
+            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Quy mô nhân sự</span>
             <div className="relative flex items-center bg-white border-[2px] border-gray-200 rounded-xl px-4 h-[56px] transition-all focus-within:border-green-500 mt-2">
               <span className="text-gray-400 mr-3 text-lg"><FaUsers /></span>
               <select className="w-full bg-transparent border-none outline-none text-gray-800 text-[15px] font-semibold appearance-none" {...register("companySize")}>
-                <option value="1-10">1 - 10 employees</option>
-                <option value="11-50">11 - 50 employees</option>
-                <option value="51-200">51 - 200 employees</option>
-                <option value="200+">200+ employees</option>
+                <option value="1-10">1 - 10 nhân viên</option>
+                <option value="11-50">11 - 50 nhân viên</option>
+                <option value="51-200">51 - 200 nhân viên</option>
+                <option value="200+">200+ nhân viên</option>
               </select>
             </div>
             {errors.companySize && <p className="absolute -bottom-1 left-1 mt-1 text-red-500 text-[11px] font-semibold">{errors.companySize.message}</p>}
@@ -82,26 +82,26 @@ const EmployerCompanyForm = () => {
         {/* Row 2: Website & Tax code */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-2">
           <div className="relative mb-4">
-            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Website URL</span>
+            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Liên kết Website</span>
             <Input icon={<FaGlobe />} placeholder="https://example.com" {...register("website")} />
             {errors.website && <p className="absolute -bottom-1 left-1 mt-1 text-red-500 text-[11px] font-semibold">{errors.website.message}</p>}
           </div>
 
           <div className="relative mb-4">
-            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Tax Code (Required)</span>
-            <Input icon={<FaIdCard />} placeholder="Mã số thuế" {...register("taxCode")} />
+            <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Mã số thuế (Bắt buộc)</span>
+            <Input icon={<FaIdCard />} placeholder="Mã số doanh nghiệp..." {...register("taxCode")} />
             {errors.taxCode && <p className="absolute -bottom-1 left-1 mt-1 text-red-500 text-[11px] font-semibold">{errors.taxCode.message}</p>}
           </div>
         </div>
 
         {/* Row 3: Description */}
         <div className="relative mb-6">
-          <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Company Description</span>
+          <span className="text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">Mô tả công ty</span>
           <div className="relative flex bg-white border-[2px] border-gray-200 rounded-xl px-4 py-3 transition-all focus-within:border-green-500 mt-2">
              <span className="text-gray-400 mr-3 text-lg mt-1"><FaInfoCircle /></span>
              <textarea 
                 className="w-full min-h-[100px] bg-transparent border-none outline-none text-gray-800 text-[15px] font-medium resize-none"
-                placeholder="A brief introduction about your company, mission, and culture..."
+                placeholder="Giới thiệu ngắn gọn về công ty, sứ mệnh và văn hóa của bạn..."
                 {...register("description")}
              ></textarea>
           </div>
@@ -114,7 +114,7 @@ const EmployerCompanyForm = () => {
           className="w-full bg-[#00D06A] hover:bg-green-600 text-white font-semibold py-4 rounded-xl shadow-[0_4px_14px_0_rgba(0,208,106,0.39)] transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed mt-4"
           disabled={isLoading}
         >
-          {isLoading ? "Saving..." : "Submit Profile"}
+          {isLoading ? "Đang lưu..." : "Gửi hồ sơ"}
           <span className="text-lg">→</span>
         </Button>
       </form>

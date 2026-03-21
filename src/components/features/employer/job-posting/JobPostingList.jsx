@@ -12,40 +12,40 @@ const demoJobs = [
   {
     id: 1,
     title: "Senior Java Backend Developer",
-    department: "Engineering",
-    type: "Full-time",
-    location: "Ho Chi Minh City",
-    status: "Active",
+    department: "Kỹ thuật",
+    type: "Toàn thời gian",
+    location: "TP. Hồ Chí Minh",
+    status: "Đang hoạt động",
     applications: 45,
     postedDate: "2024-10-01",
   },
   {
     id: 2,
     title: "Product Designer",
-    department: "Design",
-    type: "Full-time",
-    location: "Ha Noi",
-    status: "Active",
+    department: "Thiết kế",
+    type: "Toàn thời gian",
+    location: "Hà Nội",
+    status: "Đang hoạt động",
     applications: 32,
     postedDate: "2024-10-05",
   },
   {
     id: 3,
     title: "Senior Fullstack Engineer",
-    department: "Engineering",
-    type: "Full-time",
-    location: "Remote",
-    status: "Expiring",
+    department: "Kỹ thuật",
+    type: "Toàn thời gian",
+    location: "Làm việc từ xa",
+    status: "Sắp hết hạn",
     applications: 28,
     postedDate: "2024-09-20",
   },
   {
     id: 4,
     title: "QA Engineer",
-    department: "Quality Assurance",
-    type: "Contract",
-    location: "Da Nang",
-    status: "Active",
+    department: "Đảm bảo chất lượng",
+    type: "Hợp đồng",
+    location: "Đà Nẵng",
+    status: "Đang hoạt động",
     applications: 15,
     postedDate: "2024-10-10",
   },
@@ -53,28 +53,28 @@ const demoJobs = [
     id: 5,
     title: "Marketing Manager",
     department: "Marketing",
-    type: "Full-time",
-    location: "Ho Chi Minh City",
-    status: "Closed",
+    type: "Toàn thời gian",
+    location: "TP. Hồ Chí Minh",
+    status: "Đã đóng",
     applications: 67,
     postedDate: "2024-08-15",
   },
   {
     id: 6,
     title: "UX/UI Designer & Product Lead",
-    department: "Design",
-    type: "Full-time",
-    location: "Ha Noi",
-    status: "Active",
+    department: "Thiết kế",
+    type: "Toàn thời gian",
+    location: "Hà Nội",
+    status: "Đang hoạt động",
     applications: 21,
     postedDate: "2024-10-12",
   },
 ];
 
 const statusColors = {
-  Active: "bg-emerald-50 text-emerald-700",
-  Expiring: "bg-amber-50 text-amber-700",
-  Closed: "bg-slate-100 text-slate-500",
+  "Đang hoạt động": "bg-emerald-50 text-emerald-700",
+  "Sắp hết hạn": "bg-amber-50 text-amber-700",
+  "Đã đóng": "bg-slate-100 text-slate-500",
 };
 
 const JobPostingList = () => {
@@ -83,22 +83,22 @@ const JobPostingList = () => {
       {/* Header */}
       <div className="flex items-center justify-between p-5 border-b border-slate-100">
         <div>
-          <h3 className="text-lg font-bold text-slate-800">All Job Postings</h3>
+          <h3 className="text-lg font-bold text-slate-800">Tất cả tin tuyển dụng</h3>
           <p className="text-sm text-slate-400 mt-0.5">
-            Manage and track all your posted positions
+            Quản lý và theo dõi tất cả các vị trí đã đăng
           </p>
         </div>
         <div className="flex items-center gap-3">
           <input
             type="text"
-            placeholder="Search postings..."
+            placeholder="Tìm kiếm tin đăng..."
             className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all w-56"
           />
           <select className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
-            <option>All Status</option>
-            <option>Active</option>
-            <option>Expiring</option>
-            <option>Closed</option>
+            <option>Tất cả trạng thái</option>
+            <option>Đang hoạt động</option>
+            <option>Sắp hết hạn</option>
+            <option>Đã đóng</option>
           </select>
         </div>
       </div>
@@ -109,28 +109,28 @@ const JobPostingList = () => {
           <thead>
             <tr className="border-b border-slate-100 bg-slate-50/50">
               <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Job Title
+                Vị trí tuyển dụng
               </th>
               <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Department
+                Phòng ban
               </th>
               <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Type
+                Loại hình
               </th>
               <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Location
+                Địa điểm
               </th>
               <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Status
+                Trạng thái
               </th>
               <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Applications
+                Lượt ứng tuyển
               </th>
               <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Posted
+                Ngày đăng
               </th>
               <th className="text-right text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Actions
+                Thao tác
               </th>
             </tr>
           </thead>
@@ -191,15 +191,15 @@ const JobPostingList = () => {
       {/* Footer */}
       <div className="flex items-center justify-between px-5 py-4 border-t border-slate-100">
         <p className="text-sm text-slate-400">
-          Showing 1 to {demoJobs.length} of {demoJobs.length} results
+          Hiển thị 1 đến {demoJobs.length} trong tổng số {demoJobs.length} kết quả
         </p>
         <div className="flex items-center gap-1">
           <button className="px-3 py-1.5 text-sm text-slate-400 hover:bg-slate-100 rounded-lg transition-all">
-            Previous
+            Trước
           </button>
           <button className="px-3 py-1.5 text-sm bg-emerald-600 text-white rounded-lg">1</button>
           <button className="px-3 py-1.5 text-sm text-slate-400 hover:bg-slate-100 rounded-lg transition-all">
-            Next
+            Tiếp
           </button>
         </div>
       </div>

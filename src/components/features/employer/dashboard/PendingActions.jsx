@@ -5,18 +5,18 @@ import { MdCheckCircle, MdArrowForward } from "react-icons/md";
 
 const actions = [
   {
-    title: "Review 5 unread CVs",
-    subtitle: "Product Designer Role",
+    title: "Xem xét 5 CV chưa đọc",
+    subtitle: "Vị trí Product Designer",
     href: "/employer/candidate",
   },
   {
-    title: "Job posting expiring",
-    subtitle: "Senior Fullstack Engineer (2 days)",
+    title: "Tin tuyển dụng sắp hết hạn",
+    subtitle: "Senior Fullstack Engineer (còn 2 ngày)",
     href: "/employer/job-posting",
   },
   {
-    title: "Schedule 3 interviews",
-    subtitle: "Shortlisted candidates for Marketing",
+    title: "Lên lịch 3 cuộc phỏng vấn",
+    subtitle: "Ứng viên đã chọn cho vị trí Marketing",
     href: "/employer/candidate",
   },
 ];
@@ -24,7 +24,7 @@ const actions = [
 const PendingActions = () => {
   return (
     <div className="bg-white rounded-xl border border-slate-100 p-6 h-full flex flex-col">
-      <h3 className="text-lg font-bold text-slate-800 mb-5">Pending Actions</h3>
+      <h3 className="text-lg font-bold text-slate-800 mb-5">Hành động chờ xử lý</h3>
 
       <div className="space-y-4 flex-1">
         {actions.map((action, index) => (
@@ -49,7 +49,7 @@ const PendingActions = () => {
         href="/employer/candidate"
         className="flex items-center gap-1 text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors mt-4 pt-4 border-t border-slate-100"
       >
-        View all tasks
+        Xem tất cả công việc
         <MdArrowForward className="w-4 h-4" />
       </Link>
     </div>
