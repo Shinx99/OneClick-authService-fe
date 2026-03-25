@@ -8,9 +8,8 @@ import { FaUser, FaLock, FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
-import { useAuth } from "@/composables/useAuth";
+import { useAuth } from "@/context/AuthContext";
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google"
-//import { FaLinkedin } from "react-icons/fa";
 
 const LoginForm = () => {
 
