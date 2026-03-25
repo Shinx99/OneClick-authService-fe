@@ -5,6 +5,7 @@ export const LoginSchema = z.object({
   username: z
     .string()
     .min(1, { message: "Vui lòng nhập tên đăng nhập" })
+    .email({ message: "Email không đúng định dạng" }) // Ép chuẩn định dạng email
     .trim(),
 
   password: z
