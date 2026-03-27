@@ -200,27 +200,6 @@ const JobContent = ({ data }) => {
           </div>
         </div>
       </div>
-
-      {/* ==========================================
-          5. BOTTOM CTA (Nút ứng tuyển cuối bài)
-      ========================================== */}
-      <div className="bg-[#f0fdf4] p-6 md:p-8 rounded-2xl flex flex-col md:flex-row items-center justify-between border border-green-100/50 relative overflow-hidden">
-        {/* Hình tròn trang trí mờ mờ */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
-
-        <div className="mb-5 md:mb-0 text-center md:text-left relative z-10">
-          <h3 className="text-lg font-bold text-gray-900 mb-1.5">
-            Bạn đã sẵn sàng tạo ra sự khác biệt?
-          </h3>
-          <p className="text-[14px] text-gray-600 font-medium">
-            Gia nhập đội ngũ của chúng tôi và cùng xây dựng tương lai xanh.
-          </p>
-        </div>
-
-        <button className="w-full md:w-auto bg-[#10B94F] hover:bg-green-600 text-white px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg shadow-green-600/20 flex items-center justify-center gap-2 shrink-0 relative z-10 active:scale-95">
-          Ứng tuyển ngay <FiArrowRight className="text-lg" />
-        </button>
-      </div>
     </div>
   );
 };
