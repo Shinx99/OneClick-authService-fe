@@ -19,6 +19,11 @@ OneClick-authService-fe
 │   │   ├── avatar-placeholder.jpg
 │   │   ├── banner.png
 │   │   ├── ecofinance-logo.png
+│   │   ├── employer-ai.png
+│   │   ├── employer-hero.png
+│   │   ├── feature-analytics.png
+│   │   ├── feature-cv.png
+│   │   ├── feature-exam.png
 │   │   ├── greentech-logo.png
 │   │   ├── health-logo.png
 │   │   ├── login-bg.jpg
@@ -32,11 +37,28 @@ OneClick-authService-fe
 │   └── setup.js
 ├── src
 │   ├── app
+│   │   ├── (admin)
+│   │   │   └── admin
+│   │   │       ├── categories
+│   │   │       │   └── page.jsx
+│   │   │       ├── content
+│   │   │       │   ├── companies
+│   │   │       │   │   └── page.jsx
+│   │   │       │   └── jobs
+│   │   │       │       └── page.jsx
+│   │   │       ├── layout.jsx
+│   │   │       ├── page.jsx
+│   │   │       └── users
+│   │   │           ├── candidates
+│   │   │           │   └── page.jsx
+│   │   │           └── employers
+│   │   │               └── page.jsx
 │   │   ├── (auth)
 │   │   │   ├── change-password
 │   │   │   │   └── page.jsx
 │   │   │   ├── forget-password
 │   │   │   │   └── page.jsx
+│   │   │   ├── layout.jsx
 │   │   │   ├── login
 │   │   │   │   └── page.jsx
 │   │   │   ├── otp-verify
@@ -45,34 +67,90 @@ OneClick-authService-fe
 │   │   │   │   └── page.jsx
 │   │   │   └── register-employer
 │   │   │       └── page.jsx
+│   │   ├── (employer-dashboard)
+│   │   │   ├── employer
+│   │   │   │   ├── candidate
+│   │   │   │   │   └── page.jsx
+│   │   │   │   ├── company-profile
+│   │   │   │   │   └── page.jsx
+│   │   │   │   ├── dashboard
+│   │   │   │   │   └── page.jsx
+│   │   │   │   ├── job-posting
+│   │   │   │   │   ├── create
+│   │   │   │   │   │   └── page.jsx
+│   │   │   │   │   └── page.jsx
+│   │   │   │   ├── resume-search
+│   │   │   │   │   └── page.jsx
+│   │   │   │   └── setting
+│   │   │   │       └── page.jsx
+│   │   │   └── layout.jsx
+│   │   ├── (employer-landingPage)
+│   │   │   ├── employer-register
+│   │   │   │   ├── company
+│   │   │   │   │   └── page.jsx
+│   │   │   │   ├── page.jsx
+│   │   │   │   ├── pending
+│   │   │   │   │   └── page.jsx
+│   │   │   │   └── verify
+│   │   │   │       └── page.jsx
+│   │   │   ├── help-center
+│   │   │   │   └── page.jsx
+│   │   │   └── layout.jsx
+│   │   ├── (main)
+│   │   │   ├── companies
+│   │   │   │   ├── [slug]
+│   │   │   │   │   └── page.jsx
+│   │   │   │   └── page.jsx
+│   │   │   ├── jobs
+│   │   │   │   ├── (list)
+│   │   │   │   │   ├── layout.jsx
+│   │   │   │   │   └── page.jsx
+│   │   │   │   └── [id]
+│   │   │   │       ├── ai-report
+│   │   │   │       │   └── page.jsx
+│   │   │   │       └── page.jsx
+│   │   │   ├── layout.jsx
+│   │   │   ├── page.jsx
+│   │   │   └── profile
+│   │   │       ├── edit
+│   │   │       │   └── page.jsx
+│   │   │       └── page.jsx
 │   │   ├── api
 │   │   │   └── auth
-│   │   │       └── router.js
-│   │   ├── companies
-│   │   │   ├── [slug]
-│   │   │   │   └── page.jsx
-│   │   │   └── page.jsx
+│   │   │       └── route.js
 │   │   ├── favicon.ico
 │   │   ├── globals.css
-│   │   ├── jobs
-│   │   │   ├── (list)
-│   │   │   │   ├── layout.jsx
-│   │   │   │   └── page.jsx
-│   │   │   └── [id]
-│   │   │       └── page.jsx
 │   │   ├── layout.jsx
-│   │   ├── not-found.jsx
-│   │   ├── page.jsx
-│   │   └── profile
-│   │       ├── edit
-│   │       │   └── page.jsx
-│   │       └── page.jsx
+│   │   └── not-found.jsx
 │   ├── components
 │   │   ├── common
 │   │   │   ├── Footer.jsx
 │   │   │   ├── Navbar.jsx
-│   │   │   └── Not-found.jsx
+│   │   │   ├── Not-found.jsx
+│   │   │   ├── employer-dashboard
+│   │   │   │   ├── Sidebar.jsx
+│   │   │   │   └── TopNav.jsx
+│   │   │   └── employer-landingPage
+│   │   │       ├── EmployerFooter.jsx
+│   │   │       └── EmployerNavbar.jsx
 │   │   ├── features
+│   │   │   ├── admin
+│   │   │   │   ├── categories
+│   │   │   │   │   └── CategoryContent.jsx
+│   │   │   │   ├── content
+│   │   │   │   │   ├── CompanyTable.jsx
+│   │   │   │   │   └── JobTable.jsx
+│   │   │   │   ├── dashboard
+│   │   │   │   │   ├── GrowthChart.jsx
+│   │   │   │   │   ├── RecentActivities.jsx
+│   │   │   │   │   └── StatsGrid.jsx
+│   │   │   │   ├── shared
+│   │   │   │   │   ├── AdminHeader.jsx
+│   │   │   │   │   └── Sidebar.jsx
+│   │   │   │   └── users
+│   │   │   │       ├── UserFilter.jsx
+│   │   │   │       ├── UserListTable.jsx
+│   │   │   │       └── UserSearch.jsx
 │   │   │   ├── auth
 │   │   │   │   ├── ChangePasswordForm.jsx
 │   │   │   │   ├── EmployerRegisterForm.jsx
@@ -96,6 +174,37 @@ OneClick-authService-fe
 │   │   │   │   ├── EditSidebar.jsx
 │   │   │   │   ├── PersonalInfoForm.jsx
 │   │   │   │   └── SectionHeader.jsx
+│   │   │   ├── employer
+│   │   │   │   ├── auth
+│   │   │   │   │   ├── EmployerCompanyForm.jsx
+│   │   │   │   │   ├── EmployerPendingView.jsx
+│   │   │   │   │   ├── EmployerRegister.jsx
+│   │   │   │   │   └── EmployerVerifyForm.jsx
+│   │   │   │   ├── candidate
+│   │   │   │   │   ├── CandidateStats.jsx
+│   │   │   │   │   └── CandidateTable.jsx
+│   │   │   │   ├── company-profile
+│   │   │   │   │   ├── BenefitsPerks.jsx
+│   │   │   │   │   ├── CompanyDescription.jsx
+│   │   │   │   │   ├── CompanyProfileForm.jsx
+│   │   │   │   │   └── CulturePhotos.jsx
+│   │   │   │   ├── dashboard
+│   │   │   │   │   ├── CVSubmissionsChart.jsx
+│   │   │   │   │   ├── PendingActions.jsx
+│   │   │   │   │   ├── StatsCards.jsx
+│   │   │   │   │   └── WelcomeBanner.jsx
+│   │   │   │   ├── job-posting
+│   │   │   │   │   ├── JobPostingCreate.jsx
+│   │   │   │   │   └── JobPostingList.jsx
+│   │   │   │   ├── landing-page
+│   │   │   │   │   ├── AiTechnology.jsx
+│   │   │   │   │   ├── HeroArea.jsx
+│   │   │   │   │   ├── OutstandingFeatures.jsx
+│   │   │   │   │   └── PricingPlan.jsx
+│   │   │   │   └── resume-search
+│   │   │   │       ├── CandidateCard.jsx
+│   │   │   │       ├── SearchFilters.jsx
+│   │   │   │       └── SearchResults.jsx
 │   │   │   ├── home
 │   │   │   │   ├── Background.jsx
 │   │   │   │   ├── CallToAction.jsx
@@ -103,27 +212,33 @@ OneClick-authService-fe
 │   │   │   │   ├── Features.jsx
 │   │   │   │   └── JobForYou.jsx
 │   │   │   ├── jobs
+│   │   │   │   ├── AIAnalysisDashboard.jsx
+│   │   │   │   ├── AIConsultantChat.jsx
+│   │   │   │   ├── AIMatchButton.jsx
 │   │   │   │   ├── JobContent.jsx
 │   │   │   │   ├── JobFilter.jsx
 │   │   │   │   ├── JobSidebar.jsx
 │   │   │   │   └── SimilarJobs.jsx
-│   │   │   ├── profile
-│   │   │   │   ├── DocumentSidebar.jsx
-│   │   │   │   ├── EducationList.jsx
-│   │   │   │   ├── ExperienceList.jsx
-│   │   │   │   ├── ProfileHeader.jsx
-│   │   │   │   └── SkillList.jsx
-│   │   │   └── user
+│   │   │   └── profile
+│   │   │       ├── DocumentSidebar.jsx
+│   │   │       ├── EducationList.jsx
+│   │   │       ├── ExperienceList.jsx
+│   │   │       ├── ProfileHeader.jsx
+│   │   │       └── SkillList.jsx
 │   │   ├── layout
-│   │   │   └── AuthLayout.jsx
+│   │   │   ├── AuthLayout.jsx
+│   │   │   └── EmployerAuthLayout.jsx
 │   │   └── ui
 │   │       ├── Button.jsx
 │   │       ├── Input.jsx
 │   │       └── SearchBar.jsx
+│   ├── context
+│   │   └── AuthContext.jsx
 │   ├── lib
+│   │   ├── apiClient
+│   │   │   └── api.config.js
 │   │   └── validators
 │   │       └── auth.jsx
 │   └── services
-│       ├── api.config.js
 │       └── auth.service.js
 └── tree.txt

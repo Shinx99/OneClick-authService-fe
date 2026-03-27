@@ -7,13 +7,15 @@ import {
   HiOutlineAcademicCap,
   HiPaperAirplane,
 } from "react-icons/hi2";
+// IMPORT Component AI Matching
+import AIMatchButton from "./AIMatchButton";
 
 const JobSidebar = ({ data }) => {
   return (
     // 'sticky top-6' giúp Sidebar trượt theo màn hình khi lăn chuột
     <aside className="sticky top-6 space-y-6">
       {/* ==========================================
-          KHỐI 1: THÔNG TIN NHANH
+          KHỐI 1: THÔNG TIN NHANH & HÀNH ĐỘNG
       ========================================== */}
       <div className="bg-white rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.04)] border border-gray-100">
         <h3 className="text-lg font-bold text-gray-900 mb-6">
@@ -83,6 +85,11 @@ const JobSidebar = ({ data }) => {
             <HiPaperAirplane className="text-lg -rotate-45 mb-1" />
             Ứng tuyển ngay
           </button>
+
+          {/* NÚT AI MATCHING TÍCH HỢP Ở ĐÂY */}
+          {/* Nhớ truyền jobId và jobTitle từ data vào để API sau này biết đang quét CV cho job nào */}
+          <AIMatchButton jobId={data.id} jobTitle={data.title} />
+
           <button className="w-full bg-white border border-[#10B94F] text-[#10B94F] hover:bg-green-50 py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2">
             <FiBookmark className="text-lg" />
             Lưu
