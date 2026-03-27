@@ -21,7 +21,7 @@ export const RegisterSchema = z
     fullName: z
       .string()
       .min(2, { message: "Họ và tên phải có ít nhất 2 ký tự" }),
-
+    phone: z.string().min(10, { message: "Số điện thoại không hợp lệ" }),
     username: z
       .string()
       .min(1, { message: "Vui lòng nhập Email" })
@@ -69,9 +69,7 @@ export const EmployerRegisterSchema = z
       errorMap: () => ({ message: "Vui lòng chọn giới tính" }),
     }),
 
-    phoneNumber: z
-      .string()
-      .min(10, { message: "Số điện thoại không hợp lệ" }),
+    phoneNumber: z.string().min(10, { message: "Số điện thoại không hợp lệ" }),
 
     companyName: z
       .string()
@@ -90,7 +88,11 @@ export const EmployerRegisterSchema = z
 export const EmployerCompanySchema = z.object({
   industry: z.string().min(1, { message: "Vui lòng chọn lĩnh vực" }),
   companySize: z.string().min(1, { message: "Vui lòng chọn quy mô" }),
-  website: z.string().url({ message: "Website không hợp lệ" }).optional().or(z.literal("")),
+  website: z
+    .string()
+    .url({ message: "Website không hợp lệ" })
+    .optional()
+    .or(z.literal("")),
   taxCode: z.string().min(5, { message: "Mã số thuế không hợp lệ" }),
   description: z.string().max(1000, { message: "Mô tả tối đa 1000 ký tự" }),
 });
