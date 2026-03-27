@@ -109,10 +109,25 @@ export const authService = {
   // -------------------------------------------------------
   // LOGOUT
   // -------------------------------------------------------
-  logout: async () => {
-    await authClient.post('/auth/logout'); // BE clear refresh_token cookie
-    setAccessToken(null);                 // Clear memory
+  // logout: async () => {
+  //   await authClient.post('/auth/logout'); // BE clear refresh_token cookie
+  //   setAccessToken(null);                 // Clear memory
+  // },
+
+   logout: async () => {
+    try {
+      await authClient.post('/auth/logout'); 
+    } catch (error) {
+      // Log lỗi ra để biết
+      console.warn("API Logout thất bại (có thể token đã hết hạn):", error.message);
+    } finally {
+      setAccessToken(null); // Clear memory
+      // Nếu bạn có lưu token ở localStorage, hãy xóa nó tại đây luôn
+      // localStorage.removeItem('token'); 
+      // localStorage.removeItem('user');
+    }
   },
+
 
   // -------------------------------------------------------
   // REFRESH (init khi F5 page - bypass interceptor)
