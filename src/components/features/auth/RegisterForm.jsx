@@ -1,25 +1,27 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterSchema } from "@/lib/validators/auth";
-import { FaUser, FaLock, FaFacebook, FaIdCard } from "react-icons/fa";
+import { FaUser, FaLock, FaFacebook, FaIdCard, FaPhone } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
-import toast from "react-hot-toast";
+
+import { useAuth } from "@/context/AuthContext";
 
 const RegisterForm = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { register: executeRegister, isLoading } = useAuth();
 
   const {
-    register,
+    register, // Hàm này của useForm dùng để gắn vào thẻ input
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
       fullName: "",
+      phone: "",
       username: "",
       password: "",
       confirmPassword: "",
@@ -28,21 +30,16 @@ const RegisterForm = () => {
   });
 
   const onSubmit = async (data) => {
-    setIsLoading(true);
-    try {
-      console.log("🚀 Payload gửi lên API /api/auth/register:", data);
+    const payload = {
+      fullName: data.fullName,
+      phone: data.phone,
+      email: data.username, // Form đặt là username, nhưng gửi lên DB là email
+      password: data.password,
+      role: "candidate",
+    };
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // ✅ Hiển thị Toast thành công
-      toast.success("Dữ liệu hợp lệ! Chuẩn bị tạo tài khoản...");
-    } catch (error) {
-      console.error("Lỗi:", error);
-      // ✅ Hiển thị Toast thất bại
-      toast.error("Đăng ký thất bại, vui lòng kiểm tra lại!");
-    } finally {
-      setIsLoading(false);
-    }
+    // 2. Gửi đi (Hàm này đã có sẵn toast và tự chuyển trang bên trong AuthContext)
+    await executeRegister(payload);
   };
 
   return (
@@ -52,6 +49,7 @@ const RegisterForm = () => {
       </h2>
 
       <form onSubmit={handleSubmit(onSubmit)}>
+        {/* --- HỌ VÀ TÊN --- */}
         <div className="mb-5 relative">
           <Input
             icon={<FaIdCard />}
@@ -65,7 +63,23 @@ const RegisterForm = () => {
             </p>
           )}
         </div>
+        {/* --- SỐ ĐIÊN THOẠI --- */}
+        <div className="mb-5 relative">
+          <Input
+            icon={<FaPhone />}
+            type="tel"
+            placeholder="Số điện thoại"
+            autoComplete="tel"
+            {...register("phone")}
+          />
+          {errors.phone && (
+            <p className="absolute top-full left-2 mt-1 text-red-500 text-[11px] font-semibold">
+              {errors.phone.message}
+            </p>
+          )}
+        </div>
 
+        {/* --- EMAIL --- */}
         <div className="mb-5 relative">
           <Input
             icon={<FaUser />}
@@ -80,6 +94,7 @@ const RegisterForm = () => {
           )}
         </div>
 
+        {/* --- MẬT KHẨU --- */}
         <div className="mb-5 relative">
           <Input
             icon={<FaLock />}
@@ -95,6 +110,7 @@ const RegisterForm = () => {
           )}
         </div>
 
+        {/* --- XÁC NHẬN MẬT KHẨU --- */}
         <div className="mb-4 relative">
           <Input
             icon={<FaLock />}
@@ -110,7 +126,7 @@ const RegisterForm = () => {
           )}
         </div>
 
-        {/* Checkbox: Gọn lại mb-4 mt-2 */}
+        {/* --- ĐIỀU KHOẢN --- */}
         <div className="mb-4 mt-2 px-1 relative">
           <div className="flex items-start gap-2">
             <input
@@ -141,7 +157,7 @@ const RegisterForm = () => {
           )}
         </div>
 
-        {/* Nút Đăng ký */}
+        {/* --- NÚT ĐĂNG KÝ (Bị khóa nếu isLoading = true) --- */}
         <Button
           type="submit"
           variant="primary"
@@ -151,7 +167,6 @@ const RegisterForm = () => {
           {isLoading ? "Đang xử lý..." : "Đăng ký tài khoản"}
         </Button>
 
-        {/* Divider: Thu lại my-4 */}
         <div className="flex items-center gap-3 my-4">
           <div className="h-[1px] bg-gray-200 flex-1"></div>
           <span className="text-sm text-gray-500 font-bold px-2">
@@ -160,7 +175,6 @@ const RegisterForm = () => {
           <div className="h-[1px] bg-gray-200 flex-1"></div>
         </div>
 
-        {/* Nút Social */}
         <div className="space-y-2.5">
           <Button variant="social" type="button">
             <FcGoogle className="text-[22px]" />

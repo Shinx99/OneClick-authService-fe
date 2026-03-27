@@ -136,4 +136,14 @@ export const authService = {
       return false;
     }
   },
+
+
+  // VERIFY EMAIL (Xác thực tài khoản)
+  // -------------------------------------------------------
+  verifyEmail: async (token) => {
+    // Gửi phương thức POST kèm theo cái token lấy được từ thanh URL
+    // Hãy chắc chắn Backend của bạn đang dùng đường dẫn '/auth/verify-email' nhé
+    const { data } = await authClient.post('/auth/verify-email', { token });
+    return data.data;
+  },
 };

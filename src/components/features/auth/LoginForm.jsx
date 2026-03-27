@@ -9,12 +9,12 @@ import { FcGoogle } from "react-icons/fc";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { useAuth } from "@/context/AuthContext";
-import { GoogleLogin, useGoogleLogin } from "@react-oauth/google"
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 
 const LoginForm = () => {
-
   // State: auth state
-  const { login, isLoading, error, loginWithGoogle, loginWithLinkedIn } = useAuth();
+  const { login, isLoading, error, loginWithGoogle, loginWithLinkedIn } =
+    useAuth();
 
   // State: open & close
   const [showError, setShowError] = useState(false);
@@ -24,7 +24,7 @@ const LoginForm = () => {
     if (error) {
       setShowError(true);
     }
-  }, [error])
+  }, [error]);
 
   // Alert
   const handleCloseError = () => {
@@ -34,7 +34,7 @@ const LoginForm = () => {
   // Alert
   const handleInputChange = () => {
     if (showError) setShowError(false);
-  }
+  };
 
   // Turn off alert when user interaction
   const handleUserInteraction = () => {
@@ -47,21 +47,23 @@ const LoginForm = () => {
       console.log("Google Success:", credentialResponse);
       loginWithGoogle(credentialResponse);
     },
-    onError: (error) => { console.error("Google login error") },
+    onError: (error) => {
+      console.error("Google login error");
+    },
     flow: "auth-code",
   });
 
   // Login with LINKEDIN
   const handleLinkedInLogin = () => {
     const clientId = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
-    const redirectUri = 'http://localhost:3000';
-    const scope = 'r_liteprofile r_emailaddress w_member_social';
-    const state = 'linkedin_' + Date.now();
+    const redirectUri = "http://localhost:3000";
+    const scope = "r_liteprofile r_emailaddress w_member_social";
+    const state = "linkedin_" + Date.now();
 
     const authUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&state=${state}`;
 
     // Popup
-    const popup = window.open(authUrl, 'linkedin', 'width=600,height=700');
+    const popup = window.open(authUrl, "linkedin", "width=600,height=700");
 
     // Poll lấy code
     const interval = setInterval(async () => {
@@ -71,20 +73,18 @@ const LoginForm = () => {
       }
       try {
         const currentUrl = popup.location.href;
-        if (currentUrl.includes('code=')) {
-          const params = new URLSearchParams(currentUrl.split('?')[1]);
-          const code = params.get('code');
+        if (currentUrl.includes("code=")) {
+          const params = new URLSearchParams(currentUrl.split("?")[1]);
+          const code = params.get("code");
           if (code) {
             popup.close();
             clearInterval(interval);
-            loginWithLinkedIn(code);  // ← Gọi composable đã có!
+            loginWithLinkedIn(code); // ← Gọi composable đã có!
           }
         }
-      } catch (e) { }
+      } catch (e) {}
     }, 1000);
   };
-
-
 
   // Khởi tạo form với Zod
   const {
@@ -103,8 +103,7 @@ const LoginForm = () => {
   // onSubmit function
   const onSubmit = (data) => {
     login(data.username, data.password);
-  }
-
+  };
 
   return (
     <div className="w-full max-w-[380px] mx-auto">
@@ -115,14 +114,23 @@ const LoginForm = () => {
       {/* ERROR ALERT - HIỂN THỊ LỖI TỪ BACKEND */}
       {showError && error && (
         <div className="group mb-6 animate-pulse">
-          <div className="relative p-4 bg-gradient-to-r from-red-50 to-orange-50 
+          <div
+            className="relative p-4 bg-gradient-to-r from-red-50 to-orange-50 
                           border-2 border-red-200 rounded-2xl shadow-xl 
-                          backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
-
+                          backdrop-blur-sm hover:shadow-2xl transition-all duration-300"
+          >
             <div className="flex items-start gap-3">
               <div className="flex-shrink-0 pt-0.5 animate-bounce">
-                <svg className="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                <svg
+                  className="w-6 h-6 text-red-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
 
@@ -134,21 +142,28 @@ const LoginForm = () => {
 
               {/* NÚT TẮT HOẠT ĐỘNG */}
               <button
-                onClick={handleCloseError}  // Tắt alert
+                onClick={handleCloseError} // Tắt alert
                 className="ml-2 p-1.5 -mt-1 text-red-400 hover:text-red-600 
                            hover:bg-red-100 rounded-full transition-all duration-200 
                            opacity-0 group-hover:opacity-100 hover:scale-110"
                 title="Đóng"
               >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                <svg
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </button>
             </div>
           </div>
         </div>
       )}
-
 
       {/* Bọc form bằng handleSubmit */}
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -159,7 +174,7 @@ const LoginForm = () => {
             placeholder="Email"
             autoComplete="username"
             {...register("username", {
-              onChange: handleUserInteraction
+              onChange: handleUserInteraction,
             })}
           />
           {errors.username && (
@@ -177,7 +192,7 @@ const LoginForm = () => {
             placeholder="Mật khẩu"
             autoComplete="current-password"
             {...register("password", {
-              onChange: handleUserInteraction
+              onChange: handleUserInteraction,
             })}
           />
           {errors.password && (
@@ -189,9 +204,7 @@ const LoginForm = () => {
 
         {/* --- Hàng Remember Me và Forget Password --- */}
         <div className="flex items-center justify-between mb-6 px-1">
-
-          <div className="flex items-center gap-2">
-          </div>
+          <div className="flex items-center gap-2"></div>
 
           <Link
             href="/forget-password"
@@ -223,18 +236,18 @@ const LoginForm = () => {
 
         {/* Buttons Social */}
         <div className="space-y-3">
-
           {/* <Button variant="social" type="button" onClick={() => googleLogin()}>
             <FcGoogle className="text-[22px]" />
             <span className="text-sm font-semibold text-gray-700">Google</span>
           </Button> */}
 
           <Button variant="social" type="button" onClick={() => googleLogin()}>
-            <FcGoogle className="text-[22px]" />
-            <span className="text-sm font-semibold text-gray-700">Google</span>
             <GoogleLogin
               onSuccess={(credentialResponse) => {
-                console.log("GoogleLogin credential:", credentialResponse.credential);
+                console.log(
+                  "GoogleLogin credential:",
+                  credentialResponse.credential,
+                );
                 loginWithGoogle(credentialResponse);
               }}
               onError={() => console.error("Google error")}
@@ -246,10 +259,9 @@ const LoginForm = () => {
               theme="outline"
             />
           </Button>
-
         </div>
-      </form >
-    </div >
+      </form>
+    </div>
   );
 };
 

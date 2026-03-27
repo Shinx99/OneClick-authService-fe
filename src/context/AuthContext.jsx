@@ -71,12 +71,10 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(true);
       setError(null);
       try {
-        const result = await authService.register(payload);
-        const parsedUser = parseUser(result);
-        setUser(parsedUser);
-        setIsAuthenticated(true);
+        await authService.register(payload);
 
-        toast.success("Đăng ký thành công!");
+        toast.success("Đăng ký thành công! Vui lòng check mail...");
+
         router.push("/login");
         return { success: true };
       } catch (err) {
