@@ -3,8 +3,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterSchema } from "@/lib/validators/auth";
-import { FaUser, FaLock, FaFacebook, FaIdCard, FaPhone } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
+import { FaUser, FaLock, FaIdCard, FaPhone } from "react-icons/fa";
+import Link from "next/link";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 
@@ -35,7 +35,7 @@ const RegisterForm = () => {
       phone: data.phone,
       email: data.username, // Form đặt là username, nhưng gửi lên DB là email
       password: data.password,
-      role: "candidate",
+      roles: [data.isEmployer ? "employer" : "candidate"],
     };
 
     // 2. Gửi đi (Hàm này đã có sẵn toast và tự chuyển trang bên trong AuthContext)
@@ -157,6 +157,24 @@ const RegisterForm = () => {
           )}
         </div>
 
+        {/* --- CHECKBOX NHÀ TUYỂN DỤNG --- */}
+        <div className="mb-6 px-1 relative">
+          <div className="flex items-start gap-2">
+            <input
+              type="checkbox"
+              id="isEmployer"
+              {...register("isEmployer")}
+              className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2 cursor-pointer transition-all mt-[2px]"
+            />
+            <label
+              htmlFor="isEmployer"
+              className="text-sm font-medium text-slate-700 cursor-pointer leading-tight"
+            >
+              Tôi là nhà tuyển dụng
+            </label>
+          </div>
+        </div>
+
         {/* --- NÚT ĐĂNG KÝ (Bị khóa nếu isLoading = true) --- */}
         <Button
           type="submit"
@@ -170,23 +188,12 @@ const RegisterForm = () => {
         <div className="flex items-center gap-3 my-4">
           <div className="h-[1px] bg-gray-200 flex-1"></div>
           <span className="text-sm text-gray-500 font-bold px-2">
-            Hoặc đăng ký với
+            OneClick
           </span>
           <div className="h-[1px] bg-gray-200 flex-1"></div>
         </div>
 
-        <div className="space-y-2.5">
-          <Button variant="social" type="button">
-            <FcGoogle className="text-[22px]" />
-            <span className="text-sm font-semibold text-gray-700">Google</span>
-          </Button>
-          <Button variant="social" type="button">
-            <FaFacebook className="text-[#1877F2] text-[22px]" />
-            <span className="text-sm font-semibold text-gray-700">
-              Facebook
-            </span>
-          </Button>
-        </div>
+
       </form>
     </div>
   );

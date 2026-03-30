@@ -114,9 +114,9 @@ export const authService = {
   //   setAccessToken(null);                 // Clear memory
   // },
 
-   logout: async () => {
+  logout: async () => {
     try {
-      await authClient.post('/auth/logout'); 
+      await authClient.post('/auth/logout');
     } catch (error) {
       // Log lỗi ra để biết
       console.warn("API Logout thất bại (có thể token đã hết hạn):", error.message);
@@ -135,20 +135,22 @@ export const authService = {
   refreshAuth: async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/refresh-token`,
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`,
         {
           method: 'POST',
           credentials: 'include',  //Require browser automatically attachs cookie into request
-        }
+          headers: { 'Content-Type': 'application/json' }
+        },
+
       );
 
-      if (!response.ok) return false;
+      if (!response.ok) return null;
 
       const result = await response.json();
       setAccessToken(result.data.accessToken);
-      return true;
+      return result;
     } catch {
-      return false;
+      return null;
     }
   },
 
