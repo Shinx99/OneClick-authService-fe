@@ -37,6 +37,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initAuth = async () => {
       setIsLoading(true);
+
       const refreshed = await authService.refreshAuth(); // Gọi refreshAuth trong service
 
       if (refreshed && refreshed.data) {
@@ -129,6 +130,10 @@ export const AuthProvider = ({ children }) => {
       router.push("/login");
     } catch (err) {
       console.error("Logout error:", err);
+      setUser(null);
+      setIsAuthenticated(false);
+      router.push("/login")
+      toast.error("Có lỗi khi đăng xuất, vui lòng thử lại");
     } finally {
       setIsLoading(false);
     }
