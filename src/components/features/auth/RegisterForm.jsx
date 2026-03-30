@@ -26,6 +26,7 @@ const RegisterForm = () => {
       password: "",
       confirmPassword: "",
       terms: false,
+      isEmployer: false,
     },
   });
 
@@ -35,7 +36,7 @@ const RegisterForm = () => {
       phone: data.phone,
       email: data.username, // Form đặt là username, nhưng gửi lên DB là email
       password: data.password,
-      roles: [data.isEmployer ? "employer" : "candidate"],
+      roles: [data.isEmployer ? "recruiter" : "candidate"],
     };
 
     // 2. Gửi đi (Hàm này đã có sẵn toast và tự chuyển trang bên trong AuthContext)
