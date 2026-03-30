@@ -36,9 +36,8 @@ const EmployerNavbar = () => {
 
       {/* Phần đầu */}
       <header
-        className={`fixed top-0 left-0 right-0 w-full bg-white border-b border-gray-100 z-50 shadow-sm transition-transform duration-300 ease-in-out ${
-          isVisible ? "translate-y-0" : "-translate-y-full"
-        }`}
+        className={`fixed top-0 left-0 right-0 w-full bg-white border-b border-gray-100 z-50 shadow-sm transition-transform duration-300 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-full"
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
@@ -77,13 +76,15 @@ const EmployerNavbar = () => {
 
             {/* Các nút hành động */}
             <div className="flex items-center gap-3">
-              <div className="w-32">
-                <Link href="/employer-register" className="block w-full">
-                  <Button variant="primary">Đăng tin</Button>
+              <div className="w-48">
+                <Link href="/login" className="block w-full">
+                  <Button variant="social">Đăng nhập</Button>
                 </Link>
               </div>
               <div className="w-48">
-                <Button variant="social">Tư vấn tuyển dụng</Button>
+                <Link href="/employer-register" className="block w-full">
+                  <Button variant="primary">Đăng ký Nhà Tuyển Dụng</Button>
+                </Link>
               </div>
             </div>
           </div>

@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { authService } from "@/services/auth.service";
@@ -30,6 +30,34 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter();
+
+
+
+  // 1. Tự động refresh auth khi app chạy (bao gồm F5)
+  useEffect(() => {
+    const initAuth = async () => {
+      setIsLoading(true);
+      const refreshed = await authService.refreshAuth(); // Gọi refreshAuth trong service
+
+      if (refreshed && refreshed.data) {
+
+        const result = refreshed.data;
+        const parsedUser = parseUser(result);
+        setUser(parsedUser);
+        setIsAuthenticated(true);
+
+      } else {
+        setUser(null);
+        setIsAuthenticated(false);
+      }
+      setIsLoading(false);
+    };
+
+    if (typeof window !== "undefined") {
+      // Chỉ chạy ở client
+      initAuth();
+    }
+  }, []);
 
   // 2. Login (Đã bỏ : string)
   const login = useCallback(

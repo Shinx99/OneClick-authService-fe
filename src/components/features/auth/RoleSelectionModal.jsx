@@ -1,116 +1,86 @@
-"use client"; // Bắt buộc vì dùng useState
+"use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { FiUser, FiBriefcase, FiArrowRight } from "react-icons/fi";
+import { FiBriefcase, FiArrowRight } from "react-icons/fi";
 
 const RoleSelectionModal = ({ isOpen, onClose }) => {
-  // State quản lý trạng thái đang rung lắc
   const [isShaking, setIsShaking] = useState(false);
 
   if (!isOpen) return null;
 
-  // Hàm xử lý khi người dùng click ra ngoài Modal
   const handleBackdropClick = (e) => {
-    // Chỉ kích hoạt rung khi click TRÚNG LỚP NỀN ĐEN (không phải click vào phần trắng của form)
     if (e.target === e.currentTarget) {
       setIsShaking(true);
-
-      // Sau 500ms (bằng thời gian rung) thì tắt trạng thái rung để lần sau click còn rung tiếp
-      setTimeout(() => {
-        setIsShaking(false);
-      }, 500);
+      setTimeout(() => setIsShaking(false), 500);
     }
   };
 
   return (
     <>
-      {/* 1. Nhúng đoạn CSS Keyframes cho hiệu ứng rung trực tiếp vào đây */}
       <style>{`
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
-          10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-          20%, 40%, 60%, 80% { transform: translateX(5px); }
+          10%, 30%, 50%, 70%, 90% { transform: translateX(-6px); }
+          20%, 40%, 60%, 80% { transform: translateX(6px); }
         }
-        .animate-shake {
-          animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-        }
+        .animate-shake { animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+        .animate-float { animation: float 3s ease-in-out infinite; }
       `}</style>
 
-      {/* Lớp phủ đen mờ (Backdrop) - Thêm sự kiện onClick vào đây */}
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fadeIn"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black/60 to-black/40 backdrop-blur-xl p-4"
         onClick={handleBackdropClick}
       >
-        {/* Khối Modal chính - Thêm class 'animate-shake' dựa vào biến isShaking */}
         <div
-          className={`bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl relative transition-transform ${
-            isShaking
-              ? "animate-shake ring-4 ring-red-500/20"
-              : "animate-slideUp"
-          }`}
+          className={`bg-gradient-to-br from-white to-slate-50/70 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl border border-white/50 backdrop-blur-sm relative transition-all duration-500 ${isShaking
+            ? "animate-shake ring-4 ring-[#00c853]/40 shadow-3xl"
+            : "hover:shadow-3xl hover:-translate-y-2 animate-slideUp"
+            }`}
         >
-          <div className="p-8 md:p-10 text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-              Chào mừng đến với OneClick! 👋
-            </h2>
-            <p className="text-gray-500 mb-8 font-medium">
-              Để bắt đầu, vui lòng cho chúng tôi biết bạn là ai?
-            </p>
+          {/* Gradient border top */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#00c853] via-emerald-400 to-[#00c853] shadow-sm"></div>
 
-            {/* 2 Khối chọn Role */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-left">
-              {/* Card Ứng Viên */}
-              <Link
-                href="/register"
-                onClick={onClose}
-                className="group border-2 border-gray-100 rounded-2xl p-6 hover:border-green-500 hover:bg-green-50/30 transition-all cursor-pointer relative overflow-hidden"
-              >
-                <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-                  <FiUser className="text-2xl text-green-600" />
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
-                  Tôi là Ứng viên
-                </h3>
-                <p className="text-sm text-gray-500 leading-relaxed mb-6">
-                  Tôi muốn tạo CV, tìm kiếm việc làm và phát triển sự nghiệp.
-                </p>
-                <div className="flex items-center text-green-600 font-semibold text-sm group-hover:translate-x-1 transition-transform">
-                  Tạo tài khoản ứng viên <FiArrowRight className="ml-2" />
-                </div>
-              </Link>
-
-              {/* Card Nhà Tuyển Dụng */}
-              <Link
-                href="/help-center"
-                onClick={onClose}
-                className="group border-2 border-gray-100 rounded-2xl p-6 hover:border-blue-500 hover:bg-blue-50/30 transition-all cursor-pointer relative overflow-hidden"
-              >
-                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-                  <FiBriefcase className="text-2xl text-blue-600" />
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
-                  Tôi là Nhà tuyển dụng
-                </h3>
-                <p className="text-sm text-gray-500 leading-relaxed mb-6">
-                  Tôi muốn đăng tin tuyển dụng và tìm kiếm nhân tài cho công ty.
-                </p>
-                <div className="flex items-center text-blue-600 font-semibold text-sm group-hover:translate-x-1 transition-transform">
-                  Tạo tài khoản công ty <FiArrowRight className="ml-2" />
-                </div>
-              </Link>
+          <div className="p-10 text-center relative z-10">
+            {/* Floating icon */}
+            <div className="w-24 h-24 bg-gradient-to-br from-[#e8f5e9] to-[#c8e6c9] rounded-3xl mx-auto mb-8 flex items-center justify-center shadow-2xl animate-float hover:animate-none group-hover:scale-110 transition-all duration-300 border-4 border-white/50">
+              <FiBriefcase className="text-4xl text-[#00c853] drop-shadow-lg" />
             </div>
 
-            <div className="mt-8 flex flex-col items-center gap-3">
-              <div className="text-sm text-gray-500 font-medium">
-                Đã có tài khoản?{" "}
-                <Link
-                  href="/login"
-                  className="text-green-600 hover:underline font-bold"
-                  onClick={onClose}
-                >
-                  Đăng nhập ngay
-                </Link>
-              </div>
+            <h2 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-gray-900 via-gray-800 to-slate-900 bg-clip-text text-transparent mb-4 leading-tight">
+              Nhà Tuyển Dụng
+            </h2>
+            <p className="text-xl text-slate-600 mb-2 font-semibold leading-relaxed">
+              Tạo tài khoản công ty
+            </p>
+            <p className="text-lg text-slate-500 mb-10 font-medium leading-relaxed max-w-md mx-auto">
+              Đăng tin tuyển dụng nhanh chóng và tìm kiếm nhân tài chất lượng cao
+              cho doanh nghiệp của bạn.
+            </p>
+
+            {/* CTA Button */}
+            <Link
+              href="/help-center"
+              onClick={onClose}
+              className="group relative w-full max-w-sm mx-auto block bg-gradient-to-r from-[#00c853] to-emerald-500 text-white font-black py-5 px-8 rounded-2xl hover:from-[#00b04a] hover:to-emerald-400 focus:outline-none focus:ring-4 focus:ring-[#00c853]/50 shadow-2xl hover:shadow-3xl active:scale-[0.97] active:shadow-xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
+            >
+              <span className="relative z-10 flex items-center justify-center gap-3 text-lg">
+                Bắt đầu ngay
+                <FiArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+              </span>
+              <div className="absolute inset-0 bg-white/20 blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </Link>
+
+            {/* Footer */}
+            <div className="mt-12 pt-8 border-t border-slate-100/50 flex items-center justify-center gap-3">
+              <span className="text-sm text-slate-500 font-medium">Đã có tài khoản?</span>
+              <Link
+                href="/login"
+                className="text-[#00c853] hover:text-[#00b04a] underline decoration-2 underline-offset-4 font-bold text-sm transition-colors hover:no-underline"
+                onClick={onClose}
+              >
+                Đăng nhập
+              </Link>
             </div>
           </div>
         </div>
