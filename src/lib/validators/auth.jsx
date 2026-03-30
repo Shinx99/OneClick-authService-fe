@@ -38,6 +38,7 @@ export const RegisterSchema = z
     terms: z.boolean().refine((val) => val === true, {
       message: "Bạn phải đồng ý với các điều khoản",
     }),
+    isEmployer: z.boolean().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     // Logic kiểm tra 2 mật khẩu phải giống hệt nhau
