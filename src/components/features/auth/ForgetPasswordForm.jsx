@@ -1,12 +1,37 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ForgotPasswordSchema } from "@/lib/validators/auth";
 import { FaEnvelope, FaArrowLeft } from "react-icons/fa";
 import { MdOutlineLockReset } from "react-icons/md";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import { useAuth } from "@/context/AuthContext";
 
 const ForgetPasswordForm = () => {
+  // 1. Lấy hàm và trạng thái từ Context
+  const { sendForgotPasswordEmail, isLoading } = useAuth();
+
+  // 2. Khởi tạo Hook Form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(ForgotPasswordSchema),
+    defaultValues: {
+      email: "",
+    },
+  });
+
+  // 3. Hàm xử lý khi nhấn nút gửi
+  const onSubmit = async (data) => {
+    // data.email sẽ được gửi về Backend
+    await sendForgotPasswordEmail(data.email);
+  };
+
   return (
     <div className="w-full max-w-[400px] mx-auto p-8 bg-white rounded-[30px] shadow-2xl text-center">
       {/* Icon Header */}
@@ -20,25 +45,39 @@ const ForgetPasswordForm = () => {
         Quên Mật Khẩu?
       </h2>
       <p className="text-gray-500 text-sm mb-8 font-medium px-2">
-        Vui lòng nhập email để nhận mã xác thực.
+        Vui lòng nhập email để nhận mã xác thực qua thư điện tử.
       </p>
 
-      <form className="text-left">
-        <label className="block text-sm font-bold text-slate-700 mb-2 ml-1">
-          Email của bạn
-        </label>
-        <Input
-          icon={<FaEnvelope />}
-          type="email"
-          placeholder="example@email.com"
-          name="email"
-          required
-        />
+      {/* 4. Thêm handleSubmit vào form */}
+      <form onSubmit={handleSubmit(onSubmit)} className="text-left">
+        <div className="relative mb-6">
+          <label className="block text-sm font-bold text-slate-700 mb-2 ml-1">
+            Email của bạn
+          </label>
+          <Input
+            icon={<FaEnvelope />}
+            type="email"
+            placeholder="example@email.com"
+            autoComplete="email"
+            {...register("email")} // 5. Đăng ký field với hook form
+          />
+          {/* Hiển thị lỗi validation */}
+          {errors.email && (
+            <p className="absolute top-full left-1 mt-1 text-red-500 text-[11px] font-semibold">
+              {errors.email.message}
+            </p>
+          )}
+        </div>
 
         <div className="pt-2">
-          {/* Nút bấm tự động lấy màu xanh lá từ cấu hình Button.jsx hôm trước */}
-          <Button variant="primary" className="w-full mt-2">
-            Gửi yêu cầu
+          {/* 6. Thêm trạng thái disabled và loading */}
+          <Button 
+            type="submit"
+            variant="primary" 
+            className="w-full mt-2"
+            disabled={isLoading}
+          >
+            {isLoading ? "Đang xử lý..." : "Gửi yêu cầu"}
           </Button>
         </div>
 

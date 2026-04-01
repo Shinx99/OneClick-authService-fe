@@ -1,6 +1,7 @@
 import { setAccessToken } from "@/lib/apiClient/api.config";
 import { authClient } from "@/lib/apiClient/api.config";
 import { jwtDecode } from "jwt-decode";
+import { apiClient} from "@/lib/apiClient/api.config";
 
 export const authService = {
 
@@ -162,5 +163,36 @@ export const authService = {
     // Hãy chắc chắn Backend của bạn đang dùng đường dẫn '/auth/verify-email' nhé
     const { data } = await authClient.post('/auth/verify-email', { token });
     return data.data;
+  },
+
+  // -------------------------------------------------------
+  // CHANGE PASSWORD
+  // -------------------------------------------------------
+  changePassword: async (payload) => {
+    // Sửa authClient thành apiClient ở đây
+    const { data } = await apiClient.post('/auth/change-password', payload);
+    return data;
+  },
+  
+
+  // -------------------------------------------------------
+  // FORGOT PASSWORD (Yêu cầu gửi mail reset)
+  // -------------------------------------------------------
+  forgotPassword: async (email) => {
+    // Backend: @PostMapping("/forgot-password") -> ForgotPasswordRequest(String email)
+    const { data } = await authClient.post('/auth/forgot-password', { email });
+    return data;
+  },
+
+  // -------------------------------------------------------
+  // RESET PASSWORD (Đặt lại mật khẩu mới với token từ mail)
+  // -------------------------------------------------------
+  resetPassword: async (token, newPassword) => {
+    // Backend: @PostMapping("/reset-password") -> ResetPasswordRequest(String token, String newPassword)
+    const { data } = await authClient.post('/auth/reset-password', { 
+      token, 
+      newPassword 
+    });
+    return data;
   },
 };
