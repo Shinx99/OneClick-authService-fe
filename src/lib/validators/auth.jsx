@@ -97,3 +97,54 @@ export const EmployerCompanySchema = z.object({
   taxCode: z.string().min(5, { message: "Mã số thuế không hợp lệ" }),
   description: z.string().max(1000, { message: "Mô tả tối đa 1000 ký tự" }),
 });
+
+// Form Đổi mật khẩu
+export const ChangePasswordSchema = z
+  .object({
+    oldPassword: z
+      .string()
+      .min(1, "Vui lòng nhập mật khẩu hiện tại"),
+    newPassword: z
+      .string()
+      .min(6, "Mật khẩu mới phải có ít nhất 6 ký tự")
+      .max(50, "Mật khẩu quá dài"),
+    confirmPassword: z
+      .string()
+      .min(1, "Vui lòng xác nhận mật khẩu mới"),
+  })
+  .refine((data) => data.newPassword !== data.oldPassword, {
+    message: "Mật khẩu mới không được trùng với mật khẩu cũ",
+    path: ["newPassword"], // Báo lỗi tại ô mật khẩu mới
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Xác nhận mật khẩu không khớp",
+    path: ["confirmPassword"], // Báo lỗi tại ô xác nhận
+  });
+
+// Form Quên mật khẩu
+export const ForgotPasswordSchema = z.object({
+  email: z
+    .string()
+    .min(1, { message: "Vui lòng nhập email" })
+    .email({ message: "Email không đúng định dạng" }),
+});
+
+// Form Đặt lại mật khẩu
+export const ResetPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, "Mật khẩu phải có ít nhất 8 ký tự") // Tăng lên 8 cho an toàn
+      .max(50, "Mật khẩu quá dài")
+      .regex(/[A-Z]/, { message: "Mật khẩu phải chứa ít nhất 1 chữ cái viết hoa" })
+      .regex(/[a-z]/, { message: "Mật khẩu phải chứa ít nhất 1 chữ cái viết thường" })
+      .regex(/[0-9]/, { message: "Mật khẩu phải chứa ít nhất 1 chữ số" })
+      .regex(/[^A-Za-z0-9]/, { message: "Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt" }), // Cho phép cả dấu .
+    confirmPassword: z
+      .string()
+      .min(1, "Vui lòng xác nhận mật khẩu mới"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Xác nhận mật khẩu không khớp",
+    path: ["confirmPassword"],
+  });

@@ -120,6 +120,60 @@ export const AuthProvider = ({ children }) => {
     [router],
   );
 
+  // --- 6. Change Password ---
+  const changePassword = useCallback(
+    async (payload) => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        await authService.changePassword(payload);
+        toast.success("Đổi mật khẩu thành công!");
+        return { success: true };
+      } catch (err) {
+        const errorMsg = err?.response?.data?.message || "Đổi mật khẩu thất bại";
+        setError(errorMsg);
+        toast.error(errorMsg);
+        return { success: false, error: errorMsg };
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    []
+  );
+
+  // --- 7. Forgot Password ---
+  const sendForgotPasswordEmail = useCallback(async (email) => {
+  setIsLoading(true);
+  setError(null);
+  try {
+    // Gọi đến service bạn đã viết
+    await authService.forgotPassword(email);
+    toast.success("Yêu cầu thành công! Vui lòng kiểm tra email.");
+    return { success: true };
+  } catch (err) {
+    const errorMsg = err?.response?.data?.message || "Email không tồn tại hoặc lỗi hệ thống";
+    setError(errorMsg);
+    toast.error(errorMsg);
+    return { success: false };
+  } finally {
+    setIsLoading(false);
+  }
+}, []);
+
+const executeResetPassword = useCallback(async (token, newPassword) => {
+  setIsLoading(true);
+  try {
+    // Gọi đến authService.resetPassword(token, newPassword)
+    await authService.resetPassword(token, newPassword);
+    toast.success("Mật khẩu đã được thay đổi! Hãy đăng nhập lại.");
+    router.push("/login"); // Chuyển hướng về trang đăng nhập
+  } catch (err) {
+    toast.error(err?.response?.data?.message || "Token không hợp lệ hoặc đã hết hạn");
+  } finally {
+    setIsLoading(false);
+  }
+}, [router]);
+
   // 4. Logout
   const logout = useCallback(async () => {
     setIsLoading(true);
@@ -198,6 +252,9 @@ export const AuthProvider = ({ children }) => {
         register,
         logout,
         loginWithGoogle,
+        changePassword,
+        sendForgotPasswordEmail,
+        executeResetPassword,
       }}
     >
       {children}
