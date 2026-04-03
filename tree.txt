@@ -65,7 +65,11 @@ OneClick-authService-fe
 │   │   │   │   └── page.js
 │   │   │   ├── register
 │   │   │   │   └── page.jsx
-│   │   │   └── register-employer
+│   │   │   ├── register-employer
+│   │   │   │   └── page.jsx
+│   │   │   ├── reset-password
+│   │   │   │   └── page.jsx
+│   │   │   └── verify-email
 │   │   │       └── page.jsx
 │   │   ├── (employer-dashboard)
 │   │   │   ├── employer
@@ -101,6 +105,9 @@ OneClick-authService-fe
 │   │   │   │   ├── [slug]
 │   │   │   │   │   └── page.jsx
 │   │   │   │   └── page.jsx
+│   │   │   ├── cv
+│   │   │   │   └── mine
+│   │   │   │       └── page.jsx
 │   │   │   ├── jobs
 │   │   │   │   ├── (list)
 │   │   │   │   │   ├── layout.jsx
@@ -157,6 +164,7 @@ OneClick-authService-fe
 │   │   │   │   ├── ForgetPasswordForm.jsx
 │   │   │   │   ├── LoginForm.jsx
 │   │   │   │   ├── RegisterForm.jsx
+│   │   │   │   ├── ResetPasswordForm.jsx
 │   │   │   │   └── RoleSelectionModal.jsx
 │   │   │   ├── companies
 │   │   │   │   ├── CompanyCard.jsx
@@ -169,6 +177,8 @@ OneClick-authService-fe
 │   │   │   │       ├── CompanyJobs.jsx
 │   │   │   │       ├── CompanyOverview.jsx
 │   │   │   │       └── CompanyReviews.jsx
+│   │   │   ├── cv
+│   │   │   │   └── CVManagementContent.jsx
 │   │   │   ├── edit-profile
 │   │   │   │   ├── AvatarUpload.jsx
 │   │   │   │   ├── EditSidebar.jsx
@@ -240,5 +250,6 @@ OneClick-authService-fe
 │   │   └── validators
 │   │       └── auth.jsx
 │   └── services
-│       └── auth.service.js
+│       ├── auth.service.js
+│       └── resume.service.js
 └── tree.txt

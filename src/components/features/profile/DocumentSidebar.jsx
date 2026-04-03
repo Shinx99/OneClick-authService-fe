@@ -1,187 +1,118 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   FaRegFilePdf,
-  FaEllipsisV,
-  FaPlus,
   FaCheckCircle,
+  FaArrowRight,
+  FaSpinner,
   FaEye,
   FaDownload,
-  FaStar,
-  FaTrash,
   FaTimes,
 } from "react-icons/fa";
+import { resumeService } from "@/services/resume.service";
 
-const DocumentSidebar = () => {
-  // Dữ liệu mẫu khởi tạo
-  const [documents, setDocuments] = useState([
-    {
-      id: 1,
-      name: "CV_Frontend_Developer.pdf",
-      updateAt: "2 ngày trước",
-      isDefault: true,
-      url: "/sample.pdf",
-    },
-    {
-      id: 2,
-      name: "Le_Hoang_Trung_Resume.pdf",
-      updateAt: "1 tuần trước",
-      isDefault: false,
-      url: "/sample2.pdf",
-    },
-  ]);
+const DocumentSidebar = ({ isPublicView = false, candidateId = null }) => {
+  const [defaultCV, setDefaultCV] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [activeMenu, setActiveMenu] = useState(null);
+  // State quản lý việc mở pop-up xem nhanh PDF
   const [previewUrl, setPreviewUrl] = useState(null);
-  const fileInputRef = useRef(null);
 
-  // Xử lý tải lên file mới
-  const handleUploadClick = () => fileInputRef.current.click();
+  useEffect(() => {
+    const fetchDefaultCV = async () => {
+      try {
+        const data =
+          isPublicView && candidateId
+            ? await resumeService.getCandidateDefaultCV(candidateId)
+            : await resumeService.getResumes();
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type === "application/pdf") {
-      const newDoc = {
-        id: Date.now(),
-        name: file.name,
-        updateAt: "Vừa xong",
-        isDefault: false,
-        url: URL.createObjectURL(file),
-      };
-      setDocuments([...documents, newDoc]);
-    } else {
-      alert("Vui lòng chọn định dạng file PDF.");
-    }
-  };
+        const currentDefault = Array.isArray(data)
+          ? data.find((doc) => doc.isDefault)
+          : data;
+        setDefaultCV(currentDefault || null);
+      } catch (error) {
+        console.error("Lỗi khi lấy CV:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchDefaultCV();
+  }, [isPublicView, candidateId]);
 
-  // Đặt làm mặc định
-  const handleSetDefault = (id) => {
-    setDocuments((prev) =>
-      prev.map((doc) => ({
-        ...doc,
-        isDefault: doc.id === id,
-      })),
+  if (isLoading) {
+    return (
+      <div className="bg-white dark:bg-[#1e1e1e] p-6 rounded-[2rem] shadow-sm border border-gray-100 flex justify-center py-10">
+        <FaSpinner className="animate-spin text-[#00c853] text-2xl" />
+      </div>
     );
-    setActiveMenu(null);
-  };
+  }
 
-  const handleDelete = (id) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa tài liệu này?")) {
-      setDocuments(documents.filter((doc) => doc.id !== id));
-      setActiveMenu(null);
-    }
-  };
+  // Ẩn luôn nếu là NTD xem mà ứng viên không có CV
+  if (isPublicView && !defaultCV) return null;
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white dark:bg-[#1e1e1e] p-6 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800">
-        <h3 className="font-black mb-6 flex items-center gap-2 text-gray-900 dark:text-white uppercase text-xs tracking-widest">
-          <span className="w-1.5 h-5 bg-[#00c853] rounded-full"></span>
-          Tài liệu của bạn
-        </h3>
+    <div className="bg-white dark:bg-[#1e1e1e] p-6 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800">
+      <h3 className="font-black mb-6 flex items-center gap-2 text-gray-900 dark:text-white uppercase text-xs tracking-widest">
+        <span className="w-1.5 h-5 bg-[#00c853] rounded-full"></span>
+        {isPublicView ? "Hồ sơ đính kèm" : "CV Mặc Định"}
+      </h3>
 
-        <div className="space-y-3">
-          {documents.map((doc) => (
-            <div
-              key={doc.id}
-              className={`relative flex items-center justify-between p-4 border rounded-2xl transition-all ${
-                doc.isDefault
-                  ? "border-indigo-600 bg-indigo-50/30 dark:bg-indigo-900/10 shadow-sm"
-                  : "border-gray-50 dark:border-gray-800 hover:border-indigo-100"
-              }`}
-            >
-              <div className="flex items-center gap-3 overflow-hidden">
-                <div
-                  className={`p-2 rounded-xl ${doc.isDefault ? "bg-indigo-600 text-white" : "bg-red-50 text-red-500"}`}
-                >
-                  <FaRegFilePdf size={20} />
-                </div>
-                <div className="overflow-hidden">
-                  <p className="text-sm font-bold text-gray-800 dark:text-gray-200 truncate max-w-[130px]">
-                    {doc.name}
-                  </p>
-                  {doc.isDefault ? (
-                    <span className="flex items-center gap-1 text-[10px] text-indigo-600 font-black uppercase tracking-tighter">
-                      <FaCheckCircle size={8} /> Đang mặc định
-                    </span>
-                  ) : (
-                    <p className="text-[10px] text-gray-400 font-medium">
-                      Cập nhật {doc.updateAt}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <button
-                onClick={() =>
-                  setActiveMenu(activeMenu === doc.id ? null : doc.id)
-                }
-                className="text-gray-300 hover:text-gray-600 p-2 transition-colors"
-              >
-                <FaEllipsisV size={14} />
-              </button>
-
-              {/* Dropdown Menu Chức Năng */}
-              {activeMenu === doc.id && (
-                <>
-                  <div
-                    className="fixed inset-0 z-10"
-                    onClick={() => setActiveMenu(null)}
-                  ></div>
-                  <div className="absolute right-0 top-12 w-48 bg-white dark:bg-[#252525] rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-800 z-20 py-2 overflow-hidden animate-in zoom-in-95 duration-200">
-                    <button
-                      onClick={() => {
-                        setPreviewUrl(doc.url);
-                        setActiveMenu(null);
-                      }}
-                      className="w-full px-4 py-2.5 text-left text-xs font-bold text-gray-600 dark:text-gray-300 hover:bg-slate-50 flex items-center gap-2"
-                    >
-                      <FaEye className="text-slate-400" /> Xem nhanh
-                    </button>
-                    <a
-                      href={doc.url}
-                      download
-                      className="w-full px-4 py-2.5 text-left text-xs font-bold text-gray-600 dark:text-gray-300 hover:bg-slate-50 flex items-center gap-2"
-                    >
-                      <FaDownload className="text-slate-400" /> Tải xuống
-                    </a>
-                    {!doc.isDefault && (
-                      <button
-                        onClick={() => handleSetDefault(doc.id)}
-                        className="w-full px-4 py-2.5 text-left text-xs font-black text-indigo-600 hover:bg-indigo-50 flex items-center gap-2"
-                      >
-                        <FaStar className="text-indigo-400" /> Đặt làm mặc định
-                      </button>
-                    )}
-                    <button
-                      onClick={() => handleDelete(doc.id)}
-                      className="w-full px-4 py-2.5 text-left text-xs font-bold text-red-500 hover:bg-red-50 flex items-center gap-2 border-t border-gray-50 dark:border-gray-800 mt-1"
-                    >
-                      <FaTrash className="text-red-400" /> Xóa tài liệu
-                    </button>
-                  </div>
-                </>
+      {defaultCV ? (
+        <div className="relative flex flex-col p-4 border-2 border-[#00c853] bg-green-50/50 dark:bg-green-900/10 rounded-2xl shadow-sm">
+          {/* Thông tin CV */}
+          <div className="flex items-center">
+            <div className="p-2 rounded-xl bg-[#00c853] text-white mr-3 shadow-md">
+              <FaRegFilePdf size={20} />
+            </div>
+            <div className="flex-1 overflow-hidden">
+              <p className="text-sm font-bold text-gray-800 dark:text-gray-200 truncate">
+                {defaultCV.name}
+              </p>
+              {!isPublicView && (
+                <span className="flex items-center gap-1 text-[10px] text-[#00c853] font-black uppercase tracking-tighter mt-1">
+                  <FaCheckCircle size={8} /> Đang dùng để ứng tuyển
+                </span>
               )}
             </div>
-          ))}
+          </div>
+
+          {/* Cụm nút hành động: Xem & Tải */}
+          <div className="flex items-center gap-3 mt-4 pt-4 border-t border-green-200 dark:border-green-800/50">
+            <button
+              onClick={() => setPreviewUrl(defaultCV.url)}
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white dark:bg-[#252525] border border-[#00c853] text-[#00c853] font-bold rounded-xl text-xs hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors active:scale-95"
+            >
+              <FaEye size={14} /> Xem ngay
+            </button>
+            <a
+              href={defaultCV.url}
+              download
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#00c853] text-white font-bold rounded-xl text-xs hover:bg-[#00b04a] shadow-md shadow-green-500/20 transition-all active:scale-95"
+            >
+              <FaDownload size={14} /> Tải xuống
+            </a>
+          </div>
         </div>
+      ) : (
+        <div className="text-center py-6 bg-gray-50 dark:bg-[#252525] rounded-2xl border border-dashed border-gray-200 dark:border-gray-700">
+          <p className="text-xs text-gray-500 font-medium">
+            Bạn chưa thiết lập CV mặc định.
+          </p>
+        </div>
+      )}
 
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          accept=".pdf"
-          className="hidden"
-        />
-        <button
-          onClick={handleUploadClick}
-          className="w-full mt-6 py-4 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-2xl text-gray-400 text-sm font-bold hover:border-[#00c853] hover:text-[#00c853] transition-all flex items-center justify-center gap-2 active:scale-95"
+      {/* Chỉ hiển thị nút "Quản lý" ở góc nhìn Ứng viên */}
+      {!isPublicView && (
+        <Link
+          href="/cv/mine"
+          className="mt-6 w-full flex items-center justify-center gap-2 py-3.5 border-2 border-dashed border-gray-200 dark:border-gray-700 text-gray-500 hover:text-[#00c853] hover:border-[#00c853] font-bold rounded-xl transition-all text-sm active:scale-95"
         >
-          <FaPlus size={12} /> Tải lên CV mới
-        </button>
-      </div>
+          Quản lý kho CV <FaArrowRight size={12} />
+        </Link>
+      )}
 
-      {/* Pop-up Preview PDF */}
+      {/* Modal / Pop-up Xem nhanh PDF */}
       {previewUrl && (
         <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
           <div className="bg-white dark:bg-[#1e1e1e] w-full max-w-5xl h-[92vh] rounded-[2.5rem] overflow-hidden relative shadow-2xl border border-white/20">
@@ -191,7 +122,7 @@ const DocumentSidebar = () => {
             >
               <FaTimes size={20} />
             </button>
-            <div className="w-full h-full">
+            <div className="w-full h-full bg-gray-100 dark:bg-gray-800">
               <iframe
                 src={previewUrl}
                 className="w-full h-full border-none"

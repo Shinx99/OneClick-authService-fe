@@ -1,29 +1,36 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
-
+/* Định nghĩa biến theo cách Next.js dễ đọc nhất */
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-inter: var(
+    --font-inter
+  ); /* Đảm bảo khớp với variable trong layout.jsx [cite: 13, 29] */
 }
 
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
+  /* Tránh dùng inline nếu bị lỗi build */
+  --animate-scan: scan 2s linear infinite;
+  --animate-shine: shine 1.5s ease-in-out infinite;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
+/* Base Styles */
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    @apply antialiased; /* Dùng apply để giữ tính năng của tailwind [cite: 29] */
+  }
 }
+
+/* Custom Utilities */
 @layer utilities {
-  .animate-scan {
-    animation: scan 2s linear infinite;
-  }
-  .animate-shine {
-    animation: shine 1.5s ease-in-out infinite;
-  }
   .background-animate {
     background-size: 400%;
     animation: GradientAnimation 3s ease infinite;

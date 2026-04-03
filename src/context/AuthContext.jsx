@@ -1,5 +1,11 @@
 "use client";
-import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { authService } from "@/services/auth.service";
@@ -30,8 +36,9 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter();
-
-
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
 
   // 1. Tự động refresh auth khi app chạy (bao gồm F5)
   useEffect(() => {
@@ -41,12 +48,10 @@ export const AuthProvider = ({ children }) => {
       const refreshed = await authService.refreshAuth(); // Gọi refreshAuth trong service
 
       if (refreshed && refreshed.data) {
-
         const result = refreshed.data;
         const parsedUser = parseUser(result);
         setUser(parsedUser);
         setIsAuthenticated(true);
-
       } else {
         setUser(null);
         setIsAuthenticated(false);
@@ -121,58 +126,61 @@ export const AuthProvider = ({ children }) => {
   );
 
   // --- 6. Change Password ---
-  const changePassword = useCallback(
-    async (payload) => {
+  const changePassword = useCallback(async (payload) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      await authService.changePassword(payload);
+      toast.success("Đổi mật khẩu thành công!");
+      return { success: true };
+    } catch (err) {
+      const errorMsg = err?.response?.data?.message || "Đổi mật khẩu thất bại";
+      setError(errorMsg);
+      toast.error(errorMsg);
+      return { success: false, error: errorMsg };
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // --- 7. Forgot Password ---
+  const sendForgotPasswordEmail = useCallback(async (email) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      // Gọi đến service bạn đã viết
+      await authService.forgotPassword(email);
+      toast.success("Yêu cầu thành công! Vui lòng kiểm tra email.");
+      return { success: true };
+    } catch (err) {
+      const errorMsg =
+        err?.response?.data?.message || "Email không tồn tại hoặc lỗi hệ thống";
+      setError(errorMsg);
+      toast.error(errorMsg);
+      return { success: false };
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const executeResetPassword = useCallback(
+    async (token, newPassword) => {
       setIsLoading(true);
-      setError(null);
       try {
-        await authService.changePassword(payload);
-        toast.success("Đổi mật khẩu thành công!");
-        return { success: true };
+        // Gọi đến authService.resetPassword(token, newPassword)
+        await authService.resetPassword(token, newPassword);
+        toast.success("Mật khẩu đã được thay đổi! Hãy đăng nhập lại.");
+        router.push("/login"); // Chuyển hướng về trang đăng nhập
       } catch (err) {
-        const errorMsg = err?.response?.data?.message || "Đổi mật khẩu thất bại";
-        setError(errorMsg);
-        toast.error(errorMsg);
-        return { success: false, error: errorMsg };
+        toast.error(
+          err?.response?.data?.message || "Token không hợp lệ hoặc đã hết hạn",
+        );
       } finally {
         setIsLoading(false);
       }
     },
-    []
+    [router],
   );
-
-  // --- 7. Forgot Password ---
-  const sendForgotPasswordEmail = useCallback(async (email) => {
-  setIsLoading(true);
-  setError(null);
-  try {
-    // Gọi đến service bạn đã viết
-    await authService.forgotPassword(email);
-    toast.success("Yêu cầu thành công! Vui lòng kiểm tra email.");
-    return { success: true };
-  } catch (err) {
-    const errorMsg = err?.response?.data?.message || "Email không tồn tại hoặc lỗi hệ thống";
-    setError(errorMsg);
-    toast.error(errorMsg);
-    return { success: false };
-  } finally {
-    setIsLoading(false);
-  }
-}, []);
-
-const executeResetPassword = useCallback(async (token, newPassword) => {
-  setIsLoading(true);
-  try {
-    // Gọi đến authService.resetPassword(token, newPassword)
-    await authService.resetPassword(token, newPassword);
-    toast.success("Mật khẩu đã được thay đổi! Hãy đăng nhập lại.");
-    router.push("/login"); // Chuyển hướng về trang đăng nhập
-  } catch (err) {
-    toast.error(err?.response?.data?.message || "Token không hợp lệ hoặc đã hết hạn");
-  } finally {
-    setIsLoading(false);
-  }
-}, [router]);
 
   // 4. Logout
   const logout = useCallback(async () => {
@@ -186,7 +194,7 @@ const executeResetPassword = useCallback(async (token, newPassword) => {
       console.error("Logout error:", err);
       setUser(null);
       setIsAuthenticated(false);
-      router.push("/login")
+      router.push("/login");
       toast.error("Có lỗi khi đăng xuất, vui lòng thử lại");
     } finally {
       setIsLoading(false);
@@ -255,6 +263,7 @@ const executeResetPassword = useCallback(async (token, newPassword) => {
         changePassword,
         sendForgotPasswordEmail,
         executeResetPassword,
+        clearError,
       }}
     >
       {children}

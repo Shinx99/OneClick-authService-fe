@@ -17,7 +17,6 @@ const inter = Inter({
 // };
 
 export default function RootLayout({ children }) {
-
   console.log("GOOGLE_CLIENT_ID:", process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID); // debug
 
   return (
@@ -25,10 +24,10 @@ export default function RootLayout({ children }) {
       <body
         className={`${inter.variable} font-sans antialiased text-slate-800`}
       >
-        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
-
+        <GoogleOAuthProvider
+          clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+        >
           <AuthProvider>
-
             {/* TOASTER ĐẶT Ở ĐÂY ĐỂ TRANG NÀO CŨNG GỌI ĐƯỢC */}
             <Toaster
               position="top-right"
@@ -70,8 +69,6 @@ export default function RootLayout({ children }) {
 
             {/* Nơi nhúng các Layout con */}
             {children}
-
-
           </AuthProvider>
         </GoogleOAuthProvider>
       </body>

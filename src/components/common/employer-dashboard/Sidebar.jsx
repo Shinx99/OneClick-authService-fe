@@ -1,17 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import {
-  HiOutlineViewGrid,
-  HiOutlineBriefcase,
-  HiOutlineUsers,
-  HiOutlineDocumentSearch,
-  HiOutlineOfficeBuildingOutline,
-  HiOutlineCog,
-  HiOutlineQuestionMarkCircle,
-  HiOutlineLogout,
-} from "react-icons/hi";
+import { usePathname, useRouter } from "next/navigation"; // Thêm useRouter để điều hướng
 import {
   MdOutlineDashboard,
   MdOutlineWorkOutline,
@@ -22,6 +12,8 @@ import {
   MdOutlineHelpOutline,
   MdOutlineLogout,
 } from "react-icons/md";
+import { useAuth } from "@/context/AuthContext"; // Import Hook quản lý Auth
+import toast from "react-hot-toast";
 
 const navItems = [
   {
@@ -58,6 +50,20 @@ const navItems = [
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout } = useAuth(); // Lấy hàm logout từ AuthContext
+
+  // Hàm xử lý đăng xuất dành cho Employer
+  const handleLogout = async () => {
+    try {
+      await logout(); // Thực thi xóa session/token trong Context và Service
+      toast.success("Đã đăng xuất tài khoản nhà tuyển dụng");
+      router.push("/login"); // Điều hướng về trang đăng nhập sau khi thành công
+    } catch (error) {
+      toast.error("Lỗi đăng xuất, vui lòng thử lại");
+      console.error("Logout Error:", error);
+    }
+  };
 
   return (
     <aside className="w-64 min-h-screen bg-[#0f172a] flex flex-col justify-between fixed left-0 top-0 bottom-0 z-40">
@@ -65,7 +71,10 @@ const Sidebar = () => {
       <div>
         {/* Logo */}
         <div className="px-6 pt-6 pb-8">
-          <Link href="/employer/dashboard" className="flex items-center gap-3 group">
+          <Link
+            href="/employer/dashboard"
+            className="flex items-center gap-3 group"
+          >
             <div className="w-9 h-9 bg-[#e8f5e9] rounded-full flex items-center justify-center transition-transform group-hover:scale-110">
               <svg
                 className="w-6 h-6 text-[#00c853]"
@@ -135,8 +144,11 @@ const Sidebar = () => {
           </span>
         </div>
 
-        {/* Logout */}
-        <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all duration-200">
+        {/* Logout - Đã gán hàm xử lý đăng xuất */}
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all duration-200"
+        >
           <MdOutlineLogout className="w-5 h-5" />
           <span>Đăng xuất</span>
         </button>
