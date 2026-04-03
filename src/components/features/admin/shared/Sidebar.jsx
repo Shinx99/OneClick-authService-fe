@@ -11,6 +11,8 @@ import {
   FaCog,
   FaChevronDown,
   FaSignOutAlt, // Import icon đăng xuất
+  FaBolt,
+  FaComments, // icon chat
 } from "react-icons/fa";
 import { useAuth } from "@/context/AuthContext"; // Import Hook Auth của dự án
 import toast from "react-hot-toast";
@@ -72,6 +74,14 @@ const Sidebar = () => {
           icon={<FaThLarge />}
           label="Bảng điều khiển"
           active={isActive("/admin")}
+        />
+
+         {/* HỖ TRỢ TRỰC TUYẾN - CHAT */}
+        <MenuLink
+          href="/admin/chat"
+          icon={<FaComments />}
+          label="Hỗ trợ trực tuyến"
+          active={isActive("/admin/chat")}
         />
 
         <div className="space-y-1">

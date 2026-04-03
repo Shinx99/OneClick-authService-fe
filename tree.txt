@@ -70,6 +70,11 @@ OneClick-authService-fe
 │   │   │   ├── reset-password
 │   │   │   │   └── page.jsx
 │   │   │   └── verify-email
+│   │   │   ├── register-employer
+│   │   │   │   └── page.jsx
+│   │   │   ├── reset-password
+│   │   │   │   └── page.jsx
+│   │   │   └── verify-email
 │   │   │       └── page.jsx
 │   │   ├── (employer-dashboard)
 │   │   │   ├── employer
@@ -144,6 +149,12 @@ OneClick-authService-fe
 │   │   │   ├── admin
 │   │   │   │   ├── categories
 │   │   │   │   │   └── CategoryContent.jsx
+│   │   │   │   ├── chat
+│   │   │   │   │   ├── AdminChatPanel.jsx
+│   │   │   │   │   ├── AdminChatWindow.jsx
+│   │   │   │   │   ├── chat.md
+│   │   │   │   │   └── hooks
+│   │   │   │   │       └── useAdminChat.js
 │   │   │   │   ├── content
 │   │   │   │   │   ├── CompanyTable.jsx
 │   │   │   │   │   └── JobTable.jsx
@@ -165,7 +176,16 @@ OneClick-authService-fe
 │   │   │   │   ├── LoginForm.jsx
 │   │   │   │   ├── RegisterForm.jsx
 │   │   │   │   ├── ResetPasswordForm.jsx
+│   │   │   │   ├── ResetPasswordForm.jsx
 │   │   │   │   └── RoleSelectionModal.jsx
+│   │   │   ├── chatBot
+│   │   │   │   ├── ChatHandoffBanner.jsx
+│   │   │   │   ├── ChatInput.jsx
+│   │   │   │   ├── ChatMessages.jsx
+│   │   │   │   ├── ChatWidget.jsx
+│   │   │   │   ├── chatBot.md
+│   │   │   │   └── hooks
+│   │   │   │       └── useChat.js
 │   │   │   ├── companies
 │   │   │   │   ├── CompanyCard.jsx
 │   │   │   │   ├── CompanyContent.jsx
@@ -240,6 +260,7 @@ OneClick-authService-fe
 │   │   │   └── EmployerAuthLayout.jsx
 │   │   └── ui
 │   │       ├── Button.jsx
+│   │       ├── FloatingChatButton.jsx
 │   │       ├── Input.jsx
 │   │       └── SearchBar.jsx
 │   ├── context
@@ -247,9 +268,13 @@ OneClick-authService-fe
 │   ├── lib
 │   │   ├── apiClient
 │   │   │   └── api.config.js
+│   │   ├── chat
+│   │   │   └── ws.client.js
 │   │   └── validators
 │   │       └── auth.jsx
 │   └── services
 │       ├── auth.service.js
 │       └── resume.service.js
+│       ├── auth.service.js
+│       └── chat.service.js
 └── tree.txt

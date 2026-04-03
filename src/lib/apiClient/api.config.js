@@ -98,10 +98,10 @@ apiClient.interceptors.response.use(
 
     // If auth endpoints
     const isAuthEndpoint =
-      originalRequest.baseURL.includes("/auth/login") ||
-      originalRequest.baseURL.includes("/auth/register") ||
-      originalRequest.baseURL.includes("/auth/refresh-token");
-    originalRequest.baseURL.includes("/auth/logout");
+      originalRequest.url?.includes("/auth/login") ||
+      originalRequest.url?.includes("/auth/register") ||
+      originalRequest.url?.includes("/auth/refresh-token");
+originalRequest.url?.includes("/auth/logout");
 
     // Handle when server return 401 + originalRequest is non _retry
     if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
@@ -132,7 +132,7 @@ apiClient.interceptors.response.use(
       try {
 
         // Call BE to refresh token (BE read from cookie HTTP-only)
-        const { data } = await apiClient.post("/auth/refresh-token");
+        const { data } = await authClient.post("/auth/refresh-token");
         const newToken = data.data.accessToken;
 
         // Update token in memory
@@ -177,5 +177,6 @@ export const setAccessToken = (token) => {
   accessToken = token;
 };
 
+export const getAccessToken = () => accessToken;
 
 export default apiClient;

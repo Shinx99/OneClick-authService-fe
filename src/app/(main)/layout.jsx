@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
+import FloatingChatButton from "@/components/ui/FloatingChatButton";
 
 export default function MainLayout({ children }) {
   return (
@@ -14,6 +15,8 @@ export default function MainLayout({ children }) {
 
       {/* Chân trang */}
       <Footer />
+      <FloatingChatButton />
+      
     </div>
   );
 }
