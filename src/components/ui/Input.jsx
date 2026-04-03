@@ -14,12 +14,15 @@ const Input = forwardRef(
     const isPassword = type === "password";
 
     // Nếu là ô password và đang bật mắt -> đổi thành text. Còn lại giữ nguyên gốc.
-    const currentType = isPassword ? (showPassword ? "text" : "password") : type;
+    const currentType = isPassword
+      ? showPassword
+        ? "text"
+        : "password"
+      : type;
 
     return (
       <div className="w-full mb-5 mt-2">
         <div className="relative flex items-center bg-white border-[2px] border-gray-200 rounded-xl px-4 h-[56px] transition-all focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-500/10">
-
           {/* Icon đầu dòng */}
           {icon && <span className="text-gray-400 mr-3 text-lg">{icon}</span>}
 
@@ -60,7 +63,7 @@ const Input = forwardRef(
         </div>
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = "Input";

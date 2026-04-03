@@ -155,8 +155,12 @@ const Header = () => {
                       className="flex items-center gap-2 px-6 py-2.5 bg-white border border-slate-200 text-slate-700 font-semibold rounded-full hover:bg-slate-50 shadow-sm transition-all"
                     >
                       <FaUserCircle className="w-6 h-6" />
-                      <span className="hidden md:block">{user?.email?.split('@')[0] || "User"}</span>
-                      <FaChevronDown className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                      <span className="hidden md:block">
+                        {user?.email?.split("@")[0] || "User"}
+                      </span>
+                      <FaChevronDown
+                        className={`w-4 h-4 transition-transform ${dropdownOpen ? "rotate-180" : ""}`}
+                      />
                     </button>
 
                     {/* Dropdown */}
@@ -169,6 +173,9 @@ const Header = () => {
                             <div>
                               <p className="font-semibold text-slate-800 text-sm truncate max-w-[200px]">
                                 {user?.email}
+                              </p>
+                              <p className="font-semibold text-slate-800 text-sm truncate max-w-[200px]">
+                                {user?.name}
                               </p>
                               <p className="text-xs text-slate-500 capitalize">
                                 {user?.roles?.[0] || "User"}
@@ -195,7 +202,7 @@ const Header = () => {
                                 </span>
                               </div>
                               <FaChevronDown
-                                className={`text-slate-400 text-sm transition-transform ${openSections.jobs ? 'rotate-180' : ''}`}
+                                className={`text-slate-400 text-sm transition-transform ${openSections.jobs ? "rotate-180" : ""}`}
                               />
                             </button>
 
@@ -206,7 +213,11 @@ const Header = () => {
                                   className="text-sm text-slate-600 hover:text-[#00c853] transition-colors"
                                   onClick={() => {
                                     setDropdownOpen(false);
-                                    setOpenSections({ jobs: false, cv: false, security: false });
+                                    setOpenSections({
+                                      jobs: false,
+                                      cv: false,
+                                      security: false,
+                                    });
                                   }}
                                 >
                                   Việc làm đã lưu
@@ -216,7 +227,11 @@ const Header = () => {
                                   className="text-sm text-slate-600 hover:text-[#00c853] transition-colors"
                                   onClick={() => {
                                     setDropdownOpen(false);
-                                    setOpenSections({ jobs: false, cv: false, security: false });
+                                    setOpenSections({
+                                      jobs: false,
+                                      cv: false,
+                                      security: false,
+                                    });
                                   }}
                                 >
                                   Việc làm đã ứng tuyển
@@ -240,7 +255,7 @@ const Header = () => {
                                 </span>
                               </div>
                               <FaChevronDown
-                                className={`text-slate-400 text-sm transition-transform ${openSections.cv ? 'rotate-180' : ''}`}
+                                className={`text-slate-400 text-sm transition-transform ${openSections.cv ? "rotate-180" : ""}`}
                               />
                             </button>
 
@@ -251,7 +266,11 @@ const Header = () => {
                                   className="text-sm text-slate-600 hover:text-[#00c853] transition-colors"
                                   onClick={() => {
                                     setDropdownOpen(false);
-                                    setOpenSections({ jobs: false, cv: false, security: false });
+                                    setOpenSections({
+                                      jobs: false,
+                                      cv: false,
+                                      security: false,
+                                    });
                                   }}
                                 >
                                   CV của tôi
@@ -261,7 +280,11 @@ const Header = () => {
                                   className="text-sm text-slate-600 hover:text-[#00c853] transition-colors"
                                   onClick={() => {
                                     setDropdownOpen(false);
-                                    setOpenSections({ jobs: false, cv: false, security: false });
+                                    setOpenSections({
+                                      jobs: false,
+                                      cv: false,
+                                      security: false,
+                                    });
                                   }}
                                 >
                                   Nhà tuyển dụng muốn kết nối với bạn
@@ -271,7 +294,11 @@ const Header = () => {
                                   className="text-sm text-slate-600 hover:text-[#00c853] transition-colors"
                                   onClick={() => {
                                     setDropdownOpen(false);
-                                    setOpenSections({ jobs: false, cv: false, security: false });
+                                    setOpenSections({
+                                      jobs: false,
+                                      cv: false,
+                                      security: false,
+                                    });
                                   }}
                                 >
                                   Nhà tuyển dụng xem hồ sơ
@@ -296,18 +323,22 @@ const Header = () => {
                                 </span>
                               </div>
                               <FaChevronDown
-                                className={`text-slate-400 text-sm transition-transform ${openSections.security ? 'rotate-180' : ''}`}
+                                className={`text-slate-400 text-sm transition-transform ${openSections.security ? "rotate-180" : ""}`}
                               />
                             </button>
 
                             {openSections.security && (
                               <div className="flex flex-col pl-12 pr-4 pb-3 space-y-2.5">
                                 <Link
-                                  href="/profile/settings"
+                                  href="/profile"
                                   className="text-sm text-slate-600 hover:text-[#00c853] transition-colors"
                                   onClick={() => {
                                     setDropdownOpen(false);
-                                    setOpenSections({ jobs: false, cv: false, security: false });
+                                    setOpenSections({
+                                      jobs: false,
+                                      cv: false,
+                                      security: false,
+                                    });
                                   }}
                                 >
                                   Cài đặt thông tin cá nhân
@@ -317,7 +348,11 @@ const Header = () => {
                                   className="text-sm text-slate-600 hover:text-[#00c853] transition-colors"
                                   onClick={() => {
                                     setDropdownOpen(false);
-                                    setOpenSections({ jobs: false, cv: false, security: false });
+                                    setOpenSections({
+                                      jobs: false,
+                                      cv: false,
+                                      security: false,
+                                    });
                                   }}
                                 >
                                   Đổi mật khẩu
