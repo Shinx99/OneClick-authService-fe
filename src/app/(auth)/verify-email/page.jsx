@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useRef, Suspense } from "react"; // Thêm useRef
 import { useSearchParams, useRouter } from "next/navigation";
 import { authService } from "@/services/auth.service";
+import candidateService from "@/services/candidate.service";
 import Button from "@/components/ui/Button";
 import toast from "react-hot-toast";
 
@@ -28,7 +29,19 @@ const VerifyContent = () => {
 
     const verifyAccount = async () => {
       try {
-        await authService.verifyEmail(token);
+        const response = await authService.verifyEmail(token);
+
+        const payload = {
+          candidateId: response?.accountId || null,
+          email: response?.email || null,
+          phone: response?.phone || null,
+          status: response?.status || "active",
+        }
+
+        if (response?.roles.includes("candidate")) {
+          await candidateService.updateProfile(payload);
+        }
+
         setStatus("success");
         toast.success("Xác thực thành công! Đang chuyển hướng...");
 
@@ -36,6 +49,9 @@ const VerifyContent = () => {
           router.push("/login");
         }, 2000);
       } catch (error) {
+
+        console.error("Lỗi xác thực hoặc cập nhật profile:", error);
+
         setStatus("error");
         toast.error("Xác thực thất bại! Link không hợp lệ hoặc đã hết hạn.");
       }

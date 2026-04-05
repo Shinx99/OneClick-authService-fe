@@ -13,11 +13,12 @@ import {
   FaSuitcase,
   FaFileAlt,
   FaUserShield,
+  FaChevronRight,
 } from "react-icons/fa";
 import RoleSelectionModal from "@/components/features/auth/RoleSelectionModal";
 
 const Header = () => {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user, logout, isCandidate } = useAuth();
   console.log("isAuthenticated debug:", isAuthenticated);
   const router = useRouter();
 
@@ -141,6 +142,7 @@ const Header = () => {
             <div className="flex items-center gap-3">
               {isAuthenticated ? (
                 <>
+
                   <div>
                     <button
                       onClick={() => setIsRoleModalOpen(true)}
@@ -166,12 +168,20 @@ const Header = () => {
                     {/* Dropdown */}
                     {dropdownOpen && (
                       <div className="absolute right-0 top-full mt-2 w-[340px] bg-white border border-slate-200 rounded-xl shadow-2xl z-50 animate-in slide-in-from-top-2 duration-200 max-h-[80vh] overflow-y-auto">
-                        {/* PHẦN ĐẦU: thông tin user */}
-                        <div className="p-4 border-b border-slate-100">
-                          <div className="flex items-center gap-3">
-                            <FaUserCircle className="w-10 h-10 text-slate-400" />
-                            <div>
-                              <p className="font-semibold text-slate-800 text-sm truncate max-w-[200px]">
+
+                        {/* PHẦN ĐẦU: thông tin user - CLICKABLE */}
+                        <div className="p-4 border-b border-slate-100 cursor-pointer hover:bg-slate-50 transition-colors group">
+                          <Link
+                            href="/profile"
+                            className="flex items-center gap-3 w-full h-full"
+                            onClick={() => {
+                              setDropdownOpen(false);
+                              setOpenSections({ jobs: false, cv: false, security: false });
+                            }}
+                          >
+                            <FaUserCircle className="w-10 h-10 text-slate-400 group-hover:text-slate-600 transition-colors" />
+                            <div className="min-w-0 flex-1">
+                              <p className="font-semibold text-slate-800 text-sm truncate">
                                 {user?.email}
                               </p>
                               <p className="font-semibold text-slate-800 text-sm truncate max-w-[200px]">
@@ -181,7 +191,8 @@ const Header = () => {
                                 {user?.roles?.[0] || "User"}
                               </p>
                             </div>
-                          </div>
+                            <FaChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-600" />
+                          </Link>
                         </div>
 
                         {/* PHẦN DƯỚI */}

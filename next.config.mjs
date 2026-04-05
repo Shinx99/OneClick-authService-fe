@@ -5,13 +5,13 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "ui-avatars.com",
+        hostname: "res.cloudinary.com",
         pathname: "/**",
       },
-      // Thêm tên miền của Google vào đây
+      // Thêm tên miền của Google
       {
         protocol: "http",
-        hostname: "googleusercontent.com",
+        hostname: "lh3.googleusercontent.com",
         pathname: "/**",
       },
       {

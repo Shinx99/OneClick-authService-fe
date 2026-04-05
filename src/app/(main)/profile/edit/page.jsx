@@ -58,6 +58,7 @@ const EditProfilePage = () => {
     <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#121212] pt-10 pb-20 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
           {/* CỘT TRÁI: Sidebar & Tiến độ */}
           <aside className="lg:col-span-1 space-y-6">
             <div className="sticky top-24 bg-white dark:bg-[#1e1e1e] p-4 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800">
@@ -68,7 +69,7 @@ const EditProfilePage = () => {
           {/* CỘT PHẢI: Form chi tiết */}
           <main className="lg:col-span-3 space-y-8">
             <div id="personal" className="scroll-mt-24">
-              <PersonalInfoForm initialData={profileData.personal} />
+              <PersonalInfoForm />
             </div>
 
             {/* Phần Kinh nghiệm */}
@@ -76,7 +77,7 @@ const EditProfilePage = () => {
               id="exp"
               className="scroll-mt-24 bg-white dark:bg-[#1e1e1e] p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800"
             >
-              <SectionHeader title="Kinh nghiệm làm việc" onAdd={() => {}} />
+              <SectionHeader title="Kinh nghiệm làm việc" onAdd={() => { }} />
               <div className="space-y-4">
                 {profileData.experiences.map((exp) => (
                   <div
@@ -109,7 +110,7 @@ const EditProfilePage = () => {
               id="edu"
               className="scroll-mt-24 bg-white dark:bg-[#1e1e1e] p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800"
             >
-              <SectionHeader title="Học vấn" onAdd={() => {}} />
+              <SectionHeader title="Học vấn" onAdd={() => { }} />
               {profileData.education.length > 0 ? (
                 profileData.education.map((edu) => (
                   <div

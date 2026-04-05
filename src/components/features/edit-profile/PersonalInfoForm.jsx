@@ -1,33 +1,138 @@
 "use client";
-import React, { useState } from "react";
-import AvatarUpload from "./AvatarUpload";
 
-const PersonalInfoForm = ({ initialData, onSave }) => {
-  // 1. Khởi tạo State trực tiếp từ Props.
-  // Xóa bỏ hoàn toàn useEffect để không bị lỗi "cascading renders".
+import React, { useEffect, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import VNeIDVerification from "./VNeIDVerification";
+import { useCandidateProfile } from "@/hooks/useCandidateProfile";
+import { CandidateProfileSchema } from "@/lib/validators/candidate";
+
+const PersonalInfoForm = () => {
+
+  const { profile, isLoading, isUpdating, updateProfile, refreshProfile } =
+    useCandidateProfile();
+
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   reset,
+  //   control,
+  //   formState: { errors },
+  // } = useForm({
+  //   resolver: zodResolver(CandidateProfileSchema),
+  //   defaultValues: {
+  //     candidateId: "",
+  //     surname: "",
+  //     name: "",
+  //     email: "",
+  //     phone: "",
+  //     about: "",
+  //     birthday: "",
+  //     gender: undefined,
+  //     province: "",
+  //     commune: "",
+  //     referenceLink: "",
+  //   },
+  // });
+
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   reset,
+  //   control,
+  //   getValues,
+  //   formState: { errors, dirtyFields },
+  // } = useForm({
+  //   //resolver: zodResolver(CandidateProfileSchema),
+  // });
+
   const [formData, setFormData] = useState({
-    fullName: initialData?.fullName || "",
-    position: initialData?.position || "",
-    email: initialData?.email || "",
-    phone: initialData?.phone || "",
-    bio: initialData?.bio || "",
-    location: initialData?.location || "Ho Chi Minh City, Vietnam",
+    candidateId: "",
+    surname: "",
+    name: "",
+    email: "",
+    phone: "",
+    about: "",
+    birthday: "",
+    gender: undefined,
+    province: "",
+    commune: "",
+    referenceLink: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+
+  // useEffect(() => {
+  //   refreshProfile(); // Load data lần đầu
+  // }, [refreshProfile]);
+
+
+  useEffect(() => {
+    if (profile) {
+      setFormData({
+        candidateId: profile.candidateId ?? "",
+        surname: profile.surname ?? "",
+        name: profile.name ?? "",
+        email: profile.email ?? "",
+        phone: profile.phone ?? "",
+        about: profile.about ?? "",
+        birthday: profile.birthday ?? "",
+        gender: profile.gender ?? undefined,
+        province: profile.province ?? "",
+        commune: profile.commune ?? "",
+        referenceLink: profile.referenceLink ?? "",
+      });
+    }
+  }, [profile]);
+
+
+  const handleChange = (field) => (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: e.target.value,
+    }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (onSave) onSave(formData);
-    alert("Lưu thành công!");
+
+  const handleGenderChange = (value) => {
+    setFormData((prev) => ({
+      ...prev,
+      gender: value,
+    }));
   };
+
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    const payload = {
+      candidateId: formData.candidateId || null,
+      surname: formData.surname || null,
+      name: formData.name || null,
+      about: formData.about || null,
+      birthday: formData.birthday || null,
+      gender: formData.gender ?? null,
+      province: formData.province || null,
+      commune: formData.commune || null,
+      referenceLink: formData.referenceLink || null,
+    };
+
+    await updateProfile(payload);
+  };
+
+
+
+  if (isLoading) {
+    return (
+      <div className="bg-white dark:bg-[#1e1e1e] p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800 text-center py-20">
+        <div className="text-gray-400 text-lg">Đang tải thông tin cá nhân...</div>
+      </div>
+    );
+  }
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
       className="bg-white dark:bg-[#1e1e1e] p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800 transition-all"
     >
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
@@ -39,84 +144,164 @@ const PersonalInfoForm = ({ initialData, onSave }) => {
             Quản lý hồ sơ công khai của bạn.
           </p>
         </div>
+
         <div className="flex gap-3 w-full sm:w-auto">
-          <button
-            type="button"
-            className="px-6 py-2.5 text-gray-500 font-bold hover:bg-gray-100 rounded-xl transition-all"
-          >
-            Hủy
-          </button>
+
           <button
             type="submit"
-            className="px-6 py-2.5 bg-[#00c853] text-white font-black rounded-xl hover:bg-[#00a846] transition-all shadow-lg active:scale-95"
+            disabled={isLoading || isUpdating}
+            className="px-6 py-2.5 bg-[#00c853] text-white font-black rounded-xl hover:bg-[#00a846] transition-all shadow-lg active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            Lưu thay đổi
+            {isUpdating ? "Đang lưu..." : "Lưu thay đổi"}
           </button>
         </div>
       </div>
 
-      <AvatarUpload initialAvatar={initialData?.avatar} />
+      <VNeIDVerification />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-        <div className="space-y-2">
+        <div className="space-y-2 mt-3">
           <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
-            Họ và tên
+            Họ và tên đệm
           </label>
           <input
             type="text"
-            name="fullName"
-            value={formData.fullName}
-            onChange={handleChange}
-            className="w-full p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
+            value={formData.surname}
+            onChange={handleChange("surname")}
+            className="w-full mt-2 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
           />
         </div>
-        <div className="space-y-2">
+
+        <div className="space-y-2 mt-3">
           <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
-            Chức danh
+            Tên
           </label>
           <input
             type="text"
-            name="position"
-            value={formData.position}
-            onChange={handleChange}
-            className="w-full p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
+            value={formData.name}
+            onChange={handleChange("name")}
+            className="w-full mt-2 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
           />
         </div>
-        <div className="space-y-2">
+
+        <div className="space-y-2 mt-3">
           <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
-            Địa chỉ Email
+            Ngày sinh
+          </label>
+          <input
+            type="date"
+            value={formData.birthday}
+            onChange={handleChange("birthday")}
+            className="w-full mt-2 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
+          />
+        </div>
+
+        <div className="space-y-2 mt-3">
+          <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
+            Giới tính
+          </label>
+          <div className="flex gap-3 mt-2">
+            {[
+              { label: "Nam", value: true },
+              { label: "Nữ", value: false },
+            ].map(({ label, value }) => {
+              const isSelected = formData.gender === value;
+              return (
+                <button
+                  key={label}
+                  type="button"
+                  onClick={() => handleGenderChange(value)}
+                  className={`flex-1 py-3.5 rounded-2xl font-black text-sm border-2 transition-all active:scale-95 ${isSelected
+                    ? "bg-[#00c853] text-white border-[#00c853] shadow-md"
+                    : "bg-gray-50 dark:bg-[#252525] text-gray-600 dark:text-gray-400 border-gray-100 dark:border-gray-800 hover:border-[#00c853]/50"
+                    }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="space-y-2 mt-3">
+          <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
+            Tỉnh/Thành phố
+          </label>
+          <input
+            type="text"
+            placeholder="VD: TP. Hồ Chí Minh"
+            value={formData.province}
+            onChange={handleChange("province")}
+            className="w-full mt-2 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
+          />
+        </div>
+
+        <div className="space-y-2 mt-3">
+          <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
+            Xã/Phường
+          </label>
+          <input
+            type="text"
+            placeholder="VD: Phường 1"
+            value={formData.commune}
+            onChange={handleChange("commune")}
+            className="w-full mt-2 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
+          />
+        </div>
+
+        <div className="space-y-2 mt-3">
+          <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
+            Email
           </label>
           <input
             type="email"
-            name="email"
+            readOnly
             value={formData.email}
-            onChange={handleChange}
-            className="w-full p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
+            onChange={handleChange("email")}
+            className="w-full mt-2 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
           />
         </div>
-        <div className="space-y-2">
+
+        <div className="space-y-2 mt-3">
           <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
             Số điện thoại
           </label>
           <input
-            type="text"
-            name="phone"
+            type="tel"
+            readOnly
             value={formData.phone}
-            onChange={handleChange}
-            className="w-full p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
+            onChange={handleChange("phone")}
+            className="w-full mt-2 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
           />
         </div>
-        <div className="md:col-span-2 space-y-2">
+
+        <div className="md:col-span-2 space-y-2 mt-3">
+          <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
+            Link tham chiếu (GitHub, LinkedIn, Portfolio...)
+          </label>
+          <input
+            type="url"
+            placeholder="https://github.com/yourusername hoặc https://linkedin.com/in/yourprofile"
+            value={formData.referenceLink}
+            onChange={handleChange("referenceLink")}
+            className="w-full mt-2 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
+          />
+        </div>
+
+        <div className="md:col-span-2 space-y-2 mt-6">
           <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
             Giới thiệu bản thân
           </label>
           <textarea
-            name="bio"
-            rows="5"
-            value={formData.bio}
-            onChange={handleChange}
-            className="w-full p-4 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none resize-none font-medium"
+            rows="8"
+            value={formData.about}
+            onChange={handleChange("about")}
+            className="w-full mt-2 p-5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853]/50 focus:ring-offset-2 outline-none resize-vertical font-medium text-base leading-relaxed min-h-[200px] max-h-[400px]"
+            placeholder="Kể về kinh nghiệm làm việc, kỹ năng chuyên môn, thành tựu nổi bật và mục tiêu nghề nghiệp của bạn..."
           />
+          <p className="text-xs text-gray-500 mt-2">
+            Tối đa 1000 ký tự. Nội dung sẽ hiển thị công khai trên hồ sơ.
+          </p>
         </div>
       </div>
     </form>
