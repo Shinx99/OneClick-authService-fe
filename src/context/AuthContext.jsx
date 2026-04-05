@@ -9,6 +9,7 @@ import React, {
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { authService } from "@/services/auth.service";
+import candidateService from "@/services/candidate.service";
 
 export const ROLES = {
   ADMIN: "admin",

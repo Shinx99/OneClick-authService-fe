@@ -5,6 +5,8 @@ import ExperienceList from "@/components/features/profile/ExperienceList";
 import SkillList from "@/components/features/profile/SkillList";
 import EducationList from "@/components/features/profile/EducationList";
 import DocumentSidebar from "@/components/features/profile/DocumentSidebar";
+import AboutSection from "@/components/features/profile/AboutPage";
+import ReferenceLink from "@/components/features/profile/ReferenceLink";
 
 const ProfilePage = () => {
   // DỮ LIỆU TỔNG (Sau này fetch từ GET /api/user/profile)
@@ -58,7 +60,11 @@ const ProfilePage = () => {
     <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#121212] pt-8 pb-12 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <section className="mb-6">
-          <ProfileHeader user={userData.personal} />
+          <ProfileHeader />
+        </section>
+
+        <section className="mb-6">
+          <AboutSection />
         </section>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -69,7 +75,13 @@ const ProfilePage = () => {
           </div>
 
           <div className="lg:col-span-1 space-y-6">
-            <DocumentSidebar documents={userData.documents} />
+            <div>
+              <ReferenceLink />
+            </div>
+
+            <div className="mt-3">
+              <DocumentSidebar documents={userData.documents} />
+            </div>
           </div>
         </div>
       </div>
