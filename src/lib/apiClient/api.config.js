@@ -100,8 +100,8 @@ apiClient.interceptors.response.use(
     const isAuthEndpoint =
       originalRequest.url?.includes("/auth/login") ||
       originalRequest.url?.includes("/auth/register") ||
-      originalRequest.url?.includes("/auth/refresh-token");
-originalRequest.url?.includes("/auth/logout");
+      originalRequest.url?.includes("/auth/refresh-token")||
+      originalRequest.url?.includes("/auth/logout");
 
     // Handle when server return 401 + originalRequest is non _retry
     if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
