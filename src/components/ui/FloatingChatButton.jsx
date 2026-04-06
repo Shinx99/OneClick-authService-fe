@@ -1,42 +1,45 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import ChatWidget from "@/components/features/chatBot/ChatWidget";
+import { FaCommentDots } from "react-icons/fa";
 
 export default function FloatingChatButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
 
-  const buttonLabel = useMemo(() => {
-    if (!isOpen) return "Mở chat hỗ trợ";
-    if (isMinimized) return "Mở lại chat";
-    return "Đóng chat hỗ trợ";
-  }, [isOpen, isMinimized]);
-
-  const handleToggle = () => {
-    setIsOpen((prev) => {
-      const next = !prev;
-      if (next) setIsMinimized(false);
-      return next;
-    });
+  const handleCloseEverything = () => {
+    setIsOpen(false);
+    setIsMinimized(false);
   };
 
   return (
     <>
-      <button
-        type="button"
-        onClick={handleToggle}
-        aria-label={buttonLabel}
-        className="fixed bottom-6 right-6 z-[1000] flex h-14 w-14 items-center justify-center rounded-full bg-teal-700 text-white shadow-2xl transition duration-200 hover:scale-105 hover:bg-teal-800 active:scale-95"
-      >
-        <span className="text-xl">{isOpen ? "✕" : "💬"}</span>
-      </button>
+      {/* NÚT TRÒN FLOATING (CHỈ HIỆN KHI ĐÓNG) */}
+      {!isOpen && (
+        <div className="fixed bottom-8 right-8 z-[1000] animate-in fade-in zoom-in duration-500">
+          <span className="absolute inset-0 inline-flex h-full w-full animate-ping rounded-full bg-[#00c853] opacity-20"></span>
+          <button
+            type="button"
+            onClick={() => setIsOpen(true)}
+            className="relative flex h-16 w-16 items-center justify-center rounded-[20px] bg-[#00c853] text-white shadow-[0_8px_30px_rgb(0,200,83,0.4)] hover:bg-[#00b04a] hover:-translate-y-1.5 transition-all duration-300 active:scale-95"
+          >
+            <FaCommentDots size={28} />
+          </button>
+        </div>
+      )}
 
+      {/* KHUNG CHAT WIDGET TỔNG THỂ */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-[999] h-[560px] w-[380px] max-w-[calc(100vw-24px)] overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-2xl dark:border-neutral-800 dark:bg-neutral-950">
+        <div
+          className={`fixed bottom-8 right-8 z-[999] max-w-[calc(100vw-32px)] overflow-hidden rounded-[28px] border border-card-border bg-card-bg shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] ${
+            isMinimized ? "h-[80px] w-[320px]" : "h-[650px] w-[400px]"
+          }`}
+        >
           <ChatWidget
             isMinimized={isMinimized}
             onMinimize={() => setIsMinimized((prev) => !prev)}
+            onClose={handleCloseEverything}
           />
         </div>
       )}

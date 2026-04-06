@@ -41,6 +41,8 @@ OneClick-authService-fe
 │   │   │   └── admin
 │   │   │       ├── categories
 │   │   │       │   └── page.jsx
+│   │   │       ├── chat
+│   │   │       │   └── page.jsx
 │   │   │       ├── content
 │   │   │       │   ├── companies
 │   │   │       │   │   └── page.jsx
@@ -65,11 +67,6 @@ OneClick-authService-fe
 │   │   │   │   └── page.js
 │   │   │   ├── register
 │   │   │   │   └── page.jsx
-│   │   │   ├── register-employer
-│   │   │   │   └── page.jsx
-│   │   │   ├── reset-password
-│   │   │   │   └── page.jsx
-│   │   │   └── verify-email
 │   │   │   ├── register-employer
 │   │   │   │   └── page.jsx
 │   │   │   ├── reset-password
@@ -176,7 +173,6 @@ OneClick-authService-fe
 │   │   │   │   ├── LoginForm.jsx
 │   │   │   │   ├── RegisterForm.jsx
 │   │   │   │   ├── ResetPasswordForm.jsx
-│   │   │   │   ├── ResetPasswordForm.jsx
 │   │   │   │   └── RoleSelectionModal.jsx
 │   │   │   ├── chatBot
 │   │   │   │   ├── ChatHandoffBanner.jsx
@@ -200,10 +196,10 @@ OneClick-authService-fe
 │   │   │   ├── cv
 │   │   │   │   └── CVManagementContent.jsx
 │   │   │   ├── edit-profile
-│   │   │   │   ├── AvatarUpload.jsx
 │   │   │   │   ├── EditSidebar.jsx
 │   │   │   │   ├── PersonalInfoForm.jsx
-│   │   │   │   └── SectionHeader.jsx
+│   │   │   │   ├── SectionHeader.jsx
+│   │   │   │   └── VNeIDVerification.jsx
 │   │   │   ├── employer
 │   │   │   │   ├── auth
 │   │   │   │   │   ├── EmployerCompanyForm.jsx
@@ -245,15 +241,18 @@ OneClick-authService-fe
 │   │   │   │   ├── AIAnalysisDashboard.jsx
 │   │   │   │   ├── AIConsultantChat.jsx
 │   │   │   │   ├── AIMatchButton.jsx
+│   │   │   │   ├── ApplyModal.jsx
 │   │   │   │   ├── JobContent.jsx
 │   │   │   │   ├── JobFilter.jsx
 │   │   │   │   ├── JobSidebar.jsx
 │   │   │   │   └── SimilarJobs.jsx
 │   │   │   └── profile
+│   │   │       ├── AboutPage.jsx
 │   │   │       ├── DocumentSidebar.jsx
 │   │   │       ├── EducationList.jsx
 │   │   │       ├── ExperienceList.jsx
 │   │   │       ├── ProfileHeader.jsx
+│   │   │       ├── ReferenceLink.jsx
 │   │   │       └── SkillList.jsx
 │   │   ├── layout
 │   │   │   ├── AuthLayout.jsx
@@ -265,16 +264,22 @@ OneClick-authService-fe
 │   │       └── SearchBar.jsx
 │   ├── context
 │   │   └── AuthContext.jsx
+│   ├── hooks
+│   │   ├── useCandidateProfile.js
+│   │   └── useJobs.js
 │   ├── lib
 │   │   ├── apiClient
 │   │   │   └── api.config.js
 │   │   ├── chat
 │   │   │   └── ws.client.js
 │   │   └── validators
-│   │       └── auth.jsx
+│   │       ├── auth.jsx
+│   │       └── candidate.jsx
 │   └── services
+│       ├── application.service.js
 │       ├── auth.service.js
+│       ├── candidate.service.js
+│       ├── chat.service.js
+│       ├── job.service.js
 │       └── resume.service.js
-│       ├── auth.service.js
-│       └── chat.service.js
 └── tree.txt

@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import {
@@ -99,6 +98,7 @@ const CVManagementContent = () => {
 
   // --- HÀM XỬ LÝ BẬT/TẮT VÀ GỌI TOAST ---
   const handleToggleSearching = () => {
+    toast.dismiss(); // Xóa các toast cũ để tránh spam
     const newState = !isSearching;
     setIsSearching(newState);
     if (newState) {
@@ -109,6 +109,7 @@ const CVManagementContent = () => {
   };
 
   const handleToggleSearchable = () => {
+    toast.dismiss(); // Xóa các toast cũ để tránh spam
     const newState = !allowSearch;
     setAllowSearch(newState);
     if (newState) {
@@ -123,18 +124,12 @@ const CVManagementContent = () => {
     const fetchResumes = async () => {
       try {
         setIsLoading(true);
-        console.log('📡 Fetching resumes...');
-        
         const token = getAccessToken();
-        console.log('Token present:', !!token);
-        
         const data = await resumeService.getResumes();
-        console.log('📄 Raw resumes data:', data);
-        
-        // Transform data và chỉ lấy CV có status === 'active'
+
         if (data && Array.isArray(data)) {
           const formattedDocs = data
-            .filter(doc => doc.status === 'active')  // Chỉ lấy CV active
+            .filter((doc) => doc.status === "active")
             .map((doc) => ({
               id: doc.id,
               name: doc.name,
@@ -142,22 +137,19 @@ const CVManagementContent = () => {
               isDefault: doc.isDefault,
               url: doc.url,
               fileName: doc.fileName,
-              status: doc.status
+              status: doc.status,
             }));
-          
-          console.log('Formatted active docs:', formattedDocs);
           setDocuments(formattedDocs);
         } else {
           setDocuments([]);
         }
       } catch (error) {
-        console.error("Lỗi fetch CV:", error);
-        toast.error("Không thể tải danh sách CV");
+        toast.error("Không thể tải danh sách CV", { id: "fetch-error" });
       } finally {
         setIsLoading(false);
       }
     };
-    
+
     fetchResumes();
   }, []);
 
@@ -165,32 +157,29 @@ const CVManagementContent = () => {
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
-    
     if (!file) return;
-    
+
     if (file.type !== "application/pdf") {
+      toast.dismiss();
       toast.error("Vui lòng chọn định dạng file PDF.");
       e.target.value = null;
       return;
     }
-    
+
     if (file.size > 10 * 1024 * 1024) {
+      toast.dismiss();
       toast.error("File quá lớn! Vui lòng chọn file dưới 10MB.");
       e.target.value = null;
       return;
     }
-    
+
     try {
       setIsUploading(true);
-      
-      // Upload file
+      toast.loading("Đang tải lên CV...", { id: "upload-process" }); // Sử dụng ID để cố định toast
+
       await resumeService.uploadResume(file);
-      
-      // Upload thành công, fetch lại danh sách CV mới
-      toast.loading("Đang tải danh sách CV...", { id: "reload" });
-      
       const data = await resumeService.getResumes();
-      
+
       const formattedDocs = data.map((doc) => ({
         id: doc.id,
         name: doc.name,
@@ -198,16 +187,15 @@ const CVManagementContent = () => {
         isDefault: doc.isDefault,
         url: doc.url,
         fileName: doc.fileName,
-        status: doc.status
+        status: doc.status,
       }));
-      
+
       setDocuments(formattedDocs);
-      toast.dismiss("reload");
-      toast.success("Tải lên CV thành công!");
-      
+      toast.success("Tải lên CV thành công!", { id: "upload-process" }); // Cập nhật toast cũ
     } catch (error) {
-      console.error("Upload error:", error);
-      toast.error(error.message || "Upload thất bại. Vui lòng thử lại!");
+      toast.error(error.message || "Upload thất bại. Vui lòng thử lại!", {
+        id: "upload-process",
+      });
     } finally {
       setIsUploading(false);
       e.target.value = null;
@@ -215,82 +203,72 @@ const CVManagementContent = () => {
   };
 
   const handleSetDefault = async (id) => {
-    if (!id) {
-      toast.error("ID CV không hợp lệ");
-      return;
-    }
-    
+    if (!id) return;
     try {
+      toast.loading("Đang cập nhật...", { id: "set-default" });
       await resumeService.setDefaultResume(id);
       setDocuments((prev) =>
-        prev.map((doc) => ({ ...doc, isDefault: doc.id === id }))
+        prev.map((doc) => ({ ...doc, isDefault: doc.id === id })),
       );
       setActiveMenu(null);
-      toast.success("Đã cập nhật CV mặc định!");
+      toast.success("Đã cập nhật CV mặc định!", { id: "set-default" });
     } catch (error) {
-      console.error("Set default error:", error);
-      toast.error("Lỗi khi đặt CV mặc định.");
+      toast.error("Lỗi khi đặt CV mặc định.", { id: "set-default" });
     }
   };
 
   const handleDelete = async (id) => {
-    if (!id) {
-      toast.error("ID CV không hợp lệ");
-      return;
-    }
-    
+    if (!id) return;
     if (window.confirm("Bạn có chắc chắn muốn xóa CV này?")) {
       try {
+        toast.loading("Đang xóa CV...", { id: "delete-cv" });
         await resumeService.deleteResume(id);
         setDocuments(documents.filter((doc) => doc.id !== id));
         setActiveMenu(null);
-        toast.success("Đã xóa CV thành công!");
+        toast.success("Đã xóa CV thành công!", { id: "delete-cv" });
       } catch (error) {
-        console.error("Delete error:", error);
-        toast.error("Xóa CV thất bại!");
+        toast.error("Xóa CV thất bại!", { id: "delete-cv" });
       }
     }
   };
 
   const handlePreview = async (fileName) => {
-    if (!fileName || fileName === 'undefined') {
+    if (!fileName || fileName === "undefined") {
       toast.error("Không thể xem trước CV: thiếu tên file");
       return;
     }
-    
+
     try {
-      toast.loading("Đang tải CV...", { id: "preview" });
+      toast.loading("Đang tải bản xem trước...", { id: "preview-cv" });
       const { blob } = await resumeService.previewResume(fileName);
       const url = URL.createObjectURL(blob);
       setPreviewUrl(url);
-      toast.dismiss("preview");
+      toast.dismiss("preview-cv");
     } catch (error) {
-      console.error("Preview error:", error);
-      toast.error("Không thể xem trước CV!", { id: "preview" });
+      toast.error("Không thể tải bản xem trước!", { id: "preview-cv" });
     }
   };
 
   const handleDownload = async (fileName, displayName) => {
-    if (!fileName || fileName === 'undefined') {
+    if (!fileName || fileName === "undefined") {
       toast.error("Không thể tải CV: thiếu tên file");
       return;
     }
-    
+
     try {
-      toast.loading("Đang tải CV...", { id: "download" });
+      toast.loading("Đang chuẩn bị file tải về...", { id: "download-cv" });
       const { blob } = await resumeService.downloadResume(fileName);
       const downloadUrl = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = downloadUrl;
       link.download = displayName || fileName;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(downloadUrl);
-      toast.success("Tải CV thành công!", { id: "download" });
+      toast.success("Tải CV thành công!", { id: "download-cv" });
     } catch (error) {
-      console.error("Download error:", error);
-      toast.error("Không thể tải CV!", { id: "download" });
+      toast.error("Không thể tải CV!", { id: "download-cv" });
     }
   };
 
@@ -398,7 +376,8 @@ const CVManagementContent = () => {
                       Chưa có CV nào trong hệ thống.
                     </p>
                     <p className="text-sm text-slate-500">
-                      Hãy tải lên CV đầu tiên để AI phân tích và gợi ý việc làm phù hợp!
+                      Hãy tải lên CV đầu tiên để AI phân tích và gợi ý việc làm
+                      phù hợp!
                     </p>
                   </div>
                 )}
@@ -558,12 +537,6 @@ const CVManagementContent = () => {
 };
 
 export default CVManagementContent;
-
-
-
-
-
-
 
 // "use client";
 // import React, { useState, useEffect, useRef } from "react";

@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FiMapPin, FiBriefcase, FiBookmark } from "react-icons/fi";
@@ -7,175 +8,127 @@ import {
   HiOutlineAcademicCap,
   HiPaperAirplane,
 } from "react-icons/hi2";
-// IMPORT Component AI Matching
-import AIMatchButton from "./AIMatchButton";
+import ApplyModal from "./ApplyModal";
 
 const JobSidebar = ({ data }) => {
-  return (
-    // 'sticky top-6' giúp Sidebar trượt theo màn hình khi lăn chuột
-    <aside className="sticky top-6 space-y-6">
-      {/* ==========================================
-          KHỐI 1: THÔNG TIN NHANH & HÀNH ĐỘNG
-      ========================================== */}
-      <div className="bg-white rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.04)] border border-gray-100">
-        <h3 className="text-lg font-bold text-gray-900 mb-6">
-          Thông tin nhanh
-        </h3>
+  const [showApplyModal, setShowApplyModal] = useState(false);
 
-        <div className="space-y-5 mb-6">
-          {/* Mức lương */}
-          <div className="flex gap-4 items-start">
-            <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center shrink-0 text-green-500">
-              <HiOutlineCurrencyDollar className="text-xl" />
-            </div>
-            <div>
-              <p className="text-[11px] text-gray-500 font-bold uppercase tracking-wide mb-0.5">
-                Mức lương
-              </p>
-              <p className="font-bold text-gray-900">{data.salary}</p>
-            </div>
+  const infoItems = [
+    {
+      icon: <HiOutlineCurrencyDollar />,
+      label: "Mức lương",
+      value: data.salary,
+      color: "text-green-500",
+      bg: "bg-green-50 dark:bg-green-500/10",
+    },
+    {
+      icon: <FiMapPin />,
+      label: "Địa điểm",
+      value: data.location,
+      color: "text-blue-500",
+      bg: "bg-blue-50 dark:bg-blue-500/10",
+    },
+    {
+      icon: <FiBriefcase />,
+      label: "Hình thức",
+      value: data.type,
+      color: "text-orange-500",
+      bg: "bg-orange-50 dark:bg-orange-500/10",
+    },
+    {
+      icon: <HiOutlineAcademicCap />,
+      label: "Cấp bậc",
+      value: data.level,
+      color: "text-purple-500",
+      bg: "bg-purple-50 dark:bg-purple-500/10",
+    },
+  ];
+
+  return (
+    <>
+      <aside className="space-y-8">
+        <div className="bg-card-bg rounded-[32px] p-8 border border-card-border shadow-sm">
+          <h3 className="text-lg font-black text-text-main mb-8 uppercase tracking-widest border-b border-card-border pb-4">
+            Thông tin nhanh
+          </h3>
+
+          <div className="space-y-6 mb-10">
+            {infoItems.map((item, idx) => (
+              <div key={idx} className="flex gap-4 items-center">
+                <div
+                  className={`w-12 h-12 rounded-2xl ${item.bg} flex items-center justify-center shrink-0 ${item.color}`}
+                >
+                  {React.cloneElement(item.icon, { size: 22 })}
+                </div>
+                <div>
+                  <p className="text-[10px] text-text-muted font-black uppercase tracking-widest mb-1">
+                    {item.label}
+                  </p>
+                  <p className="font-bold text-text-main text-[15px] leading-none">
+                    {item.value}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
 
-          {/* Địa điểm */}
-          <div className="flex gap-4 items-start">
-            <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0 text-blue-500">
-              <FiMapPin className="text-xl" />
+          <div className="space-y-4">
+            <button
+              onClick={() => setShowApplyModal(true)}
+              className="w-full bg-[#00c853] hover:bg-[#00b04a] text-white py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-lg shadow-green-500/20 active:scale-95 flex items-center justify-center gap-3"
+            >
+              <HiPaperAirplane className="text-xl -rotate-45" /> Ứng tuyển ngay
+            </button>
+            <button className="w-full bg-background border border-card-border text-text-main hover:border-[#00c853] py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-3">
+              <FiBookmark size={20} /> Lưu việc làm
+            </button>
+          </div>
+        </div>
+
+        {/* CÔNG TY */}
+        <div className="bg-card-bg rounded-[32px] p-8 border border-card-border">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-14 h-14 rounded-2xl border border-card-border overflow-hidden bg-background relative shrink-0">
+              <Image
+                src={data.logo || "/globe.svg"}
+                alt="Logo"
+                fill
+                className="object-cover p-2"
+              />
             </div>
-            <div>
-              <p className="text-[11px] text-gray-500 font-bold uppercase tracking-wide mb-0.5">
-                Địa điểm
-              </p>
-              <p className="font-bold text-gray-900">{data.location}</p>
-              <Link href="#" className="text-xs text-blue-500 hover:underline">
-                Xem bản đồ
+            <div className="min-w-0">
+              <h4 className="font-black text-text-main text-[16px] truncate uppercase tracking-tight">
+                {data.company}
+              </h4>
+              <Link
+                href="#"
+                className="text-xs font-bold text-[#00c853] hover:underline"
+              >
+                Xem trang công ty
               </Link>
             </div>
           </div>
-
-          {/* Hình thức */}
-          <div className="flex gap-4 items-start">
-            <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center shrink-0 text-orange-500">
-              <FiBriefcase className="text-xl" />
-            </div>
-            <div>
-              <p className="text-[11px] text-gray-500 font-bold uppercase tracking-wide mb-0.5">
-                Hình thức
-              </p>
-              <p className="font-bold text-gray-900">{data.type}</p>
-            </div>
-          </div>
-
-          {/* Cấp bậc */}
-          <div className="flex gap-4 items-start">
-            <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center shrink-0 text-purple-500">
-              <HiOutlineAcademicCap className="text-xl" />
-            </div>
-            <div>
-              <p className="text-[11px] text-gray-500 font-bold uppercase tracking-wide mb-0.5">
-                Cấp bậc
-              </p>
-              <p className="font-bold text-gray-900">{data.level}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Nút hành động */}
-        <div className="space-y-3">
-          <button className="w-full bg-[#10B94F] hover:bg-green-600 text-white py-3.5 rounded-xl font-bold transition-all shadow-lg shadow-green-600/20 flex items-center justify-center gap-2">
-            <HiPaperAirplane className="text-lg -rotate-45 mb-1" />
-            Ứng tuyển ngay
-          </button>
-
-          {/* NÚT AI MATCHING TÍCH HỢP Ở ĐÂY */}
-          {/* Nhớ truyền jobId và jobTitle từ data vào để API sau này biết đang quét CV cho job nào */}
-          <AIMatchButton jobId={data.id} jobTitle={data.title} />
-
-          <button className="w-full bg-white border border-[#10B94F] text-[#10B94F] hover:bg-green-50 py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2">
-            <FiBookmark className="text-lg" />
-            Lưu
-          </button>
-        </div>
-      </div>
-
-      {/* ==========================================
-          KHỐI 2: THÔNG TIN CÔNG TY
-      ========================================== */}
-      <div className="bg-white rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.04)] border border-gray-100">
-        <div className="flex items-center gap-4 mb-4">
-          <div className="w-12 h-12 rounded-full overflow-hidden border border-gray-100 shrink-0 bg-gray-50 relative">
-            <Image
-              src={data.logo}
-              alt="Company Logo"
-              fill
-              className="object-cover"
-            />
-          </div>
-          <div>
-            <h4 className="font-bold text-gray-900 text-[15px]">
-              {data.company}
-            </h4>
-            <Link
-              href="#"
-              className="text-xs text-gray-500 hover:text-green-600 hover:underline"
-            >
-              Xem trang công ty
-            </Link>
-          </div>
-        </div>
-
-        <p className="text-sm text-gray-600 leading-relaxed mb-5">
-          Chúng tôi là công ty tiên phong trong lĩnh vực công nghệ môi trường,
-          chuyên cung cấp các giải pháp bền vững cho các doanh nghiệp toàn cầu.
-        </p>
-
-        <div className="space-y-3 text-[13px]">
-          <div className="flex justify-between items-center border-b border-gray-50 pb-2">
-            <span className="text-gray-500">Quy mô</span>
-            <span className="font-semibold text-gray-800">
-              {data.companySize}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-gray-500">Website</span>
-            <Link
-              href={`https://${data.website}`}
-              target="_blank"
-              className="font-semibold text-blue-500 hover:underline"
-            >
-              {data.website}
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* ==========================================
-          KHỐI 3: BẢN ĐỒ VỊ TRÍ
-      ========================================== */}
-      <div className="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.04)] border border-gray-100 overflow-hidden relative group cursor-pointer">
-        {/* Lớp nền giả lập bản đồ */}
-        <div className="h-32 w-full bg-[#e5e7eb] relative">
-          <Image
-            src="https://www.google.com/maps/vt/pb=!1m4!1m3!1i13!2i1313!3i3143!2m3!1e0!2sm!3i420120488!3m7!2sen!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0!23i1301875"
-            alt="Map background"
-            fill
-            className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
-          />
-          {/* Lớp mờ đen bên trên */}
-          <div className="absolute inset-0 bg-black/10"></div>
-        </div>
-
-        {/* Nút xem vị trí (nổi lên trên) */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
-          <p className="text-gray-800 font-bold mb-2 text-sm drop-shadow-md bg-white/80 px-2 py-0.5 rounded">
-            San Francisco
+          <p className="text-[13px] text-text-muted leading-relaxed mb-6 font-medium">
+            Chúng tôi tiên phong trong công nghệ môi trường...
           </p>
-          <button className="w-full bg-white/90 backdrop-blur-sm text-gray-800 hover:bg-white py-2.5 rounded-lg font-bold text-sm transition-all shadow-sm flex items-center justify-center gap-2">
-            <FiMapPin />
-            Xem vị trí văn phòng
-          </button>
+          <div className="pt-6 border-t border-card-border space-y-3">
+            <div className="flex justify-between text-[12px] font-bold">
+              <span className="text-text-muted">QUY MÔ</span>
+              <span className="text-text-main">{data.companySize}</span>
+            </div>
+            <div className="flex justify-between text-[12px] font-bold">
+              <span className="text-text-muted">WEBSITE</span>
+              <Link href="#" className="text-blue-500 hover:underline">
+                {data.website}
+              </Link>
+            </div>
+          </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+      {showApplyModal && (
+        <ApplyModal job={data} onClose={() => setShowApplyModal(false)} />
+      )}
+    </>
   );
 };
 

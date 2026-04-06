@@ -4,70 +4,65 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 
-// Cấu hình Font chữ
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin", "vietnamese"],
 });
 
-// export const metadata = {
-//   title: "One-Click | Nền tảng tuyển dụng hàng đầu",
-//   description:
-//     "Khám phá hàng ngàn cơ hội việc làm và kết nối với những nhân tài hàng đầu.",
-// };
-
 export default function RootLayout({ children }) {
-  console.log("GOOGLE_CLIENT_ID:", process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID); // debug
-
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} font-sans antialiased text-slate-800`}
+        className={`${inter.variable} font-sans antialiased bg-background text-text-main transition-colors duration-300`}
       >
         <GoogleOAuthProvider
           clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
         >
           <AuthProvider>
-            {/* TOASTER ĐẶT Ở ĐÂY ĐỂ TRANG NÀO CŨNG GỌI ĐƯỢC */}
+            {/* Cấu hình Toaster tối ưu chống Spam */}
             <Toaster
               position="top-right"
               reverseOrder={false}
+              gutter={12}
+              // GIỚI HẠN SỐ LƯỢNG: Tối đa 3 thông báo cùng lúc để tránh tràn màn hình
               toastOptions={{
-                className: "",
+                limit: 3,
+                duration: 3000, // Thời gian hiển thị ngắn lại (3s) để giải phóng không gian nhanh
                 style: {
-                  background: "#ffffff",
-                  color: "#334155",
-                  fontFamily: "inherit",
+                  background: "var(--card-bg)",
+                  color: "var(--text-main)",
+                  border: "2px solid var(--card-border)",
+                  borderRadius: "20px",
+                  padding: "16px 24px",
                   fontSize: "14px",
-                  fontWeight: "600",
-                  padding: "16px 20px",
-                  borderRadius: "16px",
-                  boxShadow:
-                    "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
-                  border: "1px solid #f1f5f9",
+                  fontWeight: "500", // Giao diện SaaS không dùng Bold
+                  boxShadow: "0 20px 40px -15px rgba(0,0,0,0.2)",
+                  maxWidth: "420px",
                 },
                 success: {
-                  duration: 3000,
                   iconTheme: {
-                    primary: "#10B94F",
+                    primary: "#00c853",
                     secondary: "#ffffff",
                   },
                 },
                 error: {
-                  duration: 4000,
                   iconTheme: {
-                    primary: "#ef4444",
+                    primary: "#ff4b4b",
                     secondary: "#ffffff",
+                  },
+                  style: {
+                    border: "2px solid rgba(255, 75, 75, 0.4)",
                   },
                 },
               }}
               containerStyle={{
-                top: 100,
-                right: 20,
+                // Dịch xuống dưới Navbar (giả định Navbar cao 80px)
+                top: 90,
+                right: 24,
+                bottom: 24,
+                left: 24,
               }}
             />
-
-            {/* Nơi nhúng các Layout con */}
             {children}
           </AuthProvider>
         </GoogleOAuthProvider>
