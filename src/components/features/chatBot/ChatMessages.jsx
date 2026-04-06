@@ -1,63 +1,43 @@
-// ChatMessages.jsx
-
 "use client";
 
-export default function ChatMessages({ 
-  messages = [], 
-  loading = false,
-  isTyping = false, // Thêm prop
-  typingUserId = null, // Ai đang typing
-}) {
+export default function ChatMessages({ messages = [], loading = false }) {
   if (loading) {
     return (
-      <div className="flex flex-1 flex-col gap-3 overflow-y-auto p-4">
-        <div className="h-8 w-2/3 animate-pulse rounded-2xl bg-neutral-200 dark:bg-neutral-800" />
-        <div className="ml-auto h-8 w-1/2 animate-pulse rounded-2xl bg-neutral-200 dark:bg-neutral-800" />
-        <div className="h-8 w-3/4 animate-pulse rounded-2xl bg-neutral-200 dark:bg-neutral-800" />
+      <div className="flex flex-1 flex-col gap-4 p-6 bg-background">
+        <div className="h-10 w-2/3 animate-pulse rounded-2xl bg-card-border" />
+        <div className="ml-auto h-10 w-1/2 animate-pulse rounded-2xl bg-card-border" />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-3 overflow-y-auto p-4">
+    <div className="flex flex-1 flex-col gap-6 overflow-y-auto p-6 bg-background transition-colors scrollbar-thin">
       {messages.map((message) => {
-        const sender = (message.sender || "AI").toUpperCase();
-        const isUser = sender === "USER";
-        const isAdmin = sender === "ADMIN";
+        const isUser = (message.sender || "AI").toUpperCase() === "USER";
 
         return (
-          <div key={message.id} className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
+          <div
+            key={message.id}
+            className={`flex ${isUser ? "justify-end" : "justify-start"} animate-in fade-in slide-in-from-bottom-2 duration-300`}
+          >
             <div
-              className={[
-                "max-w-[80%] rounded-2xl px-4 py-2 text-sm shadow-sm",
+              className={`relative max-w-[85%] px-4 py-3 rounded-[22px] text-[13.5px] leading-relaxed shadow-sm ${
                 isUser
-                  ? "rounded-br-sm bg-teal-700 text-white"
-                  : isAdmin
-                  ? "rounded-bl-sm bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-100"
-                  : "rounded-bl-sm bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100",
-              ].join(" ")}
+                  ? "bg-[#00c853] text-white rounded-br-none font-medium"
+                  : "bg-card-bg text-text-main border border-card-border rounded-bl-none shadow-black/5"
+              }`}
             >
-              <div>{message.content}</div>
-              <div className="mt-1 text-[10px] opacity-60">
-                {message.createdAtLabel || message.createdAt || ""}
+              {message.content}
+              {/* Timestamp tinh tế */}
+              <div
+                className={`absolute bottom-[-18px] text-[9px] font-bold uppercase tracking-tighter opacity-30 whitespace-nowrap ${isUser ? "right-1" : "left-1"}`}
+              >
+                {message.createdAtLabel || ""}
               </div>
             </div>
           </div>
         );
       })}
-
-      {/* Typing indicator */}
-      {isTyping && (
-        <div className="flex justify-start">
-          <div className="rounded-bl-sm rounded-2xl rounded-tr-2xl bg-neutral-100 px-4 py-2 dark:bg-neutral-800">
-            <div className="flex gap-1">
-              <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-400 [animation-delay:-0.3s]"></span>
-              <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-400 [animation-delay:-0.15s]"></span>
-              <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-400"></span>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -1,73 +1,39 @@
 @import "tailwindcss";
 
-/* Định nghĩa biến theo cách Next.js dễ đọc nhất */
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-inter: var(
-    --font-inter
-  ); /* Đảm bảo khớp với variable trong layout.jsx [cite: 13, 29] */
+  --card-bg: #ffffff;
+  --card-border: #f1f5f9;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+}
+
+/* Tự động kích hoạt biến Dark Mode khi trình duyệt/hệ thống bật Dark */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f172a;
+    --foreground: #f8fafc;
+    --card-bg: #1e293b;
+    --card-border: #334155;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+  }
 }
 
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  /* Tránh dùng inline nếu bị lỗi build */
-  --animate-scan: scan 2s linear infinite;
-  --animate-shine: shine 1.5s ease-in-out infinite;
+  --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
 }
 
-/* Base Styles */
 @layer base {
-  html {
-    -webkit-tap-highlight-color: transparent;
-  }
   body {
-    background-color: var(--background);
+    background-color: var(--background); /* Nền toàn trang ăn theo biến */
     color: var(--foreground);
-    @apply antialiased; /* Dùng apply để giữ tính năng của tailwind [cite: 29] */
-  }
-}
-
-/* Custom Utilities */
-@layer utilities {
-  .background-animate {
-    background-size: 400%;
-    animation: GradientAnimation 3s ease infinite;
-  }
-}
-
-@keyframes scan {
-  0% {
-    top: 0;
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    top: 100%;
-    opacity: 0;
-  }
-}
-
-@keyframes shine {
-  100% {
-    left: 125%;
-  }
-}
-
-@keyframes GradientAnimation {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+    @apply antialiased transition-colors duration-300;
   }
 }

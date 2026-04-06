@@ -53,8 +53,6 @@ const JobDetailPage = () => {
           </div>
 
           {/* CỘT PHẢI (Chiếm 4 phần) */}
-
-          {/* Lát nữa mình sẽ thả component <JobSidebar /> vào đây */}
           <div className="lg:col-span-4">
             <JobSidebar data={jobData} />
           </div>

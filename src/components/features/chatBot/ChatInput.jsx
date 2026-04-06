@@ -1,8 +1,6 @@
-// ChatInput.jsx
-
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { FaPaperPlane } from "react-icons/fa";
 
 export default function ChatInput({
   value,
@@ -11,81 +9,41 @@ export default function ChatInput({
   canSend,
   onRequestHandoff,
   mode,
-  disabled = false,
-  onTyping, // Thêm callback cho typing event
-  conversationId, //  Thêm conversationId
+  disabled,
 }) {
-  const [sending, setSending] = useState(false);
-  const typingTimeoutRef = useRef(null);
-
-  const handleSend = async () => {
-    if (!canSend || sending || disabled) return;
-
-    try {
-      setSending(true);
-      await onSend();
-    } finally {
-      setSending(false);
-    }
-  };
-
-  //  Handle typing event
-  const handleTyping = (e) => {
-    const newValue = e.target.value;
-    onChange(newValue);
-
-    // Publish typing event
-    if (onTyping && conversationId) {
-      onTyping(conversationId, true);
-
-      // Clear previous timeout
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-      }
-
-      // Set timeout to stop typing indicator
-      typingTimeoutRef.current = setTimeout(() => {
-        onTyping(conversationId, false);
-      }, 1000);
-    }
-  };
-
   return (
-    <div className="border-t border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-800 dark:bg-neutral-950">
-      <div className="flex items-end gap-2 rounded-2xl border border-neutral-200 bg-white px-3 py-2 dark:border-neutral-700 dark:bg-neutral-900">
+    <div className="p-5 bg-card-bg border-t border-card-border transition-colors">
+      <div className="relative flex items-end gap-2 bg-background border border-card-border rounded-[20px] p-2 focus-within:border-[#00c853] focus-within:ring-2 focus-within:ring-[#00c853]/10 transition-all shadow-inner">
         <textarea
           rows={1}
           value={value}
-          onChange={handleTyping} // ✅ Use handleTyping
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="Nhập tin nhắn..."
           disabled={disabled}
-          placeholder={mode === "admin" ? "Nhắn với admin..." : "Nhập nội dung..."}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              handleSend();
-            }
-          }}
-          className="min-h-6 max-h-28 flex-1 resize-none bg-transparent text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex-1 max-h-32 min-h-[42px] py-2.5 px-3 bg-transparent text-sm text-text-main outline-none resize-none placeholder:text-text-muted/50"
+          onKeyDown={(e) =>
+            e.key === "Enter" && !e.shiftKey && (e.preventDefault(), onSend())
+          }
         />
 
         <button
-          type="button"
-          onClick={handleSend}
-          disabled={!canSend || sending || disabled}
-          className="rounded-xl bg-teal-700 px-3 py-2 text-sm text-white transition hover:bg-teal-800 disabled:cursor-not-allowed disabled:bg-neutral-300 dark:disabled:bg-neutral-700"
+          onClick={onSend}
+          disabled={!canSend || disabled}
+          className="h-10 w-10 shrink-0 flex items-center justify-center rounded-[14px] bg-[#00c853] text-white shadow-lg shadow-green-500/20 hover:bg-[#00b04a] hover:scale-105 active:scale-95 disabled:opacity-30 disabled:scale-100 transition-all"
         >
-          {sending ? "..." : "Gửi"}
+          <FaPaperPlane size={16} />
         </button>
       </div>
 
-      {mode === "ai" && !disabled && (
-        <button
-          type="button"
-          onClick={onRequestHandoff}
-          className="mt-2 text-xs text-neutral-500 underline hover:text-teal-700"
-        >
-          Kết nối admin hỗ trợ
-        </button>
+      {mode === "ai" && (
+        <div className="mt-3 text-center">
+          <button
+            onClick={onRequestHandoff}
+            className="text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-[#00c853] transition-colors underline decoration-dotted underline-offset-4"
+          >
+            Kết nối quản trị viên
+          </button>
+        </div>
       )}
     </div>
   );
