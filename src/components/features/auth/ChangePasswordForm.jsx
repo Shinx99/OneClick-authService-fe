@@ -42,7 +42,7 @@ const onSubmit = async (data) => {
 
   return (
     <div className="w-full max-w-[380px] mx-auto">
-      <h2 className="text-2xl font-bold text-center mb-6 text-slate-800">
+      <h2 className="text-2xl font-bold text-center mb-6 text-slate-800 dark:text-gray-100">
         Đổi mật khẩu
       </h2>
 

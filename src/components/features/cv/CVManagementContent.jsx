@@ -276,14 +276,14 @@ const CVManagementContent = () => {
     <div className="relative">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* CỘT CHÍNH (8 phần): DANH SÁCH CV */}
-        <div className="lg:col-span-8 bg-white dark:bg-[#1e1e1e] p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800">
+        <div className="lg:col-span-8 bg-card-bg p-8 rounded-[2rem] shadow-sm border border-card-border">
           {isLoading ? (
             <div className="flex justify-center py-20">
               <FaSpinner className="animate-spin text-[#00c853] text-4xl" />
             </div>
           ) : (
             <>
-              <h3 className="font-black mb-6 flex items-center gap-2 text-gray-900 dark:text-white uppercase text-xs tracking-widest">
+              <h3 className="font-black mb-6 flex items-center gap-2 text-text-main uppercase text-xs tracking-widest">
                 <span className="w-1.5 h-5 bg-[#00c853] rounded-full"></span>{" "}
                 Kho CV của bạn
               </h3>
@@ -332,7 +332,7 @@ const CVManagementContent = () => {
                             className="fixed inset-0 z-10"
                             onClick={() => setActiveMenu(null)}
                           ></div>
-                          <div className="absolute right-6 top-16 w-48 bg-white dark:bg-[#252525] rounded-2xl shadow-2xl border border-slate-100 dark:border-gray-800 z-20 py-2 overflow-hidden animate-in zoom-in-95">
+                          <div className="absolute right-6 top-16 w-48 bg-card-bg rounded-2xl shadow-2xl border border-card-border z-20 py-2 overflow-hidden animate-in zoom-in-95">
                             <button
                               onClick={() => {
                                 handlePreview(doc.fileName);
@@ -408,8 +408,8 @@ const CVManagementContent = () => {
 
         {/* CỘT PHỤ (4 phần): TRẠNG THÁI */}
         <div className="lg:col-span-4 sticky top-24 space-y-6">
-          <div className="bg-white dark:bg-[#1e1e1e] p-7 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800">
-            <h3 className="font-black mb-8 flex items-center gap-2.5 text-gray-900 dark:text-white uppercase text-xs tracking-widest">
+          <div className="bg-card-bg p-7 rounded-[2rem] shadow-sm border border-card-border">
+            <h3 className="font-black mb-8 flex items-center gap-2.5 text-text-main uppercase text-xs tracking-widest">
               <span className="w-1.5 h-5 bg-[#00c853] rounded-full"></span> Cài
               đặt hồ sơ
             </h3>
@@ -419,7 +419,7 @@ const CVManagementContent = () => {
               <div className="flex items-start justify-between gap-4 mb-4">
                 <div>
                   <h4
-                    className={`text-[17px] font-bold transition-colors ${isSearching ? "text-gray-900 dark:text-white" : "text-gray-500"}`}
+                    className={`text-[17px] font-bold transition-colors ${isSearching ? "text-text-main" : "text-text-muted"}`}
                   >
                     Trạng thái tìm việc
                   </h4>
@@ -510,7 +510,7 @@ const CVManagementContent = () => {
       {/* POP-UP XEM NHANH PDF */}
       {previewUrl && (
         <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="bg-white dark:bg-[#1e1e1e] w-full max-w-5xl h-[92vh] rounded-[2.5rem] overflow-hidden relative shadow-2xl border border-white/20">
+          <div className="bg-card-bg w-full max-w-5xl h-[92vh] rounded-[2.5rem] overflow-hidden relative shadow-2xl border border-white/20">
             <button
               onClick={() => {
                 if (previewUrl) {

@@ -15,6 +15,7 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 import RoleSelectionModal from "@/components/features/auth/RoleSelectionModal";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 const Header = () => {
   const { isAuthenticated, user, logout, isCandidate } = useAuth();
@@ -140,6 +141,7 @@ const Header = () => {
 
             {/* Actions [cite: 32] */}
             <div className="flex items-center gap-3">
+              <ThemeToggle />
               {isAuthenticated ? (
                 <>
                   <button

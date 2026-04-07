@@ -19,7 +19,7 @@ const CompanyBanner = ({ company = {} }) => {
       <div className="absolute -bottom-12 left-8 right-8 flex flex-col md:flex-row items-end justify-between gap-4">
         <div className="flex items-end gap-6">
           {/* Logo Công ty  */}
-          <div className="relative w-32 h-32 rounded-3xl overflow-hidden border-4 border-white dark:border-gray-900 bg-white shadow-lg flex-shrink-0">
+          <div className="relative w-32 h-32 rounded-3xl overflow-hidden border-4 border-card-bg dark:border-gray-900 bg-card-bg shadow-lg flex-shrink-0">
             <Image
               src={company.logo || "/images/company-placeholder.png"}
               alt={`${company.name} logo`}
@@ -30,7 +30,7 @@ const CompanyBanner = ({ company = {} }) => {
 
           {/* Text Info */}
           <div className="pb-2">
-            <h1 className="text-3xl font-black text-gray-900 dark:text-white flex items-center gap-3">
+            <h1 className="text-3xl font-black text-text-main flex items-center gap-3">
               {company.name || "Tên công ty"}
               <span className="text-xs bg-blue-50 dark:bg-blue-900/30 text-blue-500 px-3 py-1 rounded-full whitespace-nowrap font-bold">
                 {company.industry || "Ngành nghề"}

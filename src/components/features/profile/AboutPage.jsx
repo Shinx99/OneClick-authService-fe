@@ -10,13 +10,13 @@ const AboutSection = () => {
     const displayAbout = profile?.about || "";
 
     return (
-        <div className="bg-white dark:bg-[#1e1e1e] p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 transition-all">
-            <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-gray-900 dark:text-white">
+        <div className="bg-card-bg p-6 rounded-3xl shadow-sm border border-card-border transition-all">
+            <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-text-main">
                 <FaUserTie className="text-[#00c853]" />
                 Giới thiệu bản thân
             </h2>
 
-            <p className="text-gray-700 dark:text-gray-300 break-words">
+            <p className="text-text-muted break-words">
                 {displayAbout}
             </p>
         </div>

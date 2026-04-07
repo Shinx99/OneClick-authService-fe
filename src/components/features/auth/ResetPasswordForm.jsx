@@ -32,19 +32,19 @@ const ResetPasswordForm = () => {
   };
 
   return (
-    <div className="w-full max-w-[400px] p-8 bg-white rounded-[30px] shadow-2xl text-center">
+    <div className="w-full max-w-[400px] p-8 bg-white dark:bg-[#1e293b] rounded-[30px] shadow-2xl text-center">
       <div className="flex justify-center mb-6">
-        <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center">
+        <div className="w-16 h-16 bg-blue-50 dark:bg-blue-500/10 rounded-full flex items-center justify-center">
           <RiLockPasswordLine className="w-10 h-10 text-blue-600" />
         </div>
       </div>
 
-      <h2 className="text-2xl font-black text-slate-800 mb-2 uppercase">Thiết lập mật khẩu</h2>
-      <p className="text-gray-500 text-sm mb-8 font-medium">Nhập mật khẩu mới cho tài khoản của bạn.</p>
+      <h2 className="text-2xl font-black text-slate-800 dark:text-gray-100 mb-2 uppercase">Thiết lập mật khẩu</h2>
+      <p className="text-gray-500 dark:text-gray-400 text-sm mb-8 font-medium">Nhập mật khẩu mới cho tài khoản của bạn.</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="text-left space-y-5">
         <div>
-          <label className="block text-sm font-bold text-slate-700 mb-2 ml-1">Mật khẩu mới</label>
+          <label className="block text-sm font-bold text-slate-700 dark:text-gray-300 mb-2 ml-1">Mật khẩu mới</label>
           <Input
             icon={<FaLock />}
             type="password"
@@ -55,7 +55,7 @@ const ResetPasswordForm = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-bold text-slate-700 mb-2 ml-1">Xác nhận mật khẩu</label>
+          <label className="block text-sm font-bold text-slate-700 dark:text-gray-300 mb-2 ml-1">Xác nhận mật khẩu</label>
           <Input
             icon={<FaLock />}
             type="password"

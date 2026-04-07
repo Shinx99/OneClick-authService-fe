@@ -22,9 +22,9 @@ const Input = forwardRef(
 
     return (
       <div className="w-full mb-5 mt-2">
-        <div className="relative flex items-center bg-white border-[2px] border-gray-200 rounded-xl px-4 h-[56px] transition-all focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-500/10">
+        <div className="relative flex items-center bg-white dark:bg-[#1e293b] border-[2px] border-gray-200 dark:border-gray-600 rounded-xl px-4 h-[56px] transition-all focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-500/10">
           {/* Icon đầu dòng */}
-          {icon && <span className="text-gray-400 mr-3 text-lg">{icon}</span>}
+          {icon && <span className="text-gray-400 dark:text-gray-500 mr-3 text-lg">{icon}</span>}
 
           <div className="relative w-full h-full flex items-center">
             <input
@@ -34,13 +34,13 @@ const Input = forwardRef(
               id={inputId}
               placeholder=" "
               // [&::-ms-reveal]:hidden [&::-ms-clear]:hidden dùng để tắt con mắt mặc định của Edge
-              className="peer w-full h-full bg-transparent border-none outline-none text-gray-800 text-[15px] font-semibold [&::-ms-reveal]:hidden [&::-ms-clear]:hidden"
+              className="peer w-full h-full bg-transparent border-none outline-none text-gray-800 dark:text-gray-100 text-[15px] font-semibold [&::-ms-reveal]:hidden [&::-ms-clear]:hidden"
               {...props}
             />
 
             <label
               htmlFor={inputId}
-              className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400 text-[15px] transition-all duration-300 pointer-events-none peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:text-[12px] peer-focus:font-bold peer-focus:text-green-600 peer-focus:bg-white peer-focus:px-1 peer-focus:-left-1 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:-translate-y-1/2 peer-[:not(:placeholder-shown)]:text-[12px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:text-gray-500 peer-[:not(:placeholder-shown)]:bg-white peer-[:not(:placeholder-shown)]:px-1 peer-[:not(:placeholder-shown)]:-left-1"
+              className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-[15px] transition-all duration-300 pointer-events-none peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:text-[12px] peer-focus:font-bold peer-focus:text-green-600 peer-focus:bg-white dark:peer-focus:bg-[#1e293b] peer-focus:px-1 peer-focus:-left-1 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:-translate-y-1/2 peer-[:not(:placeholder-shown)]:text-[12px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:text-gray-500 peer-[:not(:placeholder-shown)]:bg-white dark:peer-[:not(:placeholder-shown)]:bg-[#1e293b] peer-[:not(:placeholder-shown)]:px-1 peer-[:not(:placeholder-shown)]:-left-1"
             >
               {placeholder}
             </label>
@@ -51,7 +51,7 @@ const Input = forwardRef(
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="ml-2 flex items-center text-gray-400 hover:text-green-500 transition-colors focus:outline-none"
+              className="ml-2 flex items-center text-gray-400 dark:text-gray-500 hover:text-green-500 transition-colors focus:outline-none"
             >
               {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
             </button>

@@ -23,12 +23,12 @@ const JobDetailPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pb-20 pt-6">
+    <div className="min-h-screen bg-background pb-20 pt-6 transition-colors duration-300">
       {" "}
       {/* Nền xám nhạt như Figma */}
       {/* --- BREADCRUMB --- */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
-        <div className="flex items-center text-sm font-medium text-gray-500 gap-2">
+        <div className="flex items-center text-sm font-medium text-text-muted gap-2">
           <Link href="/" className="hover:text-green-600 transition-colors">
             Trang chủ
           </Link>
@@ -37,7 +37,7 @@ const JobDetailPage = () => {
             Việc làm
           </Link>
           <FaChevronRight className="text-[10px] text-gray-400" />
-          <span className="text-gray-900 font-semibold">{jobData.title}</span>
+          <span className="text-text-main font-semibold">{jobData.title}</span>
         </div>
       </div>
       {/* --- MAIN GRID (Chia tỉ lệ 8:4) --- */}

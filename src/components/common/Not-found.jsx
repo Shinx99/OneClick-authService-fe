@@ -8,7 +8,7 @@ import { PiLeaf, PiTree, PiTreeEvergreen } from "react-icons/pi";
 
 const NotFoundUI = () => {
   return (
-    <div className="min-h-screen bg-[#F8F9FA] flex flex-col items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 relative overflow-hidden">
       {/* --- PHẦN 1: HÌNH ẢNH --- */}
       <div className="relative w-full max-w-[400px] aspect-square mb-8 group">
         <div className="absolute inset-4 bg-green-900/20 blur-2xl rounded-full transform translate-y-4 group-hover:translate-y-6 transition-transform duration-500"></div>
@@ -29,12 +29,12 @@ const NotFoundUI = () => {
       {/* --- PHẦN 2: NỘI DUNG --- */}
       <div className="text-center w-full z-10 px-4 flex flex-col items-center">
         {/* Badge 404 */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-50 border border-green-200 shadow-sm mb-6 whitespace-nowrap">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-800 shadow-sm mb-6 whitespace-nowrap">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
           </span>
-          <span className="text-xs font-bold tracking-widest text-green-700 uppercase font-sans">
+          <span className="text-xs font-bold tracking-widest text-green-700 dark:text-green-400 uppercase font-sans">
             Error 404
           </span>
         </div>
@@ -45,12 +45,12 @@ const NotFoundUI = () => {
             2. text-2xl md:text-5xl: Chỉnh lại cỡ chữ để vừa vặn hơn.
             3. w-full: Chiếm toàn bộ chiều ngang để có chỗ hiển thị 1 dòng.
         */}
-        <h1 className="text-2xl md:text-5xl font-black mb-6 leading-tight bg-gradient-to-br from-green-800 via-green-600 to-slate-800 bg-clip-text text-transparent drop-shadow-sm w-full md:whitespace-nowrap">
+        <h1 className="text-2xl md:text-5xl font-black mb-6 leading-tight bg-gradient-to-br from-green-800 via-green-600 to-slate-800 dark:from-green-400 dark:via-green-500 dark:to-slate-400 bg-clip-text text-transparent drop-shadow-sm w-full md:whitespace-nowrap">
           Rất tiếc, trang bạn tìm kiếm không tồn tại
         </h1>
 
         {/* Đoạn mô tả */}
-        <div className="text-slate-500 text-base md:text-lg mb-10 leading-relaxed font-medium max-w-2xl mx-auto">
+        <div className="text-slate-500 dark:text-slate-400 text-base md:text-lg mb-10 leading-relaxed font-medium max-w-2xl mx-auto">
           <p className="mb-1">
             Có vẻ như bạn đã đi lạc vào một vùng rừng lạ mờ ảo.
           </p>
@@ -78,7 +78,7 @@ const NotFoundUI = () => {
 
           <Link
             href="/support"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 bg-white border border-gray-200 hover:border-green-500 text-slate-600 hover:text-green-600 rounded-full font-bold shadow-sm hover:shadow-md transition-all group"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 bg-white dark:bg-[#1e293b] border border-gray-200 dark:border-gray-600 hover:border-green-500 text-slate-600 dark:text-gray-300 hover:text-green-600 rounded-full font-bold shadow-sm hover:shadow-md transition-all group"
           >
             <BiSupport
               size={20}

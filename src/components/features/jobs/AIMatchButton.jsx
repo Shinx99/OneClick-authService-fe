@@ -94,24 +94,24 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
 
       {isOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-white dark:bg-[#1e1e1e] w-full max-w-md rounded-[2.5rem] shadow-2xl relative overflow-hidden animate-in zoom-in-95">
+          <div className="bg-card-bg w-full max-w-md rounded-[2.5rem] shadow-2xl relative overflow-hidden animate-in zoom-in-95">
             <button
               onClick={closeModal}
-              className="absolute top-6 right-6 text-gray-400 p-2 hover:bg-gray-100 rounded-full z-10"
+              className="absolute top-6 right-6 text-text-muted p-2 hover:bg-background rounded-full z-10"
             >
               <FaTimes />
             </button>
 
             {step === "select" && (
               <div className="p-8">
-                <div className="flex items-center gap-3 mb-6 font-black text-slate-800 dark:text-white uppercase tracking-tighter">
+                <div className="flex items-center gap-3 mb-6 font-black text-text-main uppercase tracking-tighter">
                   <FaRobot size={20} className="text-[#00c853]" /> AI Matching
                 </div>
 
-                <div className="flex bg-slate-100 dark:bg-gray-800 p-1 rounded-2xl mb-6">
+                <div className="flex bg-background p-1 rounded-2xl mb-6">
                   <button
                     onClick={() => setCvOption("existing")}
-                    className={`flex-1 py-3 text-xs font-black rounded-xl transition-all ${cvOption === "existing" ? "bg-white dark:bg-gray-700 text-[#00c853] shadow-sm" : "text-slate-500"}`}
+                    className={`flex-1 py-3 text-xs font-black rounded-xl transition-all ${cvOption === "existing" ? "bg-card-bg text-[#00c853] shadow-sm" : "text-text-muted"}`}
                   >
                     CV Đã lưu
                   </button>
@@ -136,7 +136,7 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
                             <FaRegFilePdf size={28} />
                           </div>
                           <div className="flex-1 overflow-hidden text-left">
-                            <p className="font-black text-sm text-slate-800 dark:text-white truncate">
+                            <p className="font-black text-sm text-text-main truncate">
                               {defaultResume.name}
                             </p>
                             <span className="px-2 py-0.5 bg-[#00c853] text-[8px] font-black text-white rounded-md uppercase">
@@ -181,7 +181,7 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
                               size={24}
                             />
                             <div className="overflow-hidden">
-                              <p className="text-xs font-black text-slate-700 dark:text-white truncate max-w-[150px]">
+                              <p className="text-xs font-black text-text-main truncate max-w-[150px]">
                                 {uploadedFile.name}
                               </p>
                               <p className="text-[9px] text-[#00c853] font-bold uppercase">
@@ -226,7 +226,7 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
                   <FaFileAlt className="text-6xl text-[#00c853] opacity-20" />
                   <div className="absolute top-0 left-0 w-full h-1.5 bg-[#00c853] animate-scan shadow-[0_5px_15px_rgba(0,200,83,0.5)]"></div>
                 </div>
-                <h4 className="text-lg font-black text-slate-800 dark:text-white mb-2 uppercase tracking-tighter">
+                <h4 className="text-lg font-black text-text-main mb-2 uppercase tracking-tighter">
                   OneClick AI Scanning
                 </h4>
                 <div className="w-full max-w-[200px] bg-slate-100 h-1.5 rounded-full overflow-hidden mx-auto">
@@ -244,7 +244,7 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
       {/* MODAL XEM NHANH PDF (DÙNG CHUNG) */}
       {previewUrl && (
         <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
-          <div className="bg-white w-full max-w-4xl h-[85vh] rounded-[2.5rem] overflow-hidden relative shadow-2xl">
+          <div className="bg-card-bg w-full max-w-4xl h-[85vh] rounded-[2.5rem] overflow-hidden relative shadow-2xl">
             <button
               onClick={() => {
                 if (previewUrl.startsWith("blob:"))

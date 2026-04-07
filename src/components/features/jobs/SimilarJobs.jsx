@@ -39,7 +39,7 @@ const SimilarJobs = () => {
 
   return (
     <div className="mt-12">
-      <h2 className="text-[22px] font-bold text-gray-900 mb-6">
+      <h2 className="text-[22px] font-bold text-text-main mb-6">
         Việc làm tương tự
       </h2>
 
@@ -49,7 +49,7 @@ const SimilarJobs = () => {
           <Link
             href={`/jobs/${job.id}`}
             key={job.id}
-            className="bg-white rounded-2xl p-5 border border-gray-100 hover:border-green-200 hover:shadow-[0_8px_24px_rgba(0,0,0,0.04)] transition-all group flex flex-col justify-between"
+            className="bg-card-bg rounded-2xl p-5 border border-card-border hover:border-green-200 hover:shadow-[0_8px_24px_rgba(0,0,0,0.04)] transition-all group flex flex-col justify-between"
           >
             {/* Header Card: Icon & Tag */}
             <div className="flex justify-between items-start mb-6">
@@ -58,24 +58,24 @@ const SimilarJobs = () => {
               >
                 {job.icon}
               </div>
-              <span className="bg-[#f8fafc] text-gray-600 text-[11px] font-semibold px-3 py-1.5 rounded-full border border-gray-100">
+              <span className="bg-background text-text-muted text-[11px] font-semibold px-3 py-1.5 rounded-full border border-card-border">
                 {job.type}
               </span>
             </div>
 
             {/* Middle Card: Title & Company */}
             <div className="mb-6">
-              <h3 className="font-bold text-gray-900 text-[16px] mb-1 group-hover:text-[#10B94F] transition-colors leading-tight">
+              <h3 className="font-bold text-text-main text-[16px] mb-1 group-hover:text-[#10B94F] transition-colors leading-tight">
                 {job.title}
               </h3>
-              <p className="text-[13px] text-gray-500 font-medium">
+              <p className="text-[13px] text-text-muted font-medium">
                 {job.company}
               </p>
             </div>
 
             {/* Bottom Card: Salary & Location */}
-            <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-50">
-              <span className="font-bold text-gray-900 text-[14px]">
+            <div className="flex items-center justify-between mt-auto pt-4 border-t border-card-border">
+              <span className="font-bold text-text-main text-[14px]">
                 {job.salary}
               </span>
               <span className="text-[12px] text-gray-400 font-medium">

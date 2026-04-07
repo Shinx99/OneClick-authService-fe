@@ -2,9 +2,9 @@ import React from "react";
 
 const CompanyJobs = ({ jobs = [] }) => {
   return (
-    <div className="bg-white dark:bg-[#1e1e1e] p-6 rounded-3xl border border-gray-100 dark:border-gray-800 transition-all shadow-sm">
+    <div className="bg-card-bg p-6 rounded-3xl border border-card-border transition-all shadow-sm">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+        <h3 className="font-bold text-lg text-text-main">
           Vị trí đang tuyển
         </h3>
         {jobs.length > 0 && (
@@ -19,9 +19,9 @@ const CompanyJobs = ({ jobs = [] }) => {
           jobs.map((job) => (
             <div
               key={job.id}
-              className="p-4 rounded-2xl border border-gray-50 dark:border-gray-800 hover:border-[#00c853] transition-all cursor-pointer group"
+              className="p-4 rounded-2xl border border-card-border hover:border-[#00c853] transition-all cursor-pointer group"
             >
-              <h4 className="font-bold text-sm text-gray-800 dark:text-gray-200 group-hover:text-[#00c853] transition-colors">
+              <h4 className="font-bold text-sm text-text-main group-hover:text-[#00c853] transition-colors">
                 {job.title}
               </h4>
               <div className="flex justify-between mt-2 font-medium">
@@ -39,7 +39,7 @@ const CompanyJobs = ({ jobs = [] }) => {
         )}
       </div>
 
-      <button className="w-full mt-6 py-3 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-bold text-gray-500 hover:text-[#00c853] hover:border-[#00c853] transition-all active:scale-95">
+      <button className="w-full mt-6 py-3 border border-card-border rounded-xl text-sm font-bold text-text-muted hover:text-[#00c853] hover:border-[#00c853] transition-all active:scale-95">
         Xem tất cả công việc
       </button>
     </div>

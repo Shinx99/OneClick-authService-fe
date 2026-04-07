@@ -5,7 +5,7 @@ import ResetPasswordForm from "@/components/features/auth/ResetPasswordForm";
 
 const ResetPasswordPage = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
       {/* Bắt buộc dùng Suspense vì ResetPasswordForm sử dụng useSearchParams() 
           để lấy token từ URL. Next.js yêu cầu điều này để render phía Client.
       */}
