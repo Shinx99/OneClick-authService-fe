@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 
@@ -11,14 +12,15 @@ const inter = Inter({
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${inter.variable} font-sans antialiased bg-background text-text-main transition-colors duration-300`}
       >
-        <GoogleOAuthProvider
-          clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
-        >
-          <AuthProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <GoogleOAuthProvider
+            clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+          >
+            <AuthProvider>
             {/* Cấu hình Toaster tối ưu chống Spam */}
             <Toaster
               position="top-right"
@@ -62,10 +64,11 @@ export default function RootLayout({ children }) {
                 bottom: 24,
                 left: 24,
               }}
-            />
-            {children}
-          </AuthProvider>
-        </GoogleOAuthProvider>
+              />
+              {children}
+            </AuthProvider>
+          </GoogleOAuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -186,7 +186,7 @@ export default async function CompanyDetailPage({ params }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#121212] pt-6 pb-20 transition-colors">
+    <div className="min-h-screen bg-background pt-6 pb-20 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* TRUYỀN DỮ LIỆU QUA PROPS CHO CÁC SERVER COMPONENTS CON */}
         <CompanyBanner company={companyData} />

@@ -49,7 +49,7 @@ const LoginForm = () => {
 
   return (
     <div className="w-full max-w-[380px] mx-auto">
-      <h2 className="text-3xl font-bold text-center mb-8 text-slate-800">
+      <h2 className="text-3xl font-bold text-center mb-8 text-slate-800 dark:text-gray-100">
         Đăng nhập tài khoản
       </h2>
 
@@ -130,18 +130,18 @@ const LoginForm = () => {
 
         {/* Divider (Dấu gạch ngang) - Giữ nguyên style cũ */}
         <div className="flex items-center gap-3 mb-6 mt-4">
-          <div className="h-[1px] bg-gray-200 flex-1"></div>
-          <span className="text-sm text-gray-500 font-bold px-2">
+          <div className="h-[1px] bg-gray-200 dark:bg-gray-600 flex-1"></div>
+          <span className="text-sm text-gray-500 dark:text-gray-400 font-bold px-2">
             Hoặc đăng nhập với
           </span>
-          <div className="h-[1px] bg-gray-200 flex-1"></div>
+          <div className="h-[1px] bg-gray-200 dark:bg-gray-600 flex-1"></div>
         </div>
 
         {/* Nút Google - Thiết kế thủ công để khớp với style cũ của bạn */}
         <button
           type="button"
           onClick={() => handleGoogleLogin()}
-          className="w-full h-[48px] flex items-center justify-center gap-3 bg-white border border-gray-200 rounded-full font-bold text-sm text-slate-700 transition-all hover:bg-gray-50 hover:shadow-md active:scale-95 shadow-sm"
+          className="w-full h-[48px] flex items-center justify-center gap-3 bg-white dark:bg-[#1e293b] border border-gray-200 dark:border-gray-600 rounded-full font-bold text-sm text-slate-700 dark:text-gray-200 transition-all hover:bg-gray-50 dark:hover:bg-[#334155] hover:shadow-md active:scale-95 shadow-sm"
         >
           <FcGoogle size={20} />
           <span>Google</span>

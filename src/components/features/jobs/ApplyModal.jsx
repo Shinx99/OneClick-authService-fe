@@ -50,24 +50,24 @@ const ApplyModal = ({ job, onClose, onSuccess }) => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md animate-in fade-in duration-300">
-      <div className="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden animate-in zoom-in duration-300">
+      <div className="bg-card-bg w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden animate-in zoom-in duration-300">
         {/* Nút đóng */}
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 text-slate-300 hover:text-slate-600 transition-colors"
+          className="absolute top-6 right-6 text-text-muted hover:text-text-main transition-colors"
         >
           <FaTimes size={20} />
         </button>
 
         <div className="mb-8 text-center">
-          <h3 className="text-xl font-bold text-slate-800 tracking-tight">
+          <h3 className="text-xl font-bold text-text-main tracking-tight">
             Ứng tuyển ngay
           </h3>
-          <p className="text-sm text-slate-500 mt-1 italic">{job.company}</p>
+          <p className="text-sm text-text-muted mt-1 italic">{job.company}</p>
         </div>
 
         <div className="space-y-4 mb-8">
-          <p className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] px-2">
+          <p className="text-[10px] font-black uppercase text-text-muted tracking-[0.2em] px-2">
             Hồ sơ ứng tuyển của bạn
           </p>
 
@@ -82,17 +82,17 @@ const ApplyModal = ({ job, onClose, onSuccess }) => {
                   key={cv.id}
                   onClick={() => setSelectedId(cv.id)}
                   className={`group p-4 rounded-[1.5rem] border-2 transition-all cursor-pointer flex items-center justify-between
-                    ${selectedId === cv.id ? "border-green-500 bg-green-50/50" : "border-slate-50 bg-slate-50/50 hover:border-slate-200"}`}
+                    ${selectedId === cv.id ? "border-green-500 bg-green-50/50 dark:bg-green-900/10" : "border-card-border bg-background hover:border-card-border"}`}
                 >
                   <div className="flex items-center gap-4">
                     <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${selectedId === cv.id ? "bg-green-500 text-white" : "bg-white text-slate-400 shadow-sm"}`}
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${selectedId === cv.id ? "bg-green-500 text-white" : "bg-card-bg text-text-muted shadow-sm"}`}
                     >
                       <FaFilePdf size={18} />
                     </div>
                     <div>
                       <p
-                        className={`text-sm font-bold transition-colors ${selectedId === cv.id ? "text-green-700" : "text-slate-700"}`}
+                        className={`text-sm font-bold transition-colors ${selectedId === cv.id ? "text-green-700 dark:text-green-400" : "text-text-main"}`}
                       >
                         {cv.name}
                       </p>
@@ -108,7 +108,7 @@ const ApplyModal = ({ job, onClose, onSuccess }) => {
               ))}
             </div>
           ) : (
-            <div className="p-8 text-center border-2 border-dashed border-slate-200 rounded-[1.5rem] bg-slate-50/50">
+            <div className="p-8 text-center border-2 border-dashed border-card-border rounded-[1.5rem] bg-background">
               <FaCloudUploadAlt className="mx-auto text-slate-300 text-3xl mb-3" />
               <p className="text-xs font-bold text-slate-400 uppercase tracking-tighter">
                 Bạn chưa có CV nào
@@ -123,7 +123,7 @@ const ApplyModal = ({ job, onClose, onSuccess }) => {
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 py-4 text-xs font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-all"
+            className="flex-1 py-4 text-xs font-black uppercase tracking-widest text-text-muted hover:text-text-main transition-all"
           >
             Để sau
           </button>

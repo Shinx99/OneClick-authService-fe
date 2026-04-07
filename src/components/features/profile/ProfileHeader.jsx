@@ -27,22 +27,22 @@ const ImageModal = ({ isOpen, onClose, imageUrl, title, onUpload, isUpdating }) 
       onClick={onClose}
     >
       <div
-        className="relative bg-white dark:bg-[#1e1e1e] rounded-3xl overflow-hidden shadow-2xl w-[95vw] max-w-2xl flex flex-col"
+        className="relative bg-card-bg rounded-3xl overflow-hidden shadow-2xl w-[95vw] max-w-2xl flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800">
-          <h3 className="font-black text-gray-900 dark:text-white text-lg">{title}</h3>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-card-border">
+          <h3 className="font-black text-text-main text-lg">{title}</h3>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-background hover:bg-card-border transition-all"
           >
-            <FaTimes className="text-gray-600 dark:text-gray-400 w-3.5 h-3.5" />
+            <FaTimes className="text-text-muted w-3.5 h-3.5" />
           </button>
         </div>
 
         {/* Ảnh full */}
-        <div className="relative w-full aspect-video min-h-[400px] bg-gray-100 dark:bg-[#252525]">
+        <div className="relative w-full aspect-video min-h-[400px] bg-background">
           <Image
             src={imageUrl}
             alt={title}
@@ -58,8 +58,8 @@ const ImageModal = ({ isOpen, onClose, imageUrl, title, onUpload, isUpdating }) 
         </div>
 
         {/* Footer — nút thay đổi ảnh */}
-        <div className="px-6 py-5 flex items-center justify-between gap-4 border-t border-gray-100 dark:border-gray-800">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+        <div className="px-6 py-5 flex items-center justify-between gap-4 border-t border-card-border">
+          <p className="text-sm text-text-muted">
             Hỗ trợ JPG, PNG, WEBP. Tối đa 5MB.
           </p>
           <button
@@ -183,7 +183,7 @@ const ProfileHeader = () => {
         isUpdating={isUpdating}
       />
 
-      <div className="relative bg-white dark:bg-[#1e1e1e] rounded-3xl border border-gray-100 dark:border-gray-800 transition-all">
+      <div className="relative bg-card-bg rounded-3xl border border-card-border transition-all">
         {/* Cover Photo */}
         <div
           className={`h-48 md:h-56 lg:h-64 relative overflow-hidden rounded-t-3xl cursor-pointer transition-all group ${coverDragging ? "ring-4 ring-[#00c853]/50 scale-[1.01]" : ""} ${isUpdating ? "opacity-70 pointer-events-none" : ""}`}
@@ -255,7 +255,7 @@ const ProfileHeader = () => {
 
           {/* User Info */}
           <div className="flex-1 min-w-0 space-y-1.5">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-gray-900 dark:text-white leading-tight">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-text-main leading-tight">
               {displayFullName}
             </h1>
             <p className="text-[#00c853] font-bold text-lg md:text-xl">{displayEmail}</p>

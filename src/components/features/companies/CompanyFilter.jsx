@@ -47,7 +47,7 @@ const CompanyFilter = ({
   };
 
   return (
-    <div className="bg-white dark:bg-[#1e1e1e] p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 transition-all">
+    <div className="bg-card-bg p-6 rounded-3xl shadow-sm border border-card-border transition-all">
       {/* Tiêu đề Bộ lọc */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-bold flex items-center gap-2 text-[#00c853]">
@@ -63,7 +63,7 @@ const CompanyFilter = ({
 
       {/* Nhóm 1: Lĩnh vực */}
       <div className="mb-8">
-        <h3 className="font-bold text-base mb-4 text-gray-900 dark:text-white">
+        <h3 className="font-bold text-base mb-4 text-text-main">
           Lĩnh vực
         </h3>
         <div className="space-y-4">
@@ -84,7 +84,7 @@ const CompanyFilter = ({
                 />
                 <FaCheckCircle className="absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none text-xs" />
               </div>
-              <span className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-[#00c853] transition-colors font-medium">
+              <span className="text-sm text-text-muted group-hover:text-[#00c853] transition-colors font-medium">
                 {item}
               </span>
             </label>
@@ -94,7 +94,7 @@ const CompanyFilter = ({
 
       {/* Nhóm 2: Quy mô công ty */}
       <div className="mb-8">
-        <h3 className="font-bold text-base mb-4 text-gray-900 dark:text-white">
+        <h3 className="font-bold text-base mb-4 text-text-main">
           Quy mô công ty
         </h3>
         <div className="space-y-4">
@@ -115,7 +115,7 @@ const CompanyFilter = ({
                 />
                 <FaCheckCircle className="absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none text-xs" />
               </div>
-              <span className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-[#00c853] transition-colors font-medium">
+              <span className="text-sm text-text-muted group-hover:text-[#00c853] transition-colors font-medium">
                 {item}
               </span>
             </label>
@@ -125,17 +125,16 @@ const CompanyFilter = ({
 
       {/* Nhóm 3: Địa điểm */}
       <div className="relative">
-        <h3 className="font-bold text-base mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+        <h3 className="font-bold text-base mb-4 text-text-main flex items-center gap-2">
           <HiOutlineLocationMarker className="text-[#00c853]" /> ĐỊA ĐIỂM
         </h3>
 
         {/* Trigger Dropdown */}
         <div
           onClick={() => setIsLocOpen(!isLocOpen)}
-          className={`flex items-center justify-between p-3 rounded-2xl border transition-all duration-300 cursor-pointer 
-            ${isLocOpen ? "border-[#00c853] ring-4 ring-[#00c853]/5" : "border-gray-100 dark:border-gray-800 bg-gray-50/50"}`}
+          className={`flex items-center justify-between p-3 rounded-2xl border transition-all duration-300 cursor-pointer ${isLocOpen ? "border-[#00c853] ring-4 ring-[#00c853]/5" : "border-card-border bg-background"}`}
         >
-          <span className="text-sm font-bold text-gray-700 dark:text-gray-300">
+          <span className="text-sm font-bold text-text-main">
             {selectedLoc}
           </span>
           <FaChevronDown
@@ -146,7 +145,7 @@ const CompanyFilter = ({
 
         {/* Dropdown Menu Địa điểm */}
         {isLocOpen && (
-          <div className="absolute z-50 w-full mt-2 bg-white dark:bg-[#2a2a2a] border border-gray-100 dark:border-gray-700 rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+          <div className="absolute z-50 w-full mt-2 bg-card-bg border border-card-border rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             {locations.map((loc, idx) => (
               <div
                 key={idx}
@@ -156,7 +155,7 @@ const CompanyFilter = ({
                   onFilterChange?.("location", loc);
                 }}
                 className={`px-4 py-3 text-sm cursor-pointer transition-colors
-                  ${selectedLoc === loc ? "bg-[#00c853] text-white font-bold" : "text-gray-600 dark:text-gray-400 hover:bg-green-50 dark:hover:bg-green-900/10"}`}
+                  ${selectedLoc === loc ? "bg-[#00c853] text-white font-bold" : "text-text-muted hover:bg-green-50 dark:hover:bg-green-900/10"}`}
               >
                 {loc}
               </div>

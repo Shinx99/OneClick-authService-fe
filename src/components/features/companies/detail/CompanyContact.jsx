@@ -5,8 +5,8 @@ import { FaGlobe, FaUsers, FaMapMarkerAlt } from "react-icons/fa";
 // Component này nhận object contact từ trang cha thông qua props
 const CompanyContact = ({ contact = {} }) => {
   return (
-    <div className="bg-white dark:bg-[#1e1e1e] p-6 rounded-3xl border border-gray-100 dark:border-gray-800 space-y-6 transition-all shadow-sm hover:shadow-md">
-      <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+    <div className="bg-card-bg p-6 rounded-3xl border border-card-border space-y-6 transition-all shadow-sm hover:shadow-md">
+      <h3 className="font-bold text-lg text-text-main">
         Thông tin liên hệ
       </h3>
 
@@ -44,7 +44,7 @@ const CompanyContact = ({ contact = {} }) => {
             <p className="text-[10px] text-gray-400 font-black uppercase tracking-wider">
               Quy mô
             </p>
-            <p className="text-sm font-bold text-gray-800 dark:text-gray-200">
+            <p className="text-sm font-bold text-text-main">
               {contact.size || "Chưa xác định"}
             </p>
           </div>
@@ -59,7 +59,7 @@ const CompanyContact = ({ contact = {} }) => {
             <p className="text-[10px] text-gray-400 font-black uppercase tracking-wider">
               Địa chỉ
             </p>
-            <p className="text-sm font-medium text-gray-600 dark:text-gray-400 leading-snug">
+            <p className="text-sm font-medium text-text-muted leading-snug">
               {contact.address || "Đang cập nhật địa chỉ..."}
             </p>
           </div>

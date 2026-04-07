@@ -99,7 +99,7 @@ const DocumentSidebar = ({ isPublicView = false, candidateId = null }) => {
 
   if (isLoading) {
     return (
-      <div className="bg-white dark:bg-[#1e1e1e] p-6 rounded-[2rem] shadow-sm border border-gray-100 flex justify-center py-10">
+      <div className="bg-card-bg p-6 rounded-[2rem] shadow-sm border border-card-border flex justify-center py-10">
         <FaSpinner className="animate-spin text-[#00c853] text-2xl" />
       </div>
     );
@@ -108,8 +108,8 @@ const DocumentSidebar = ({ isPublicView = false, candidateId = null }) => {
   if (isPublicView && !defaultCV) return null;
 
   return (
-    <div className="bg-white dark:bg-[#1e1e1e] p-6 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800">
-      <h3 className="font-black mb-6 flex items-center gap-2 text-gray-900 dark:text-white uppercase text-xs tracking-widest">
+    <div className="bg-card-bg p-6 rounded-[2rem] shadow-sm border border-card-border">
+      <h3 className="font-black mb-6 flex items-center gap-2 text-text-main uppercase text-xs tracking-widest">
         <span className="w-1.5 h-5 bg-[#00c853] rounded-full"></span>
         {isPublicView ? "Hồ sơ đính kèm" : "CV Mặc Định"}
       </h3>
@@ -121,7 +121,7 @@ const DocumentSidebar = ({ isPublicView = false, candidateId = null }) => {
               <FaRegFilePdf size={20} />
             </div>
             <div className="flex-1 overflow-hidden">
-              <p className="text-sm font-bold text-gray-800 dark:text-gray-200 truncate">
+              <p className="text-sm font-bold text-text-main truncate">
                 {defaultCV.name}
               </p>
               {!isPublicView && (
@@ -136,7 +136,7 @@ const DocumentSidebar = ({ isPublicView = false, candidateId = null }) => {
             <button
               onClick={() => handlePreview(defaultCV.fileName)}
               disabled={isPreviewLoading}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white dark:bg-[#252525] border border-[#00c853] text-[#00c853] font-bold rounded-xl text-xs hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-background border border-[#00c853] text-[#00c853] font-bold rounded-xl text-xs hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isPreviewLoading ? (
                 <FaSpinner className="animate-spin" size={14} />
@@ -161,7 +161,7 @@ const DocumentSidebar = ({ isPublicView = false, candidateId = null }) => {
           </div>
         </div>
       ) : (
-        <div className="text-center py-6 bg-gray-50 dark:bg-[#252525] rounded-2xl border border-dashed border-gray-200 dark:border-gray-700">
+        <div className="text-center py-6 bg-background rounded-2xl border border-dashed border-card-border">
           <p className="text-xs text-gray-500 font-medium">
             {isPublicView 
               ? "Ứng viên chưa có CV mặc định."
@@ -173,7 +173,7 @@ const DocumentSidebar = ({ isPublicView = false, candidateId = null }) => {
       {!isPublicView && (
         <Link
           href="/cv/mine"
-          className="mt-6 w-full flex items-center justify-center gap-2 py-3.5 border-2 border-dashed border-gray-200 dark:border-gray-700 text-gray-500 hover:text-[#00c853] hover:border-[#00c853] font-bold rounded-xl transition-all text-sm active:scale-95"
+          className="mt-6 w-full flex items-center justify-center gap-2 py-3.5 border-2 border-dashed border-card-border text-text-muted hover:text-[#00c853] hover:border-[#00c853] font-bold rounded-xl transition-all text-sm active:scale-95"
         >
           Quản lý kho CV <FaArrowRight size={12} />
         </Link>
@@ -182,7 +182,7 @@ const DocumentSidebar = ({ isPublicView = false, candidateId = null }) => {
       {/* Popup xem nhanh PDF */}
       {previewUrl && (
         <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="bg-white dark:bg-[#1e1e1e] w-full max-w-5xl h-[92vh] rounded-[2.5rem] overflow-hidden relative shadow-2xl border border-white/20">
+          <div className="bg-card-bg w-full max-w-5xl h-[92vh] rounded-[2.5rem] overflow-hidden relative shadow-2xl border border-white/20">
             <button
               onClick={() => {
                 if (previewUrl) {

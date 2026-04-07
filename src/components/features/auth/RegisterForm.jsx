@@ -91,7 +91,7 @@ const RegisterForm = () => {
   return (
     <div className="w-full max-w-[380px] mx-auto p-4">
       {/* TIÊU ĐỀ: Thống nhất font-bold và tracking-tight mềm mại như Login */}
-      <h2 className="text-3xl font-bold text-center mb-8 text-slate-800 tracking-tight leading-none">
+      <h2 className="text-3xl font-bold text-center mb-8 text-slate-800 dark:text-gray-100 tracking-tight leading-none">
         Đăng ký tài khoản
       </h2>
 
@@ -173,23 +173,23 @@ const RegisterForm = () => {
             ${
               watchIsEmployer
                 ? "bg-green-50 border-green-100 shadow-[0_10px_25px_-12px_rgba(0,200,83,0.3)]"
-                : "bg-gray-50 border-gray-100 shadow-none"
+                : "bg-gray-50 dark:bg-[#1e293b] border-gray-100 dark:border-gray-600 shadow-none"
             }`}
         >
           <div className="flex items-center gap-4">
             <div
               className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-700 shadow-sm
-              ${watchIsEmployer ? "bg-[#00c853] text-white rotate-[360deg]" : "bg-white text-gray-400"}`}
+              ${watchIsEmployer ? "bg-[#00c853] text-white rotate-[360deg]" : "bg-white dark:bg-[#334155] text-gray-400"}`}
             >
               <FaUserTie size={16} />
             </div>
             <div>
               <label
-                className={`text-sm font-bold transition-colors ${watchIsEmployer ? "text-green-700" : "text-slate-700"}`}
+                className={`text-sm font-bold transition-colors ${watchIsEmployer ? "text-green-700 dark:text-green-400" : "text-slate-700 dark:text-gray-200"}`}
               >
                 Tôi là nhà tuyển dụng
               </label>
-              <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-0.5 leading-none">
+              <p className="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mt-0.5 leading-none">
                 {watchIsEmployer
                   ? "Chế độ doanh nghiệp"
                   : "Đăng ký làm ứng viên"}
@@ -213,11 +213,11 @@ const RegisterForm = () => {
               type="checkbox"
               id="terms"
               {...register("terms")}
-              className="w-4 h-4 text-[#00c853] bg-gray-100 border-gray-300 rounded focus:ring-[#00c853] cursor-pointer mt-0.5"
+              className="w-4 h-4 text-[#00c853] bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-[#00c853] cursor-pointer mt-0.5"
             />
             <label
               htmlFor="terms"
-              className="text-xs text-gray-500 font-medium leading-tight select-none"
+              className="text-xs text-gray-500 dark:text-gray-400 font-medium leading-tight select-none"
             >
               Tôi đồng ý với{" "}
               <span className="text-[#00c853] font-bold hover:underline cursor-pointer">

@@ -124,7 +124,7 @@ const PersonalInfoForm = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-white dark:bg-[#1e1e1e] p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800 text-center py-20">
+      <div className="bg-card-bg p-8 rounded-[2rem] shadow-sm border border-card-border text-center py-20">
         <div className="text-gray-400 text-lg">Đang tải thông tin cá nhân...</div>
       </div>
     );
@@ -133,14 +133,14 @@ const PersonalInfoForm = () => {
   return (
     <form
       onSubmit={onSubmit}
-      className="bg-white dark:bg-[#1e1e1e] p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800 transition-all"
+      className="bg-card-bg p-8 rounded-[2rem] shadow-sm border border-card-border transition-all"
     >
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
-          <h2 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">
+          <h2 className="text-2xl font-black text-text-main tracking-tight">
             Thông tin cá nhân
           </h2>
-          <p className="text-sm text-gray-500 font-medium">
+          <p className="text-sm text-text-muted font-medium">
             Quản lý hồ sơ công khai của bạn.
           </p>
         </div>
@@ -161,43 +161,43 @@ const PersonalInfoForm = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
         <div className="space-y-2 mt-3">
-          <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
+          <label className="text-sm font-black text-text-muted ml-1">
             Họ và tên đệm
           </label>
           <input
             type="text"
             value={formData.surname}
             onChange={handleChange("surname")}
-            className="w-full mt-2 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
+            className="w-full mt-2 p-3.5 rounded-2xl border border-card-border bg-background focus:ring-2 focus:ring-[#00c853] outline-none font-medium text-text-main"
           />
         </div>
 
         <div className="space-y-2 mt-3">
-          <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
+          <label className="text-sm font-black text-text-muted ml-1">
             Tên
           </label>
           <input
             type="text"
             value={formData.name}
             onChange={handleChange("name")}
-            className="w-full mt-2 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
+            className="w-full mt-2 p-3.5 rounded-2xl border border-card-border bg-background focus:ring-2 focus:ring-[#00c853] outline-none font-medium text-text-main"
           />
         </div>
 
         <div className="space-y-2 mt-3">
-          <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
+          <label className="text-sm font-black text-text-muted ml-1">
             Ngày sinh
           </label>
           <input
             type="date"
             value={formData.birthday}
             onChange={handleChange("birthday")}
-            className="w-full mt-2 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
+            className="w-full mt-2 p-3.5 rounded-2xl border border-card-border bg-background focus:ring-2 focus:ring-[#00c853] outline-none font-medium text-text-main"
           />
         </div>
 
         <div className="space-y-2 mt-3">
-          <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
+          <label className="text-sm font-black text-text-muted ml-1">
             Giới tính
           </label>
           <div className="flex gap-3 mt-2">
@@ -213,7 +213,7 @@ const PersonalInfoForm = () => {
                   onClick={() => handleGenderChange(value)}
                   className={`flex-1 py-3.5 rounded-2xl font-black text-sm border-2 transition-all active:scale-95 ${isSelected
                     ? "bg-[#00c853] text-white border-[#00c853] shadow-md"
-                    : "bg-gray-50 dark:bg-[#252525] text-gray-600 dark:text-gray-400 border-gray-100 dark:border-gray-800 hover:border-[#00c853]/50"
+                    : "bg-background text-text-muted border-card-border hover:border-[#00c853]/50"
                     }`}
                 >
                   {label}
@@ -224,7 +224,7 @@ const PersonalInfoForm = () => {
         </div>
 
         <div className="space-y-2 mt-3">
-          <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
+          <label className="text-sm font-black text-text-muted ml-1">
             Tỉnh/Thành phố
           </label>
           <input
@@ -232,12 +232,12 @@ const PersonalInfoForm = () => {
             placeholder="VD: TP. Hồ Chí Minh"
             value={formData.province}
             onChange={handleChange("province")}
-            className="w-full mt-2 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
+            className="w-full mt-2 p-3.5 rounded-2xl border border-card-border bg-background focus:ring-2 focus:ring-[#00c853] outline-none font-medium text-text-main"
           />
         </div>
 
         <div className="space-y-2 mt-3">
-          <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
+          <label className="text-sm font-black text-text-muted ml-1">
             Xã/Phường
           </label>
           <input
@@ -245,12 +245,12 @@ const PersonalInfoForm = () => {
             placeholder="VD: Phường 1"
             value={formData.commune}
             onChange={handleChange("commune")}
-            className="w-full mt-2 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
+            className="w-full mt-2 p-3.5 rounded-2xl border border-card-border bg-background focus:ring-2 focus:ring-[#00c853] outline-none font-medium text-text-main"
           />
         </div>
 
         <div className="space-y-2 mt-3">
-          <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
+          <label className="text-sm font-black text-text-muted ml-1">
             Email
           </label>
           <input
@@ -258,12 +258,12 @@ const PersonalInfoForm = () => {
             readOnly
             value={formData.email}
             onChange={handleChange("email")}
-            className="w-full mt-2 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
+            className="w-full mt-2 p-3.5 rounded-2xl border border-card-border bg-background focus:ring-2 focus:ring-[#00c853] outline-none font-medium text-text-main"
           />
         </div>
 
         <div className="space-y-2 mt-3">
-          <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
+          <label className="text-sm font-black text-text-muted ml-1">
             Số điện thoại
           </label>
           <input
@@ -271,12 +271,12 @@ const PersonalInfoForm = () => {
             readOnly
             value={formData.phone}
             onChange={handleChange("phone")}
-            className="w-full mt-2 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
+            className="w-full mt-2 p-3.5 rounded-2xl border border-card-border bg-background focus:ring-2 focus:ring-[#00c853] outline-none font-medium text-text-main"
           />
         </div>
 
         <div className="md:col-span-2 space-y-2 mt-3">
-          <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
+          <label className="text-sm font-black text-text-muted ml-1">
             Link tham chiếu (GitHub, LinkedIn, Portfolio...)
           </label>
           <input
@@ -284,19 +284,19 @@ const PersonalInfoForm = () => {
             placeholder="https://github.com/yourusername hoặc https://linkedin.com/in/yourprofile"
             value={formData.referenceLink}
             onChange={handleChange("referenceLink")}
-            className="w-full mt-2 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
+            className="w-full mt-2 p-3.5 rounded-2xl border border-card-border bg-background focus:ring-2 focus:ring-[#00c853] outline-none font-medium text-text-main"
           />
         </div>
 
         <div className="md:col-span-2 space-y-2 mt-6">
-          <label className="text-sm font-black text-gray-700 dark:text-gray-300 ml-1">
+          <label className="text-sm font-black text-text-muted ml-1">
             Giới thiệu bản thân
           </label>
           <textarea
             rows="8"
             value={formData.about}
             onChange={handleChange("about")}
-            className="w-full mt-2 p-5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] focus:ring-2 focus:ring-[#00c853]/50 focus:ring-offset-2 outline-none resize-vertical font-medium text-base leading-relaxed min-h-[200px] max-h-[400px]"
+            className="w-full mt-2 p-5 rounded-2xl border border-card-border bg-background focus:ring-2 focus:ring-[#00c853]/50 focus:ring-offset-2 outline-none resize-vertical font-medium text-base leading-relaxed min-h-[200px] max-h-[400px] text-text-main"
             placeholder="Kể về kinh nghiệm làm việc, kỹ năng chuyên môn, thành tựu nổi bật và mục tiêu nghề nghiệp của bạn..."
           />
           <p className="text-xs text-gray-500 mt-2">

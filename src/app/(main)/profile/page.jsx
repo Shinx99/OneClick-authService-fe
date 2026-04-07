@@ -57,7 +57,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#121212] pt-8 pb-12 transition-colors">
+    <div className="min-h-screen bg-background pt-8 pb-12 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <section className="mb-6">
           <ProfileHeader />

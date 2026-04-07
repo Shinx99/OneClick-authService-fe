@@ -46,7 +46,7 @@ export default async function CompaniesPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#121212] pt-10 pb-20 transition-colors">
+    <div className="min-h-screen bg-background pt-10 pb-20 transition-colors duration-300">
       <CompanyContent initialCompanies={initialCompanies} />
     </div>
   );

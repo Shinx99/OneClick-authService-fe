@@ -49,10 +49,10 @@ const CompanyContent = ({ initialCompanies = [] }) => {
       {/* Header Section */}
       <div className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
-          <h1 className="text-3xl font-black text-gray-900 dark:text-white mb-2 tracking-tight uppercase">
+          <h1 className="text-3xl font-black text-text-main mb-2 tracking-tight uppercase">
             Danh sách công ty nổi bật
           </h1>
-          <p className="text-gray-500 text-sm font-medium italic">
+          <p className="text-text-muted text-sm font-medium italic">
             Tìm thấy{" "}
             <span className="text-[#00c853] font-bold">
               {filteredCompanies.length}

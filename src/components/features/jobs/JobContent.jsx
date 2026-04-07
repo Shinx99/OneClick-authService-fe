@@ -17,13 +17,13 @@ import {
 
 const JobContent = ({ data }) => {
   return (
-    <div className="bg-white rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(0,0,0,0.04)] border border-gray-100">
+    <div className="bg-card-bg rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(0,0,0,0.04)] border border-card-border">
       {/* ==========================================
           1. KHỐI HEADER JOB
       ========================================== */}
-      <div className="flex flex-col md:flex-row gap-6 border-b border-gray-100 pb-8 mb-8">
+      <div className="flex flex-col md:flex-row gap-6 border-b border-card-border pb-8 mb-8">
         {/* Logo Công ty */}
-        <div className="w-20 h-20 md:w-24 md:h-24 shrink-0 rounded-2xl border border-gray-100 overflow-hidden relative bg-[#f1f8f5] flex items-center justify-center p-2">
+        <div className="w-20 h-20 md:w-24 md:h-24 shrink-0 rounded-2xl border border-card-border overflow-hidden relative bg-green-50 dark:bg-green-500/10 flex items-center justify-center p-2">
           <Image
             src={data.logo}
             alt="Company Logo"
@@ -35,7 +35,7 @@ const JobContent = ({ data }) => {
         {/* Thông tin chính */}
         <div className="flex-1">
           <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3 mb-3">
-            <h1 className="text-2xl md:text-[28px] font-extrabold text-gray-900 leading-tight">
+            <h1 className="text-2xl md:text-[28px] font-extrabold text-text-main leading-tight">
               {data.title}
             </h1>
             <span className="bg-[#e8f5e9] text-green-600 text-[11px] font-bold px-3 py-1.5 rounded-full whitespace-nowrap w-fit">
@@ -47,7 +47,7 @@ const JobContent = ({ data }) => {
             {data.company}
           </p>
 
-          <div className="flex flex-wrap items-center gap-5 text-[13px] text-gray-500 font-medium">
+          <div className="flex flex-wrap items-center gap-5 text-[13px] text-text-muted font-medium">
             <span className="flex items-center gap-1.5">
               <FiClock className="text-gray-400 text-lg" /> {data.postedAt}
             </span>
@@ -63,10 +63,10 @@ const JobContent = ({ data }) => {
           2. MÔ TẢ CÔNG VIỆC
       ========================================== */}
       <div className="mb-8">
-        <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+        <h2 className="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
           <FiFileText className="text-blue-500 text-xl" /> Mô tả công việc
         </h2>
-        <div className="text-gray-600 text-[15px] leading-relaxed space-y-4">
+        <div className="text-text-muted text-[15px] leading-relaxed space-y-4">
           <p>
             Tại GreenEarth Solutions, chúng tôi đang tìm kiếm một Senior UX
             Designer tài năng để dẫn dắt việc thiết kế trải nghiệm người dùng
@@ -74,7 +74,7 @@ const JobContent = ({ data }) => {
             chẽ với các nhà quản lý sản phẩm và kỹ sư để tạo ra các giải pháp
             trực quan, lấy người dùng làm trung tâm.
           </p>
-          <ul className="list-disc pl-5 space-y-2.5 marker:text-gray-400">
+          <ul className="list-disc pl-5 space-y-2.5 marker:text-text-muted">
             <li>
               Dẫn dắt quy trình thiết kế từ ý tưởng đến triển khai cuối cùng.
             </li>
@@ -99,10 +99,10 @@ const JobContent = ({ data }) => {
           3. YÊU CẦU ỨNG VIÊN
       ========================================== */}
       <div className="mb-10">
-        <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+        <h2 className="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
           <FiCheckCircle className="text-blue-500 text-xl" /> Yêu cầu ứng viên
         </h2>
-        <ul className="list-disc pl-5 space-y-2.5 text-[15px] text-gray-600 leading-relaxed marker:text-gray-400">
+        <ul className="list-disc pl-5 space-y-2.5 text-[15px] text-text-muted leading-relaxed marker:text-text-muted">
           <li>
             Có ít nhất 5 năm kinh nghiệm làm việc trong lĩnh vực UI/UX Design.
           </li>
@@ -134,67 +134,67 @@ const JobContent = ({ data }) => {
           4. QUYỀN LỢI (GRID 2x2) - ĐÃ CẬP NHẬT
       ========================================== */}
       <div className="mb-10">
-        <h2 className="text-lg font-bold text-gray-900 mb-5 flex items-center gap-2">
+        <h2 className="text-lg font-bold text-text-main mb-5 flex items-center gap-2">
           <FiStar className="text-blue-500 text-xl" /> Quyền lợi
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Item 1 */}
-          <div className="bg-[#f8fafc] p-5 rounded-2xl border border-gray-100 hover:border-blue-200 transition-colors group">
+          <div className="bg-background p-5 rounded-2xl border border-card-border hover:border-blue-200 transition-colors group">
             {/* Wrapper bọc Icon và Tiêu đề */}
             <div className="flex items-center gap-3 mb-2.5">
               <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                 <HiOutlineCurrencyDollar className="text-blue-500 text-xl" />
               </div>
-              <h4 className="font-bold text-gray-900 text-[14px]">
+              <h4 className="font-bold text-text-main text-[14px]">
                 Mức lương cạnh tranh
               </h4>
             </div>
-            <p className="text-[13px] text-gray-500 leading-relaxed">
+            <p className="text-[13px] text-text-muted leading-relaxed">
               Lên đến $4000/tháng + Thưởng hiệu suất năm.
             </p>
           </div>
 
           {/* Item 2 */}
-          <div className="bg-[#f8fafc] p-5 rounded-2xl border border-gray-100 hover:border-blue-200 transition-colors group">
+          <div className="bg-background p-5 rounded-2xl border border-card-border hover:border-blue-200 transition-colors group">
             <div className="flex items-center gap-3 mb-2.5">
               <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                 <HiOutlineShieldCheck className="text-blue-500 text-xl" />
               </div>
-              <h4 className="font-bold text-gray-900 text-[14px]">
+              <h4 className="font-bold text-text-main text-[14px]">
                 Bảo hiểm toàn diện
               </h4>
             </div>
-            <p className="text-[13px] text-gray-500 leading-relaxed">
+            <p className="text-[13px] text-text-muted leading-relaxed">
               Bảo hiểm sức khỏe cao cấp cho bạn và gia đình.
             </p>
           </div>
 
           {/* Item 3 */}
-          <div className="bg-[#f8fafc] p-5 rounded-2xl border border-gray-100 hover:border-blue-200 transition-colors group">
+          <div className="bg-background p-5 rounded-2xl border border-card-border hover:border-blue-200 transition-colors group">
             <div className="flex items-center gap-3 mb-2.5">
               <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                 <HiOutlineComputerDesktop className="text-blue-500 text-xl" />
               </div>
-              <h4 className="font-bold text-gray-900 text-[14px]">
+              <h4 className="font-bold text-text-main text-[14px]">
                 Thiết bị làm việc
               </h4>
             </div>
-            <p className="text-[13px] text-gray-500 leading-relaxed">
+            <p className="text-[13px] text-text-muted leading-relaxed">
               Cung cấp MacBook Pro mới nhất và màn hình 4K.
             </p>
           </div>
 
           {/* Item 4 */}
-          <div className="bg-[#f8fafc] p-5 rounded-2xl border border-gray-100 hover:border-blue-200 transition-colors group">
+          <div className="bg-background p-5 rounded-2xl border border-card-border hover:border-blue-200 transition-colors group">
             <div className="flex items-center gap-3 mb-2.5">
               <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                 <HiOutlineGlobeAlt className="text-blue-500 text-xl" />
               </div>
-              <h4 className="font-bold text-gray-900 text-[14px]">
+              <h4 className="font-bold text-text-main text-[14px]">
                 Du lịch & Team building
               </h4>
             </div>
-            <p className="text-[13px] text-gray-500 leading-relaxed">
+            <p className="text-[13px] text-text-muted leading-relaxed">
               Chuyến đi công ty hàng năm và các hoạt động nhóm.
             </p>
           </div>

@@ -19,7 +19,7 @@ const Button = ({
       "bg-green-600 text-white hover:bg-green-700 hover:-translate-y-1 hover:shadow-lg hover:shadow-green-600/30 disabled:hover:translate-y-0 disabled:hover:shadow-none disabled:hover:bg-green-600",
 
     social:
-      "bg-white text-black border border-gray-200 hover:border-gray-400 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md disabled:hover:translate-y-0 disabled:hover:shadow-none disabled:hover:bg-white disabled:hover:border-gray-200",
+      "bg-white dark:bg-[#1e293b] text-black dark:text-gray-100 border border-gray-200 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-[#334155] hover:-translate-y-1 hover:shadow-md disabled:hover:translate-y-0 disabled:hover:shadow-none disabled:hover:bg-white dark:disabled:hover:bg-[#1e293b] disabled:hover:border-gray-200",
   };
 
   return (

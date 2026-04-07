@@ -33,7 +33,7 @@ const RoleSelectionModal = ({ isOpen, onClose }) => {
         onClick={handleBackdropClick}
       >
         <div
-          className={`bg-gradient-to-br from-white to-slate-50/70 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl border border-white/50 backdrop-blur-sm relative transition-all duration-500 ${isShaking
+          className={`bg-gradient-to-br from-white to-slate-50/70 dark:from-[#1e293b] dark:to-[#0f172a] rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl border border-white/50 dark:border-gray-700 backdrop-blur-sm relative transition-all duration-500 ${isShaking
             ? "animate-shake ring-4 ring-[#00c853]/40 shadow-3xl"
             : "hover:shadow-3xl hover:-translate-y-2 animate-slideUp"
             }`}
@@ -47,13 +47,13 @@ const RoleSelectionModal = ({ isOpen, onClose }) => {
               <FiBriefcase className="text-4xl text-[#00c853] drop-shadow-lg" />
             </div>
 
-            <h2 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-gray-900 via-gray-800 to-slate-900 bg-clip-text text-transparent mb-4 leading-tight">
+            <h2 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-gray-900 via-gray-800 to-slate-900 dark:from-gray-100 dark:via-gray-200 dark:to-slate-300 bg-clip-text text-transparent mb-4 leading-tight">
               Nhà Tuyển Dụng
             </h2>
-            <p className="text-xl text-slate-600 mb-2 font-semibold leading-relaxed">
+            <p className="text-xl text-slate-600 dark:text-slate-300 mb-2 font-semibold leading-relaxed">
               Tạo tài khoản công ty
             </p>
-            <p className="text-lg text-slate-500 mb-10 font-medium leading-relaxed max-w-md mx-auto">
+            <p className="text-lg text-slate-500 dark:text-slate-400 mb-10 font-medium leading-relaxed max-w-md mx-auto">
               Đăng tin tuyển dụng nhanh chóng và tìm kiếm nhân tài chất lượng cao
               cho doanh nghiệp của bạn.
             </p>
@@ -72,8 +72,8 @@ const RoleSelectionModal = ({ isOpen, onClose }) => {
             </Link>
 
             {/* Footer */}
-            <div className="mt-12 pt-8 border-t border-slate-100/50 flex items-center justify-center gap-3">
-              <span className="text-sm text-slate-500 font-medium">Đã có tài khoản?</span>
+            <div className="mt-12 pt-8 border-t border-slate-100/50 dark:border-gray-700 flex items-center justify-center gap-3">
+              <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">Đã có tài khoản?</span>
               <Link
                 href="/login"
                 className="text-[#00c853] hover:text-[#00b04a] underline decoration-2 underline-offset-4 font-bold text-sm transition-colors hover:no-underline"
