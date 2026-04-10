@@ -40,7 +40,7 @@ export const useCandidateProfile = () => {
         try {
             const updatedProfile = await candidateService.updateProfile(payload);
             setProfile(updatedProfile);
-            toast.success("Cập nhật hồ sơ thành công!");
+
             return { success: true, data: updatedProfile };
         } catch (err) {
             const errMsg = err?.response?.data?.message || "Lỗi khi cập nhật hồ sơ";

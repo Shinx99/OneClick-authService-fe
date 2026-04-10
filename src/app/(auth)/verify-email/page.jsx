@@ -2,7 +2,6 @@
 import React, { useEffect, useState, useRef, Suspense } from "react"; // Thêm useRef
 import { useSearchParams, useRouter } from "next/navigation";
 import { authService } from "@/services/auth.service";
-import candidateService from "@/services/candidate.service";
 import Button from "@/components/ui/Button";
 import toast from "react-hot-toast";
 
@@ -15,13 +14,14 @@ const VerifyContent = () => {
 
   const hasCalledAPI = useRef(false);
 
+
   useEffect(() => {
     if (!token) {
       setStatus("error");
       return;
     }
 
-    // 👉 THÊM DÒNG NÀY: Nếu đã gọi API rồi thì dừng lại, không gọi lần 2
+    // THÊM DÒNG NÀY: Nếu đã gọi API rồi thì dừng lại, không gọi lần 2
     if (hasCalledAPI.current) return;
 
     // Đóng chốt lại ngay lập tức
@@ -29,18 +29,7 @@ const VerifyContent = () => {
 
     const verifyAccount = async () => {
       try {
-        const response = await authService.verifyEmail(token);
-
-        const payload = {
-          candidateId: response?.accountId || null,
-          email: response?.email || null,
-          phone: response?.phone || null,
-          status: response?.status || "active",
-        }
-
-        if (response?.roles.includes("candidate")) {
-          await candidateService.updateProfile(payload);
-        }
+        await authService.verifyEmail(token);
 
         setStatus("success");
         toast.success("Xác thực thành công! Đang chuyển hướng...");

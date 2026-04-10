@@ -1,11 +1,25 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import EditSidebar from "@/components/features/edit-profile/EditSidebar";
 import PersonalInfoForm from "@/components/features/edit-profile/PersonalInfoForm";
 import SectionHeader from "@/components/features/edit-profile/SectionHeader";
 import { FaPlus } from "react-icons/fa";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import VNeIDVerification from "@/components/features/edit-profile/VNeIDVerification";
+
 
 const EditProfilePage = () => {
+
+  const { isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.replace("/login");
+    }
+  }, [isLoading, isAuthenticated, router]);
+
   // 1. STATE TỔNG - Đồng bộ cấu trúc với trang ProfilePage hiển thị
   const [profileData, setProfileData] = useState({
     personal: {
@@ -34,6 +48,16 @@ const EditProfilePage = () => {
   });
 
   const [newSkill, setNewSkill] = useState("");
+
+
+  if (isLoading) return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00c853]"></div>
+    </div>
+  );
+
+  if (!isAuthenticated) { return null; }
+
 
   // 2. LOGIC HANDLERS
   const removeSkill = (skillName) => {
@@ -68,6 +92,10 @@ const EditProfilePage = () => {
 
           {/* CỘT PHẢI: Form chi tiết */}
           <main className="lg:col-span-3 space-y-8">
+            <div className="scroll-mt-24">
+              <VNeIDVerification />
+            </div>
+
             <div id="personal" className="scroll-mt-24">
               <PersonalInfoForm />
             </div>
