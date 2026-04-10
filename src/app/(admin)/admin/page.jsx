@@ -1,91 +1,73 @@
-import React from "react";
-import StatsGrid from "@/components/features/admin/dashboard/StatsGrid";
-import GrowthChart from "@/components/features/admin/dashboard/GrowthChart";
-import RecentActivities from "@/components/features/admin/dashboard/RecentActivities";
+'use client';
+import { useState, useEffect } from 'react';
+import StatsGrid from '@/components/features/admin/dashboard/StatsGrid';
+import GrowthChart from '@/components/features/admin/dashboard/GrowthChart';
+import RecentActivities from '@/components/features/admin/dashboard/RecentActivities';
+import MonthPicker from '@/components/features/admin/dashboard/MonthPicker';
+import { dashboardService } from '@/services/admindashboard.service.js';
+import Skeleton from '@/components/features/admin/dashboard/Skeleton';
 
-export default async function AdminDashboard() {
-  // SAU NÀY KẾT NỐI API TẠI ĐÂY:
-  const mockData = {
-    stats: [
-      {
-        id: 1,
-        label: "Tổng Ứng viên",
-        value: "12,540",
-        trend: "+12%",
-        color: "green",
-      },
-      {
-        id: 2,
-        label: "Tổng Công ty",
-        value: "850",
-        trend: "+4%",
-        color: "blue",
-      },
-      {
-        id: 3,
-        label: "Doanh thu",
-        value: "45,000,000đ",
-        trend: "+22%",
-        color: "orange",
-      },
-      {
-        id: 4,
-        label: "Tin tuyển dụng mới",
-        value: "120",
-        trend: "+18",
-        color: "purple",
-      },
-    ],
-    activities: [
-      {
-        id: 1,
-        type: "user",
-        title: "Người dùng mới đăng ký",
-        desc: "Nguyễn Văn An vừa tạo tài khoản",
-        time: "2 phút trước",
-      },
-      {
-        id: 2,
-        type: "job",
-        title: "Tin tuyển dụng được duyệt",
-        desc: "Vingroup: Tuyển chuyên viên AI",
-        time: "15 phút trước",
-      },
-      {
-        id: 3,
-        type: "payment",
-        title: "Giao dịch thành công",
-        desc: "Gói 'Premium Plus' đã thanh toán",
-        time: "1 giờ trước",
-      },
-    ],
-  };
+export default function AdminDashboard() {
+  const [counts, setCounts] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await dashboardService.getAdminCounts(selectedMonth || null);
+        setCounts(data);
+      } catch (err) {
+        setError('Không thể tải dữ liệu.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [selectedMonth]);
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-black text-gray-800">
-          Bảng điều khiển tổng quan
-        </h1>
-        <p className="text-sm text-gray-400 font-medium">
-          Chào mừng trở lại, quản trị viên!
-        </p>
+      {/* Header và MonthPicker */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-black text-gray-800">Bảng điều khiển</h1>
+          <p className="text-sm text-gray-400">Chào mừng trở lại, quản trị viên!</p>
+        </div>
+        <MonthPicker selectedMonth={selectedMonth} onChange={setSelectedMonth} />
       </div>
 
-      {/* 4 Cards thống kê */}
-      <StatsGrid stats={mockData.stats} />
-
-      <div className="grid grid-cols-12 gap-8">
-        {/* Biểu đồ bên trái (8 cột) */}
-        <div className="col-span-8">
-          <GrowthChart />
+      {/* Loading / Error / StatsGrid */}
+      {loading && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-32 bg-gray-100 rounded-2xl animate-pulse" />
+          ))}
         </div>
+      )}
 
-        {/* Hoạt động bên phải (4 cột) */}
-        <div className="col-span-4">
-          <RecentActivities activities={mockData.activities} />
+      {error && (
+        <div className="bg-red-50 text-red-600 p-4 rounded-xl text-center">
+          {error}
         </div>
-      </div>
+      )}
+
+      {!loading && !error && counts && <StatsGrid counts={counts} />}
+
+      {/* Biểu đồ và Hoạt động gần đây */}
+      {!loading && !error && (
+        <div className="grid grid-cols-12 gap-8">
+          <div className="col-span-8">
+            <GrowthChart month={selectedMonth} />
+          </div>
+          <div className="col-span-4">
+            <RecentActivities />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
