@@ -1,5 +1,7 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 import ProfileHeader from "@/components/features/profile/ProfileHeader";
 import ExperienceList from "@/components/features/profile/ExperienceList";
 import SkillList from "@/components/features/profile/SkillList";
@@ -9,52 +11,31 @@ import AboutSection from "@/components/features/profile/AboutPage";
 import ReferenceLink from "@/components/features/profile/ReferenceLink";
 
 const ProfilePage = () => {
-  // DỮ LIỆU TỔNG (Sau này fetch từ GET /api/user/profile)
-  const userData = {
-    personal: {
-      fullName: "Lê Nguyễn Hoàng Trung",
-      position: "Full-stack Developer",
-      location: "Hà Nội, Việt Nam",
-      avatar: "/images/one-click-logo.png",
-    },
-    experiences: [
-      {
-        id: 1,
-        role: "Senior Product Designer",
-        company: "VinGroup",
-        time: "2020 - Hiện tại",
-        desc: "Chịu trách nhiệm thiết kế trải nghiệm người dùng...",
-        achievements: [
-          "Tăng tỷ lệ chuyển đổi lên 15%",
-          "Xây dựng hệ thống Design System",
-        ],
-        logo: "/images/one-click-logo.png",
-      },
-    ],
-    education: [
-      {
-        id: 1,
-        school: "Đại học FPT",
-        major: "Software Development",
-        time: "2014 - 2018",
-        gpa: "3.51/4.0",
-        logo: "/images/one-click-logo.png",
-      },
-    ],
-    skills: [
-      { id: 1, name: "Java Spring Boot" },
-      { id: 2, name: "Next.js" },
-      { id: 3, name: "Docker" },
-    ],
-    documents: [
-      {
-        id: 1,
-        name: "CV_HoangTrung.pdf",
-        updateAt: "2 ngày trước",
-        type: "pdf",
-      },
-    ],
-  };
+
+  const { isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
+
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.replace("/login");
+    }
+  }, [isLoading, isAuthenticated, router]);
+
+
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00c853]"></div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    //router.push("/login");
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-background pt-8 pb-12 transition-colors duration-300">
@@ -62,25 +43,19 @@ const ProfilePage = () => {
         <section className="mb-6">
           <ProfileHeader />
         </section>
-
         <section className="mb-6">
           <AboutSection />
         </section>
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
-            <ExperienceList experiences={userData.experiences} />
-            <EducationList education={userData.education} />
-            <SkillList skills={userData.skills} />
+            <ExperienceList />
+            <EducationList />
+            <SkillList />
           </div>
-
           <div className="lg:col-span-1 space-y-6">
-            <div>
-              <ReferenceLink />
-            </div>
-
+            <ReferenceLink />
             <div className="mt-3">
-              <DocumentSidebar documents={userData.documents} />
+              <DocumentSidebar />
             </div>
           </div>
         </div>

@@ -97,7 +97,7 @@ const ProfileHeader = () => {
   const [coverDragging, setCoverDragging] = useState(false);
   const [avatarDragging, setAvatarDragging] = useState(false);
 
-  const [coverPreview, setCoverPreview] = useState("/images/cover-placeholder.jpg");
+  const [coverPreview, setCoverPreview] = useState("/images/avatar-placeholder.jpg");
   const [avatarPreview, setAvatarPreview] = useState("/images/avatar-placeholder.jpg");
 
   const prevCoverRef = useRef(coverPreview);
@@ -214,7 +214,7 @@ const ProfileHeader = () => {
             <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg text-sm font-bold text-gray-800">
               Xem / Thay ảnh bìa
             </div>
-            {coverPreview !== "/images/cover-placeholder.jpg" && (
+            {coverPreview !== "/images/avatar-placeholder.jpg" && (
               <button
                 onClick={(e) => { e.stopPropagation(); handleCoverRemove(); }}
                 className="bg-red-500/90 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-red-600 backdrop-blur-sm transition-all"
@@ -230,7 +230,7 @@ const ProfileHeader = () => {
           {/* Avatar */}
           <div
             className={`relative w-28 h-28 lg:w-40 lg:h-40 xl:w-44 xl:h-44 rounded-full overflow-hidden border-4 border-white shadow-xl ring-4 ring-white/50 cursor-pointer transition-all flex-shrink-0 ${avatarDragging ? "ring-[#00c853]/50 scale-105" : ""} ${isUpdating ? "opacity-70 pointer-events-none" : ""}`}
-            onClick={() => setModal({ open: true, type: "avatar" })} // ✅ mở modal
+            onClick={() => setModal({ open: true, type: "avatar" })} //  mở modal
             onDragOver={(e) => { e.preventDefault(); setAvatarDragging(true); }}
             onDragLeave={() => setAvatarDragging(false)}
             onDrop={(e) => {

@@ -1,4 +1,4 @@
-import { apiClient, getAccessToken } from "@/lib/apiClient/api.config";
+import { apiClient, testClient, getAccessToken } from "@/lib/apiClient/api.config";
 import toast from "react-hot-toast";
 
 export const resumeService = {
@@ -10,14 +10,14 @@ export const resumeService = {
     try {
       const response = await apiClient.get('/profile/cvs');
       const apiResponse = response.data;
-      
+
       if (!apiResponse?.success) {
         throw new Error(apiResponse?.message || 'Failed to fetch resumes');
       }
-      
+
       const cvResponse = apiResponse.data;
       const cvs = cvResponse?.cvs || [];
-      
+
       // Transform CvDto to frontend format - CHÚ Ý: field là 'filename' không phải 'fileName'
       return cvs.map(cv => ({
         id: cv.resumeId,
@@ -47,19 +47,19 @@ export const resumeService = {
   //       size: file.size,
   //       type: file.type
   //     });
-      
+
   //     const formData = new FormData();
   //     formData.append("resumeFile", file); // Tên field = resumeFile
-      
+
   //     // Log FormData content
   //     for (let pair of formData.entries()) {
   //       console.log("FormData entry:", pair[0], pair[1]);
   //     }
-      
+
   //     const response = await apiClient.post('/profile/scan-cv', formData);
-      
+
   //     console.log("📦 Upload response:", response.data);
-      
+
   //     // Kiểm tra response
   //     if (response.data?.success && response.data?.data?.success !== false) {
   //       return { success: true };
@@ -73,35 +73,35 @@ export const resumeService = {
   // },
 
   uploadResume: async (file) => {
-  try {
-    const formData = new FormData();
-    formData.append("resumeFile", file);
-    
-    const token = getAccessToken();
-    const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
-    
-    const response = await fetch(`${baseURL}/profile/scan-cv`, {
-      method: 'POST',
-      body: formData,
-      credentials: 'include',
-      headers: {
-        'Authorization': `Bearer ${token}`
+    try {
+      const formData = new FormData();
+      formData.append("resumeFile", file);
+
+      const token = getAccessToken();
+      const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+
+      const response = await fetch(`${baseURL}/profile/scan-cv`, {
+        method: 'POST',
+        body: formData,
+        credentials: 'include',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+      console.log("Upload response:", data);
+
+      if (data?.success) {
+        return { success: true };
+      } else {
+        throw new Error(data?.message || 'Upload failed');
       }
-    });
-    
-    const data = await response.json();
-    console.log("Upload response:", data);
-    
-    if (data?.success) {
-      return { success: true };
-    } else {
-      throw new Error(data?.message || 'Upload failed');
+    } catch (error) {
+      console.error("Upload error:", error);
+      throw error;
     }
-  } catch (error) {
-    console.error("Upload error:", error);
-    throw error;
-  }
-},
+  },
 
 
 
@@ -109,15 +109,15 @@ export const resumeService = {
     if (!resumeId) {
       throw new Error('Invalid resume ID');
     }
-    
+
     try {
       const response = await apiClient.patch(`/profile/cv/${resumeId}/default`);
       const apiResponse = response.data;
-      
+
       if (!apiResponse?.success) {
         throw new Error(apiResponse?.message || 'Failed to set default resume');
       }
-      
+
       return apiResponse;
     } catch (error) {
       console.error("Set default resume error:", error);
@@ -129,15 +129,15 @@ export const resumeService = {
     if (!resumeId || resumeId === 'undefined') {
       throw new Error('Invalid resume ID');
     }
-    
+
     try {
       const response = await apiClient.delete(`/profile/cv/${resumeId}`);
       const apiResponse = response.data;
-      
+
       if (!apiResponse?.success) {
         throw new Error(apiResponse?.message || 'Failed to delete resume');
       }
-      
+
       return apiResponse;
     } catch (error) {
       console.error("Delete resume error:", error);
@@ -149,18 +149,18 @@ export const resumeService = {
     if (!fileName || fileName === 'undefined') {
       throw new Error('Invalid file name');
     }
-    
+
     try {
       const response = await apiClient.get(`/profile/cv/${encodeURIComponent(fileName)}`, {
         responseType: 'blob'
       });
-      
+
       if (response.data.type === 'application/json') {
         const text = await response.data.text();
         const error = JSON.parse(text);
         throw new Error(error.message || 'Download failed');
       }
-      
+
       return {
         blob: response.data,
         contentType: response.headers['content-type'] || 'application/pdf',
@@ -176,18 +176,18 @@ export const resumeService = {
     if (!fileName || fileName === 'undefined') {
       throw new Error('Invalid file name');
     }
-    
+
     try {
       const response = await apiClient.get(`/profile/cv/stream/${encodeURIComponent(fileName)}`, {
         responseType: 'blob'
       });
-      
+
       if (response.data.type === 'application/json') {
         const text = await response.data.text();
         const error = JSON.parse(text);
         throw new Error(error.message || 'Preview failed');
       }
-      
+
       return {
         blob: response.data,
         contentType: response.headers['content-type'] || 'application/pdf'

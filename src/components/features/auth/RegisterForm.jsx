@@ -79,7 +79,6 @@ const RegisterForm = () => {
 
   const onSubmit = async (data) => {
     const payload = {
-      fullName: data.fullName,
       phone: data.phone,
       email: data.username,
       password: data.password,
@@ -98,15 +97,16 @@ const RegisterForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* --- CÁC INPUT --- */}
         <div className="space-y-5 mb-6">
+
           <div className="relative">
             <Input
-              icon={<FaIdCard className="text-slate-400" />}
-              placeholder="Họ và tên"
-              {...register("fullName")}
+              icon={<FaUser className="text-slate-400" />}
+              placeholder="Email"
+              {...register("username")}
             />
-            {errors.fullName && (
+            {errors.username && (
               <p className="absolute top-full left-2 text-red-500 text-[10px] font-bold uppercase tracking-tight mt-1">
-                {errors.fullName.message}
+                {errors.username.message}
               </p>
             )}
           </div>
@@ -121,19 +121,6 @@ const RegisterForm = () => {
             {errors.phone && (
               <p className="absolute top-full left-2 text-red-500 text-[10px] font-bold uppercase tracking-tight mt-1">
                 {errors.phone.message}
-              </p>
-            )}
-          </div>
-
-          <div className="relative">
-            <Input
-              icon={<FaUser className="text-slate-400" />}
-              placeholder="Email"
-              {...register("username")}
-            />
-            {errors.username && (
-              <p className="absolute top-full left-2 text-red-500 text-[10px] font-bold uppercase tracking-tight mt-1">
-                {errors.username.message}
               </p>
             )}
           </div>
@@ -170,10 +157,9 @@ const RegisterForm = () => {
         {/* --- KHỐI TOGGLE NHÀ TUYỂN DỤNG CHUẨN SaaS --- */}
         <div
           className={`mb-6 p-4 rounded-[1.5rem] border transition-all duration-500 flex items-center justify-between
-            ${
-              watchIsEmployer
-                ? "bg-green-50 border-green-100 shadow-[0_10px_25px_-12px_rgba(0,200,83,0.3)]"
-                : "bg-gray-50 dark:bg-[#1e293b] border-gray-100 dark:border-gray-600 shadow-none"
+            ${watchIsEmployer
+              ? "bg-green-50 border-green-100 shadow-[0_10px_25px_-12px_rgba(0,200,83,0.3)]"
+              : "bg-gray-50 dark:bg-[#1e293b] border-gray-100 dark:border-gray-600 shadow-none"
             }`}
         >
           <div className="flex items-center gap-4">

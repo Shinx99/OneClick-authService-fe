@@ -9,7 +9,7 @@ import React, {
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { authService } from "@/services/auth.service";
-import candidateService from "@/services/candidate.service";
+import { refreshTokenOnce } from "@/lib/apiClient/api.config";
 
 export const ROLES = {
   ADMIN: "admin",
@@ -21,19 +21,18 @@ export const ROLES = {
 const parseUser = (result) => ({
   id: result.accountId,
   email: result.email,
+  phone: result.phone,
   status: result.status,
   roles: result.roles ?? [],
 });
 
-// Đã bỏ interface AuthContextType
-// Đã bỏ Generic <AuthContextType | null>
 const AuthContext = createContext(null);
 
 // Đã bỏ khai báo kiểu cho { children }
 export const AuthProvider = ({ children }) => {
   // Đã bỏ <any> và <string | null>
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter();
@@ -46,22 +45,29 @@ export const AuthProvider = ({ children }) => {
     const initAuth = async () => {
       setIsLoading(true);
 
-      const refreshed = await authService.refreshAuth(); // Gọi refreshAuth trong service
+      try {
+        const refreshed = await refreshTokenOnce();
 
-      if (refreshed && refreshed.data) {
-        const result = refreshed.data;
-        const parsedUser = parseUser(result);
-        setUser(parsedUser);
-        setIsAuthenticated(true);
-      } else {
+        if (refreshed && refreshed.data) {
+          const result = refreshed.data;
+          const parsedUser = parseUser(result);
+          setUser(parsedUser);
+          setIsAuthenticated(true);
+        } else {
+          setUser(null);
+          setIsAuthenticated(false);
+        }
+      } catch (err) {
+        // refreshAuth throw error → coi như chưa đăng nhập, không redirect
         setUser(null);
         setIsAuthenticated(false);
+      } finally {
+        // Dù thành công hay thất bại, LUÔN tắt loading
+        setIsLoading(false); // ← QUAN TRỌNG NHẤT
       }
-      setIsLoading(false);
     };
 
     if (typeof window !== "undefined") {
-      // Chỉ chạy ở client
       initAuth();
     }
   }, []);
@@ -83,7 +89,9 @@ export const AuthProvider = ({ children }) => {
         if (roles.includes(ROLES.ADMIN)) router.push("/admin");
         else if (roles.includes(ROLES.RECRUITER))
           router.push("/employer/dashboard");
-        else if (roles.includes(ROLES.CANDIDATE)) router.push("/");
+        else if (roles.includes(ROLES.CANDIDATE)) {
+          router.push("/");
+        }
         else router.push("/");
 
         return { success: true };
@@ -99,6 +107,7 @@ export const AuthProvider = ({ children }) => {
     },
     [router],
   );
+
 
   // 3. Register (Đã bỏ : any)
   const register = useCallback(
@@ -126,6 +135,7 @@ export const AuthProvider = ({ children }) => {
     [router],
   );
 
+
   // --- 6. Change Password ---
   const changePassword = useCallback(async (payload) => {
     setIsLoading(true);
@@ -143,6 +153,7 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(false);
     }
   }, []);
+
 
   // --- 7. Forgot Password ---
   const sendForgotPasswordEmail = useCallback(async (email) => {
@@ -163,6 +174,7 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(false);
     }
   }, []);
+
 
   const executeResetPassword = useCallback(
     async (token, newPassword) => {
@@ -201,6 +213,7 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(false);
     }
   }, [router]);
+
 
   // 5. Google Login (Đã bỏ : any)
   const loginWithGoogle = useCallback(
@@ -278,3 +291,23 @@ export const useAuth = () => {
     throw new Error("useAuth phải được dùng bên trong AuthProvider");
   return context;
 };
+
+// // Thay vì throw Error, trả về một dữ liệu mặc định (chỉ dùng khi test)
+// export const useAuth = () => {
+//   const context = useContext(AuthContext);
+//   if (!context) {
+//     console.warn("Đang chạy app không có AuthProvider");
+//     return {
+//       user: null,
+//       isLoading: false,
+//       isAuthenticated: false,
+//       isAdmin: false,
+//       isRecruiter: false,
+//       isCandidate: false,
+//       // ... thêm các hàm rỗng để tránh lỗi "is not a function"
+//       login: () => { },
+//       logout: () => { },
+//     };
+//   }
+//   return context;
+// };

@@ -3,9 +3,9 @@
 import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import VNeIDVerification from "./VNeIDVerification";
 import { useCandidateProfile } from "@/hooks/useCandidateProfile";
 import { CandidateProfileSchema } from "@/lib/validators/candidate";
+import toast from "react-hot-toast";
 
 const PersonalInfoForm = () => {
 
@@ -118,6 +118,7 @@ const PersonalInfoForm = () => {
     };
 
     await updateProfile(payload);
+    toast.success("Cập nhật hồ sơ thành công!");
   };
 
 
@@ -156,8 +157,6 @@ const PersonalInfoForm = () => {
           </button>
         </div>
       </div>
-
-      <VNeIDVerification />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
         <div className="space-y-2 mt-3">
