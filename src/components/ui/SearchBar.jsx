@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import Image from "next/image";
-import Link from "next/link";
+
 import {
   FaSearch,
   FaMapMarkerAlt,
@@ -187,11 +186,10 @@ const SearchBar = ({ className, onSearch }) => {
                   {/* Logo */}
                   <div className="w-10 h-10 rounded-xl border border-card-border bg-background flex items-center justify-center shrink-0 overflow-hidden relative">
                     {job.companyLogoUrl ? (
-                      <Image
+                      <img
                         src={job.companyLogoUrl}
                         alt={job.companyName || ""}
-                        fill
-                        className="object-contain p-1"
+                        className="w-full h-full object-contain p-1"
                       />
                     ) : (
                       <span className="text-[#00c853] font-bold text-sm uppercase">

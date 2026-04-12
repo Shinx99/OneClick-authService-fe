@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import Image from "next/image";
 import {
   FiMapPin,
   FiDollarSign,
@@ -77,11 +76,10 @@ const JobList = ({ filters = {} }) => {
                 {/* 1. Logo Section */}
                 <div className="w-16 h-16 rounded-2xl border-2 border-card-border bg-background flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-500 overflow-hidden shadow-inner relative">
                   {job.companyLogoUrl ? (
-                    <Image
+                    <img
                       src={job.companyLogoUrl}
                       alt={job.companyName || "Company"}
-                      fill
-                      className="object-contain p-2"
+                      className="w-full h-full object-contain p-2"
                     />
                   ) : (
                     <span className="text-[#00c853] font-medium text-2xl uppercase italic leading-none">

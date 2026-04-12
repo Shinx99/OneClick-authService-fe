@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import Image from "next/image";
+
 import {
   FiMapPin,
   FiDollarSign,
@@ -56,11 +56,10 @@ const JobForYou = () => {
                     {/* Logo nhỏ gọn (56px) */}
                     <div className="w-14 h-14 rounded-xl border-2 border-card-border bg-background flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform overflow-hidden shadow-inner relative">
                       {job.companyLogoUrl ? (
-                        <Image
+                        <img
                           src={job.companyLogoUrl}
                           alt={job.companyName || "Company"}
-                          fill
-                          className="object-contain p-1.5"
+                          className="w-full h-full object-contain p-1.5"
                         />
                       ) : (
                         <span className="text-[#00c853] font-medium text-xl uppercase italic">
