@@ -18,9 +18,6 @@ export const LoginSchema = z.object({
 // Form Đăng ký
 export const RegisterSchema = z
   .object({
-    fullName: z
-      .string()
-      .min(2, { message: "Họ và tên phải có ít nhất 2 ký tự" }),
     phone: z.string().min(10, { message: "Số điện thoại không hợp lệ" }),
     username: z
       .string()
