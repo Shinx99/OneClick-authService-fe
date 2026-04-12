@@ -12,7 +12,7 @@ export function useJobs(filters = {}) {
   const [jobs, setJobs] = useState([]);
   const [pagination, setPagination] = useState({
     page: 0,
-    size: 10,
+    size: 6,
     totalElements: 0,
     totalPages: 0,
     last: true,
@@ -28,7 +28,7 @@ export function useJobs(filters = {}) {
       setJobs(data?.content || []);
       setPagination({
         page: data?.page ?? 0,
-        size: data?.size ?? 10,
+        size: data?.size ?? 6,
         totalElements: data?.totalElements ?? 0,
         totalPages: data?.totalPages ?? 0,
         last: data?.last ?? true,

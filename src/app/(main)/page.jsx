@@ -7,8 +7,11 @@ import CompanyHot from "@/components/features/home/CompanyHot";
 export default function Home() {
   return (
     <div className=" transition-colors duration-300">
-      <Background />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-4 py-4">
+      {/* Banner search — z-30 để dropdown gợi ý không bị phần dưới đè lên */}
+      <div className="relative z-30">
+        <Background />
+      </div>
+      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-4 py-4">
         <JobForYou />
 
         <CallToAction />
