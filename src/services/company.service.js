@@ -1,7 +1,6 @@
 // src/services/company.service.js
 import api from '../lib/apiClient/api.config';
 
-// Chú ý: Phải có từ khóa 'export' ngay trước 'const companyService'
 export const companyService = {
   // Lấy Top 6 công ty hàng đầu
   getTop6Companies: async () => {
@@ -14,9 +13,37 @@ export const companyService = {
     }
   },
 
-  // Bạn có thể thêm các hàm khác ở đây
+  // Lấy tất cả công ty
   getAllCompanies: async (params) => {
     const response = await api.get('recruitment/company/all', { params });
     return response.data;
-  }
+  },
+
+  // -------------------------------------------------------
+  // UPLOAD COMPANY LOGO (ROLE_recruiter)
+  // PUT /api/recruitment/company/logo/upload
+  // -------------------------------------------------------
+  uploadCompanyLogo: async (file) => {
+    const formData = new FormData();
+    formData.append("logoImage", file);
+
+    const response = await api.put("recruitment/company/logo/upload", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response.data; // { success, message, data: CompanyDTO }
+  },
+
+  // -------------------------------------------------------
+  // UPLOAD COMPANY BACKGROUND (ROLE_recruiter)
+  // PUT /api/recruitment/company/background/upload
+  // -------------------------------------------------------
+  uploadCompanyBackground: async (file) => {
+    const formData = new FormData();
+    formData.append("backgroundImage", file);
+
+    const response = await api.put("recruitment/company/background/upload", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response.data; // { success, message, data: CompanyDTO }
+  },
 };
