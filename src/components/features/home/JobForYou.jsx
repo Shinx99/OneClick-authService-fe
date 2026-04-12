@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 import {
   FiMapPin,
   FiDollarSign,
@@ -10,7 +11,7 @@ import {
 import { useJobs } from "@/hooks/useJobs";
 
 const JobForYou = () => {
-  const { jobs, isLoading, error } = useJobs();
+  const { jobs, isLoading, error } = useJobs({ page: 0, size: 6 });
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 6;
 
@@ -53,10 +54,19 @@ const JobForYou = () => {
                 >
                   <div className="flex gap-3">
                     {/* Logo nhỏ gọn (56px) */}
-                    <div className="w-14 h-14 rounded-xl border-2 border-card-border bg-background flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform overflow-hidden shadow-inner">
-                      <span className="text-[#00c853] font-medium text-xl uppercase italic">
-                        {job.title?.charAt(0)}
-                      </span>
+                    <div className="w-14 h-14 rounded-xl border-2 border-card-border bg-background flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform overflow-hidden shadow-inner relative">
+                      {job.companyLogoUrl ? (
+                        <Image
+                          src={job.companyLogoUrl}
+                          alt={job.companyName || "Company"}
+                          fill
+                          className="object-contain p-1.5"
+                        />
+                      ) : (
+                        <span className="text-[#00c853] font-medium text-xl uppercase italic">
+                          {job.title?.charAt(0)}
+                        </span>
+                      )}
                     </div>
 
                     {/* Thông tin chính */}
@@ -68,7 +78,7 @@ const JobForYou = () => {
                         {job.title}
                       </h3>
                       <p className="text-[12px] text-text-muted font-normal truncate opacity-80 uppercase tracking-tight">
-                        {job.company || "OneClick Partner"}
+                        {job.companyName || "OneClick Partner"}
                       </p>
                     </div>
                   </div>
