@@ -13,10 +13,24 @@ export const companyService = {
     }
   },
 
-  // Lấy tất cả công ty
   getAllCompanies: async (params) => {
     const response = await api.get('recruitment/company/all', { params });
     return response.data;
+  },
+
+    getCompanyById: async (companyId) => {
+    const response = await api.get(`/recruitment/company/${companyId}`);
+    return response.data;
+  },
+
+  getCompanyFilters: async () => {
+    try {
+      const response = await api.get('recruitment/company/filters');
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching filters:", error);
+      throw error;
+    }
   },
 
   // -------------------------------------------------------

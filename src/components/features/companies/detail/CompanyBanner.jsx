@@ -1,14 +1,25 @@
 import React from "react";
 import Image from "next/image";
 
+// Hàm kiểm tra URL hợp lệ để tránh lỗi "Invalid URL" gây sập trang
+const isValidUrl = (url) => {
+  if (!url || typeof url !== "string") return false;
+  return url.startsWith("http") || url.startsWith("/");
+};
+
 const CompanyBanner = ({ company = {} }) => {
   return (
     <div className="relative mb-8">
-      {/* Image BAnner */}
+      {/* Image Banner */}
       <div className="relative h-64 md:h-80 w-full overflow-hidden rounded-[2rem]">
         <Image
-          src={company.cover || "/images/banner-placeholder.png"}
-          alt={`${company.name} cover`}
+          // Kiểm tra URL hợp lệ, lưu ý: DB của bạn có thể dùng backgroundUrl thay vì cover
+          src={
+            isValidUrl(company.backgroundUrl || company.cover)
+              ? company.backgroundUrl || company.cover
+              : "/images/banner-placeholder.png"
+          }
+          alt={`${company.companyName || "Company"} cover`}
           fill
           priority // Đảm bảo ảnh banner được tải ngay lập tức khi trang được truy cập
           className="object-cover"
@@ -21,8 +32,13 @@ const CompanyBanner = ({ company = {} }) => {
           {/* Logo Công ty  */}
           <div className="relative w-32 h-32 rounded-3xl overflow-hidden border-4 border-card-bg dark:border-gray-900 bg-card-bg shadow-lg flex-shrink-0">
             <Image
-              src={company.logo || "/images/company-placeholder.png"}
-              alt={`${company.name} logo`}
+              // Sử dụng logoUrl theo đúng tên trong Database và kiểm tra hợp lệ
+              src={
+                isValidUrl(company.logoUrl)
+                  ? company.logoUrl
+                  : "/images/company-placeholder.png"
+              }
+              alt={`${company.companyName || "Company"} logo`}
               fill
               className="object-contain p-2"
             />
@@ -31,13 +47,15 @@ const CompanyBanner = ({ company = {} }) => {
           {/* Text Info */}
           <div className="pb-2">
             <h1 className="text-3xl font-black text-text-main flex items-center gap-3">
-              {company.name || "Tên công ty"}
+              {/* Đổi company.name thành company.companyName cho khớp DB */}
+              {company.companyName || "Tên công ty"}
               <span className="text-xs bg-blue-50 dark:bg-blue-900/30 text-blue-500 px-3 py-1 rounded-full whitespace-nowrap font-bold">
                 {company.industry || "Ngành nghề"}
               </span>
             </h1>
-            <p className="text-gray-500 text-sm mt-1 font-medium">
-              {company.slogan || "Slogan công ty"}
+            <p className="text-gray-500 text-sm mt-1 font-medium line-clamp-1">
+              {/* Nếu DB không có slogan, bạn có thể dùng overview cắt ngắn, hoặc giữ nguyên nếu đã tự thêm trường slogan */}
+              {company.slogan || company.overview || "Slogan công ty"}
             </p>
           </div>
         </div>

@@ -6,9 +6,7 @@ import { FaGlobe, FaUsers, FaMapMarkerAlt } from "react-icons/fa";
 const CompanyContact = ({ contact = {} }) => {
   return (
     <div className="bg-card-bg p-6 rounded-3xl border border-card-border space-y-6 transition-all shadow-sm hover:shadow-md">
-      <h3 className="font-bold text-lg text-text-main">
-        Thông tin liên hệ
-      </h3>
+      <h3 className="font-bold text-lg text-text-main">Thông tin liên hệ</h3>
 
       <div className="space-y-4">
         {/* Website */}
@@ -20,14 +18,14 @@ const CompanyContact = ({ contact = {} }) => {
             <p className="text-[10px] text-gray-400 font-black uppercase tracking-wider">
               Website
             </p>
-            {contact.website ? (
+            {contact.websiteUrl ? (
               <a
-                href={`https://${contact.website}`}
+                href={`https://${contact.websiteUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-[#00c853] font-bold hover:underline block truncate"
               >
-                {contact.website}
+                {contact.websiteUrl}
               </a>
             ) : (
               <p className="text-sm text-gray-400 italic">Đang cập nhật...</p>
