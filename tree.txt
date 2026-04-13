@@ -282,4 +282,5 @@ OneClick-authService-fe
 │       ├── chat.service.js
 │       ├── job.service.js
 │       └── resume.service.js
+│       └── company.service.js
 └── tree.txt
