@@ -11,6 +11,8 @@ import {
   MdOutlineSettings,
   MdOutlineHelpOutline,
   MdOutlineLogout,
+  MdManageAccounts,
+  MdOutlinePublic, // Import thêm icon cho phần Mạng xã hội / Thương hiệu
 } from "react-icons/md";
 import { useAuth } from "@/context/AuthContext"; // Import Hook quản lý Auth
 import toast from "react-hot-toast";
@@ -32,6 +34,11 @@ const navItems = [
     icon: MdOutlinePeopleAlt,
   },
   {
+    name: "Quản lý nhân sự",
+    href: "/employer/team",
+    icon: MdManageAccounts,
+  },
+  {
     name: "Tìm kiếm hồ sơ",
     href: "/employer/resume-search",
     icon: MdOutlineSearch,
@@ -40,6 +47,11 @@ const navItems = [
     name: "Hồ sơ công ty",
     href: "/employer/company-profile",
     icon: MdOutlineBusiness,
+  },
+  {
+    name: "Thương hiệu cá nhân", // NavItem mới thêm vào
+    href: "/employer/social-profile",
+    icon: MdOutlinePublic,
   },
   {
     name: "Cài đặt tài khoản",

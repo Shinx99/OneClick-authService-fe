@@ -56,17 +56,19 @@ OneClick-authService-fe
 │   │   │           └── employers
 │   │   │               └── page.jsx
 │   │   ├── (auth)
+│   │   │   ├── (login-register)
+│   │   │   │   ├── layout.jsx
+│   │   │   │   ├── login
+│   │   │   │   │   └── page.jsx
+│   │   │   │   └── register
+│   │   │   │       └── page.jsx
 │   │   │   ├── change-password
 │   │   │   │   └── page.jsx
 │   │   │   ├── forget-password
 │   │   │   │   └── page.jsx
 │   │   │   ├── layout.jsx
-│   │   │   ├── login
-│   │   │   │   └── page.jsx
 │   │   │   ├── otp-verify
 │   │   │   │   └── page.js
-│   │   │   ├── register
-│   │   │   │   └── page.jsx
 │   │   │   ├── register-employer
 │   │   │   │   └── page.jsx
 │   │   │   ├── reset-password
@@ -87,7 +89,11 @@ OneClick-authService-fe
 │   │   │   │   │   └── page.jsx
 │   │   │   │   ├── resume-search
 │   │   │   │   │   └── page.jsx
-│   │   │   │   └── setting
+│   │   │   │   ├── setting
+│   │   │   │   │   └── page.jsx
+│   │   │   │   ├── setup
+│   │   │   │   │   └── page.jsx
+│   │   │   │   └── team
 │   │   │   │       └── page.jsx
 │   │   │   └── layout.jsx
 │   │   ├── (employer-landingPage)
@@ -157,7 +163,10 @@ OneClick-authService-fe
 │   │   │   │   │   └── JobTable.jsx
 │   │   │   │   ├── dashboard
 │   │   │   │   │   ├── GrowthChart.jsx
+│   │   │   │   │   ├── MonthPicker.jsx
 │   │   │   │   │   ├── RecentActivities.jsx
+│   │   │   │   │   ├── SingleLineChart.jsx
+│   │   │   │   │   ├── Skeleton.jsx
 │   │   │   │   │   └── StatsGrid.jsx
 │   │   │   │   ├── shared
 │   │   │   │   │   ├── AdminHeader.jsx
@@ -205,7 +214,8 @@ OneClick-authService-fe
 │   │   │   │   │   ├── EmployerCompanyForm.jsx
 │   │   │   │   │   ├── EmployerPendingView.jsx
 │   │   │   │   │   ├── EmployerRegister.jsx
-│   │   │   │   │   └── EmployerVerifyForm.jsx
+│   │   │   │   │   ├── EmployerVerifyForm.jsx
+│   │   │   │   │   └── RestrictedWrapper.jsx
 │   │   │   │   ├── candidate
 │   │   │   │   │   ├── CandidateStats.jsx
 │   │   │   │   │   └── CandidateTable.jsx
@@ -227,10 +237,12 @@ OneClick-authService-fe
 │   │   │   │   │   ├── HeroArea.jsx
 │   │   │   │   │   ├── OutstandingFeatures.jsx
 │   │   │   │   │   └── PricingPlan.jsx
-│   │   │   │   └── resume-search
-│   │   │   │       ├── CandidateCard.jsx
-│   │   │   │       ├── SearchFilters.jsx
-│   │   │   │       └── SearchResults.jsx
+│   │   │   │   ├── resume-search
+│   │   │   │   │   ├── CandidateCard.jsx
+│   │   │   │   │   ├── SearchFilters.jsx
+│   │   │   │   │   └── SearchResults.jsx
+│   │   │   │   └── team
+│   │   │   │       └── TeamManager.jsx
 │   │   │   ├── home
 │   │   │   │   ├── Background.jsx
 │   │   │   │   ├── CallToAction.jsx
@@ -244,7 +256,7 @@ OneClick-authService-fe
 │   │   │   │   ├── ApplyModal.jsx
 │   │   │   │   ├── JobContent.jsx
 │   │   │   │   ├── JobFilter.jsx
-│   │   │   │   ├── JobSidebar.jsx
+│   │   │   │   ├── JobList.jsx
 │   │   │   │   └── SimilarJobs.jsx
 │   │   │   └── profile
 │   │   │       ├── AboutPage.jsx
@@ -261,11 +273,13 @@ OneClick-authService-fe
 │   │       ├── Button.jsx
 │   │       ├── FloatingChatButton.jsx
 │   │       ├── Input.jsx
-│   │       └── SearchBar.jsx
+│   │       ├── SearchBar.jsx
+│   │       └── ThemeToggle.jsx
 │   ├── context
 │   │   └── AuthContext.jsx
 │   ├── hooks
 │   │   ├── useCandidateProfile.js
+│   │   ├── useJobDetail.js
 │   │   └── useJobs.js
 │   ├── lib
 │   │   ├── apiClient
@@ -276,11 +290,13 @@ OneClick-authService-fe
 │   │       ├── auth.jsx
 │   │       └── candidate.jsx
 │   └── services
+│       ├── admindashboard.service.js
 │       ├── application.service.js
 │       ├── auth.service.js
 │       ├── candidate.service.js
 │       ├── chat.service.js
+│       ├── company.service.js
 │       ├── job.service.js
 │       └── resume.service.js
-│       └── company.service.js
+├── tailwind.config.mjs
 └── tree.txt
