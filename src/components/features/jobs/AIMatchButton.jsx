@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import {
   FaMagic,
   FaTimes,
@@ -8,18 +7,19 @@ import {
   FaUpload,
   FaRegFilePdf,
   FaFileAlt,
-  FaCheckCircle,
   FaSpinner,
   FaEye,
   FaTrash,
+  FaChevronLeft,
 } from "react-icons/fa";
 import { resumeService } from "@/services/resume.service";
 import toast from "react-hot-toast";
+import AIAnalysisDashboard from "./AIAnalysisDashboard";
+import AIConsultantChat from "./AIConsultantChat";
 
 const AIMatchButton = ({ jobId, jobTitle }) => {
-  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [step, setStep] = useState("idle");
+  const [step, setStep] = useState("idle"); // idle | select | scanning | result
   const [cvOption, setCvOption] = useState("existing");
   const [uploadedFile, setUploadedFile] = useState(null);
   const [scanProgress, setScanProgress] = useState(0);
@@ -27,6 +27,18 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
   const [resumes, setResumes] = useState([]);
   const [isLoadingResumes, setIsLoadingResumes] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
+
+  // Lock body scroll khi modal mở
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen && cvOption === "existing") {
@@ -47,7 +59,6 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
 
   const defaultResume = resumes.find((cv) => cv.isDefault) || resumes[0];
 
-  // Xem nhanh file từ máy tính
   const handlePreviewUploadedFile = () => {
     if (uploadedFile) {
       const url = URL.createObjectURL(uploadedFile);
@@ -67,7 +78,7 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
     }, 150);
     setTimeout(() => {
       clearInterval(interval);
-      router.push(`/jobs/${jobId}/ai-report`);
+      setStep("result");
     }, 2000);
   };
 
@@ -78,8 +89,15 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
     setPreviewUrl(null);
   };
 
+  // Quay lại chọn CV
+  const handleBackToSelect = () => {
+    setStep("select");
+    setScanProgress(0);
+  };
+
   return (
     <>
+      {/* === NÚT BẤM === */}
       <button
         onClick={() => {
           setIsOpen(true);
@@ -92,7 +110,8 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
         <span className="relative z-10">AI Phân tích hồ sơ</span>
       </button>
 
-      {isOpen && (
+      {/* === MODAL: Chọn CV + Scanning === */}
+      {isOpen && (step === "select" || step === "scanning") && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in">
           <div className="bg-card-bg w-full max-w-md rounded-[2.5rem] shadow-2xl relative overflow-hidden animate-in zoom-in-95">
             <button
@@ -117,7 +136,7 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
                   </button>
                   <button
                     onClick={() => setCvOption("upload")}
-                    className={`flex-1 py-3 text-xs font-black rounded-xl transition-all ${cvOption === "upload" ? "bg-white dark:bg-gray-700 text-[#00c853] shadow-sm" : "text-slate-500"}`}
+                    className={`flex-1 py-3 text-xs font-black rounded-xl transition-all ${cvOption === "upload" ? "bg-card-bg text-[#00c853] shadow-sm" : "text-text-muted"}`}
                   >
                     Tải file mới
                   </button>
@@ -158,7 +177,6 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      {/* KHUNG UPLOAD LUÔN GIỮ NGUYÊN */}
                       <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-indigo-200 rounded-3xl bg-indigo-50/10 hover:bg-indigo-50 cursor-pointer transition-all group">
                         <FaUpload className="w-6 h-6 mb-2 text-indigo-300 group-hover:text-indigo-600 transition-colors" />
                         <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
@@ -172,7 +190,6 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
                         />
                       </label>
 
-                      {/* HIỂN THỊ FILE ĐÃ CHỌN Ở BÊN DƯỚI */}
                       {uploadedFile && (
                         <div className="p-4 rounded-2xl border border-[#00c853] bg-green-50/30 flex items-center justify-between animate-in slide-in-from-top-2 duration-300">
                           <div className="flex items-center gap-3 overflow-hidden">
@@ -241,7 +258,59 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
         </div>
       )}
 
-      {/* MODAL XEM NHANH PDF (DÙNG CHUNG) */}
+      {/* === MODAL FULL SCREEN: Kết quả AI (Dashboard + Chat) === */}
+      {isOpen && step === "result" && (
+        <div className="fixed inset-0 z-[100] bg-background overflow-y-auto animate-in fade-in duration-300">
+          {/* Header */}
+          <header className="bg-card-bg/80 backdrop-blur-md border-b border-card-border sticky top-0 z-50">
+            <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+              <button
+                onClick={handleBackToSelect}
+                className="flex items-center gap-2 text-text-muted hover:text-[#00c853] font-bold transition-all group text-sm"
+              >
+                <FaChevronLeft
+                  className="group-hover:-translate-x-1 transition-transform"
+                  size={12}
+                />
+                Quét lại
+              </button>
+
+              <div className="flex items-center gap-2 text-indigo-600 bg-indigo-50 dark:bg-indigo-500/10 px-4 py-1.5 rounded-full border border-indigo-100 dark:border-indigo-500/20">
+                <FaRobot className="animate-pulse" size={12} />
+                <span className="text-[10px] font-black uppercase tracking-wider">
+                  OneClick AI Analysis
+                </span>
+              </div>
+
+              <button
+                onClick={closeModal}
+                className="p-2 text-text-muted hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all"
+              >
+                <FaTimes size={16} />
+              </button>
+            </div>
+          </header>
+
+          {/* Content: 2 cột */}
+          <main className="max-w-7xl mx-auto px-4 py-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              {/* Trái: Dashboard phân tích */}
+              <div className="lg:col-span-8">
+                <AIAnalysisDashboard jobId={jobId} />
+              </div>
+
+              {/* Phải: Chat AI tư vấn */}
+              <div className="lg:col-span-4">
+                <div className="sticky top-24">
+                  <AIConsultantChat jobId={jobId} />
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      )}
+
+      {/* === MODAL XEM NHANH PDF === */}
       {previewUrl && (
         <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
           <div className="bg-card-bg w-full max-w-4xl h-[85vh] rounded-[2.5rem] overflow-hidden relative shadow-2xl">

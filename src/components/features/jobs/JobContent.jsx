@@ -25,6 +25,7 @@ import {
   HiOutlineGlobeAlt,
 } from "react-icons/hi2";
 import ApplyModal from "./ApplyModal";
+import AIMatchButton from "./AIMatchButton";
 
 // Fallback avatar
 const FALLBACK_LOGO =
@@ -161,188 +162,242 @@ const JobContent = ({ data }) => {
 
   return (
     <>
-      <div className="space-y-6">
+      <div className="flex flex-col lg:flex-row gap-6">
         {/* ==========================================
-            1. HEADER: Logo + Title + Quick Info + Actions
+            LEFT COLUMN: Job Information
         ========================================== */}
-        <div className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border">
-          {/* Top: Logo + Title + Status */}
-          <div className="flex flex-col md:flex-row gap-6 mb-6">
-            {/* Logo */}
-            <div className="w-20 h-20 md:w-[88px] md:h-[88px] shrink-0 rounded-2xl border-2 border-card-border overflow-hidden relative bg-background flex items-center justify-center">
-              <Image
-                src={companyLogo}
-                alt={`Logo ${companyName}`}
-                fill
-                className="object-contain p-2"
-              />
-            </div>
+        <div className="flex-1 min-w-0 space-y-6">
+          {/* 1. HEADER: Logo + Title + Meta + Actions */}
+          <div className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border">
+            {/* Top: Logo + Title + Status */}
+            <div className="flex flex-col md:flex-row gap-6">
+              {/* Logo */}
+              <div className="w-20 h-20 md:w-[88px] md:h-[88px] shrink-0 rounded-2xl border-2 border-card-border overflow-hidden relative bg-background flex items-center justify-center">
+                <Image
+                  src={companyLogo}
+                  alt={`Logo ${companyName}`}
+                  fill
+                  className="object-contain p-2"
+                />
+              </div>
 
-            {/* Title + Company + Meta */}
-            <div className="flex-1 min-w-0">
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2">
-                <h1 className="text-[22px] md:text-[26px] font-bold text-text-main leading-tight">
+              {/* Title + Company + Meta */}
+              <div className="flex-1 min-w-0">
+                <h1 className="text-[22px] md:text-[26px] font-bold text-text-main leading-tight mb-2 line-clamp-2">
                   {data.title}
                 </h1>
-                <span className={`${statusInfo.bg} ${statusInfo.color} ${statusInfo.border} border text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap w-fit uppercase tracking-wider`}>
-                  {statusInfo.text}
-                </span>
-              </div>
 
-              {/* Company name */}
-              {data.companyId ? (
-                <Link href={`/companies/${data.companyId}`} className="text-[15px] font-bold text-[#00c853] hover:underline inline-block mb-3">
-                  {companyName}
-                </Link>
-              ) : (
-                <p className="text-[15px] font-bold text-[#00c853] mb-3">{companyName}</p>
-              )}
+                {/* Company name + Status badge */}
+                <div className="flex items-center gap-2.5 mb-3 flex-wrap">
+                  {data.companyId ? (
+                    <Link href={`/companies/${data.companyId}`} className="text-[15px] font-bold text-[#00c853] hover:underline">
+                      {companyName}
+                    </Link>
+                  ) : (
+                    <span className="text-[15px] font-bold text-[#00c853]">{companyName}</span>
+                  )}
+                  <span className="w-1 h-1 rounded-full bg-text-muted/40 shrink-0" />
+                  <span className={`${statusInfo.bg} ${statusInfo.color} ${statusInfo.border} border text-[10px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap uppercase tracking-wider`}>
+                    {statusInfo.text}
+                  </span>
+                </div>
 
-              {/* Meta: thời gian, ứng viên, lượt xem */}
-              <div className="flex flex-wrap items-center gap-4 text-[12px] text-text-muted font-medium">
-                <span className="flex items-center gap-1.5">
-                  <FiClock size={14} className="opacity-60" /> {formatTimeAgo(data.createdAt)}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <FiUsers size={14} className="opacity-60" /> {data.applicationCount ?? 0} ứng viên
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <FiEye size={14} className="opacity-60" /> {data.viewCount ?? 0} lượt xem
-                </span>
+                {/* Meta: thời gian, ứng viên, lượt xem */}
+                <div className="flex flex-wrap items-center gap-4 text-[12px] text-text-muted font-medium">
+                  <span className="flex items-center gap-1.5">
+                    <FiClock size={14} className="opacity-60" /> {formatTimeAgo(data.createdAt)}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <FiUsers size={14} className="opacity-60" /> {data.applicationCount ?? 0} ứng viên
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <FiEye size={14} className="opacity-60" /> {data.viewCount ?? 0} lượt xem
+                  </span>
+                </div>
               </div>
+            </div>
+
+            {/* Quick Info Grid — chỉ hiện trên mobile (lg trở xuống) */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-6 lg:hidden">
+              {quickInfoItems.map((item, idx) => (
+                <div key={idx} className="flex items-center gap-3 bg-background rounded-2xl p-3 border border-card-border">
+                  <div className={`w-9 h-9 rounded-xl ${item.bg} flex items-center justify-center shrink-0 ${item.color}`}>
+                    {item.icon}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[10px] text-text-muted font-bold uppercase tracking-wider leading-none mb-1">
+                      {item.label}
+                    </p>
+                    <p className={`text-[13px] font-bold text-text-main leading-tight truncate ${item.extra ? "text-red-500" : ""}`}>
+                      {item.value}{item.extra}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Action buttons — nằm cuối card header */}
+            <div className="flex flex-col sm:flex-row gap-3 mt-6">
+              <button
+                onClick={() => !deadlinePassed && setShowApplyModal(true)}
+                disabled={deadlinePassed}
+                className={`flex-1 py-3.5 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${
+                  deadlinePassed
+                    ? "bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed"
+                    : "bg-[#00c853] hover:bg-[#00b04a] text-white shadow-lg shadow-green-500/20"
+                }`}
+              >
+                <HiPaperAirplane className="text-lg -rotate-45" />
+                {deadlinePassed ? "Đã hết hạn ứng tuyển" : "Ứng tuyển ngay"}
+              </button>
+              <button className="sm:w-auto px-6 py-3.5 bg-background border-2 border-card-border text-text-main hover:border-[#00c853] rounded-2xl font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+                <FiBookmark size={18} /> Lưu việc làm
+              </button>
             </div>
           </div>
 
-          {/* Quick Info Grid — giống TopCV */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
-            {quickInfoItems.map((item, idx) => (
-              <div key={idx} className="flex items-center gap-3 bg-background rounded-2xl p-3 border border-card-border">
-                <div className={`w-9 h-9 rounded-xl ${item.bg} flex items-center justify-center shrink-0 ${item.color}`}>
-                  {item.icon}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-[10px] text-text-muted font-bold uppercase tracking-wider leading-none mb-1">
-                    {item.label}
-                  </p>
-                  <p className={`text-[13px] font-bold text-text-main leading-tight truncate ${item.extra ? "text-red-500" : ""}`}>
-                    {item.value}{item.extra}
-                  </p>
-                </div>
+          {/* 2. MÔ TẢ CÔNG VIỆC */}
+          <div className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border">
+            <h2 className="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
+              <FiFileText className="text-blue-500 text-xl" /> Mô tả công việc
+            </h2>
+            <div
+              className="text-text-muted text-[15px] leading-relaxed space-y-3 prose prose-sm max-w-none
+                         prose-ul:list-disc prose-ul:pl-5 prose-ul:space-y-2 prose-ul:marker:text-text-muted
+                         prose-ol:list-decimal prose-ol:pl-5 prose-ol:space-y-2
+                         prose-p:mb-3 prose-a:text-blue-500 prose-a:underline"
+              dangerouslySetInnerHTML={{ __html: data.description }}
+            />
+          </div>
+
+          {/* 3. YÊU CẦU ỨNG VIÊN */}
+          <div className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border">
+            <h2 className="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
+              <FiCheckCircle className="text-blue-500 text-xl" /> Yêu cầu ứng viên
+            </h2>
+            <div
+              className="text-text-muted text-[15px] leading-relaxed space-y-3 prose prose-sm max-w-none
+                         prose-ul:list-disc prose-ul:pl-5 prose-ul:space-y-2 prose-ul:marker:text-text-muted
+                         prose-ol:list-decimal prose-ol:pl-5 prose-ol:space-y-2
+                         prose-p:mb-3 prose-a:text-blue-500 prose-a:underline"
+              dangerouslySetInnerHTML={{ __html: data.requirement }}
+            />
+          </div>
+
+          {/* 4. CHUYÊN NGÀNH ƯU TIÊN */}
+          {data.majorPreferred && (
+            <div className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border">
+              <h2 className="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
+                <FiBookOpen className="text-blue-500 text-xl" /> Chuyên ngành ưu tiên
+              </h2>
+              <p className="text-text-muted text-[15px] leading-relaxed">
+                {data.majorPreferred}
+              </p>
+            </div>
+          )}
+
+          {/* 5. KỸ NĂNG YÊU CẦU */}
+          {data.skills && data.skills.length > 0 && (
+            <div className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border">
+              <h2 className="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
+                <FiTag className="text-blue-500 text-xl" /> Kỹ năng yêu cầu
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {data.skills.map((skill) => (
+                  <span
+                    key={skill.skillId}
+                    className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[13px] font-semibold px-4 py-2 rounded-full border border-emerald-500/20 hover:bg-emerald-500/20 transition-colors"
+                  >
+                    {skill.skillName}
+                  </span>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          )}
 
-          {/* Action buttons */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            <button
-              onClick={() => !deadlinePassed && setShowApplyModal(true)}
-              disabled={deadlinePassed}
-              className={`flex-1 py-3.5 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${
-                deadlinePassed
-                  ? "bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed"
-                  : "bg-[#00c853] hover:bg-[#00b04a] text-white shadow-lg shadow-green-500/20"
-              }`}
-            >
-              <HiPaperAirplane className="text-lg -rotate-45" />
-              {deadlinePassed ? "Đã hết hạn ứng tuyển" : "Ứng tuyển ngay"}
-            </button>
-            <button className="sm:w-auto px-6 py-3.5 bg-background border-2 border-card-border text-text-main hover:border-[#00c853] rounded-2xl font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2">
-              <FiBookmark size={18} /> Lưu việc làm
-            </button>
-          </div>
-        </div>
-
-        {/* ==========================================
-            2. MÔ TẢ CÔNG VIỆC
-        ========================================== */}
-        <div className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border">
-          <h2 className="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
-            <FiFileText className="text-blue-500 text-xl" /> Mô tả công việc
-          </h2>
-          <div
-            className="text-text-muted text-[15px] leading-relaxed space-y-3 prose prose-sm max-w-none
-                       prose-ul:list-disc prose-ul:pl-5 prose-ul:space-y-2 prose-ul:marker:text-text-muted
-                       prose-ol:list-decimal prose-ol:pl-5 prose-ol:space-y-2
-                       prose-p:mb-3 prose-a:text-blue-500 prose-a:underline"
-            dangerouslySetInnerHTML={{ __html: data.description }}
-          />
-        </div>
-
-        {/* ==========================================
-            3. YÊU CẦU ỨNG VIÊN
-        ========================================== */}
-        <div className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border">
-          <h2 className="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
-            <FiCheckCircle className="text-blue-500 text-xl" /> Yêu cầu ứng viên
-          </h2>
-          <div
-            className="text-text-muted text-[15px] leading-relaxed space-y-3 prose prose-sm max-w-none
-                       prose-ul:list-disc prose-ul:pl-5 prose-ul:space-y-2 prose-ul:marker:text-text-muted
-                       prose-ol:list-decimal prose-ol:pl-5 prose-ol:space-y-2
-                       prose-p:mb-3 prose-a:text-blue-500 prose-a:underline"
-            dangerouslySetInnerHTML={{ __html: data.requirement }}
-          />
-        </div>
-
-        {/* ==========================================
-            4. CHUYÊN NGÀNH ƯU TIÊN
-        ========================================== */}
-        {data.majorPreferred && (
+          {/* 6. QUYỀN LỢI */}
           <div className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border">
-            <h2 className="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
-              <FiBookOpen className="text-blue-500 text-xl" /> Chuyên ngành ưu tiên
+            <h2 className="text-lg font-bold text-text-main mb-5 flex items-center gap-2">
+              <FiStar className="text-blue-500 text-xl" /> Quyền lợi
             </h2>
-            <p className="text-text-muted text-[15px] leading-relaxed">
-              {data.majorPreferred}
-            </p>
-          </div>
-        )}
-
-        {/* ==========================================
-            5. KỸ NĂNG YÊU CẦU
-        ========================================== */}
-        {data.skills && data.skills.length > 0 && (
-          <div className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border">
-            <h2 className="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
-              <FiTag className="text-blue-500 text-xl" /> Kỹ năng yêu cầu
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {data.skills.map((skill) => (
-                <span
-                  key={skill.skillId}
-                  className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[13px] font-semibold px-4 py-2 rounded-full border border-emerald-500/20 hover:bg-emerald-500/20 transition-colors"
-                >
-                  {skill.skillName}
-                </span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {[
+                { icon: <HiOutlineCurrencyDollar className="text-blue-500 text-xl" />, title: "Mức lương cạnh tranh", desc: "Lên đến $4000/tháng + Thưởng hiệu suất năm." },
+                { icon: <HiOutlineShieldCheck className="text-blue-500 text-xl" />, title: "Bảo hiểm toàn diện", desc: "Bảo hiểm sức khỏe cao cấp cho bạn và gia đình." },
+                { icon: <HiOutlineComputerDesktop className="text-blue-500 text-xl" />, title: "Thiết bị làm việc", desc: "Cung cấp MacBook Pro mới nhất và màn hình 4K." },
+                { icon: <HiOutlineGlobeAlt className="text-blue-500 text-xl" />, title: "Du lịch & Team building", desc: "Chuyến đi công ty hàng năm và các hoạt động nhóm." },
+              ].map((item, idx) => (
+                <div key={idx} className="bg-background p-4 rounded-2xl border border-card-border hover:border-blue-200 transition-colors group flex items-start gap-3">
+                  <div className="w-10 h-10 bg-blue-50 dark:bg-blue-500/10 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                    {item.icon}
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-text-main text-[14px] mb-0.5">{item.title}</h4>
+                    <p className="text-[13px] text-text-muted leading-relaxed">{item.desc}</p>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
-        )}
+        </div>
 
         {/* ==========================================
-            6. QUYỀN LỢI
+            RIGHT SIDEBAR: Quick Info + Actions (sticky, ẩn trên mobile)
         ========================================== */}
-        <div className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border">
-          <h2 className="text-lg font-bold text-text-main mb-5 flex items-center gap-2">
-            <FiStar className="text-blue-500 text-xl" /> Quyền lợi
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {[
-              { icon: <HiOutlineCurrencyDollar className="text-blue-500 text-xl" />, title: "Mức lương cạnh tranh", desc: "Lên đến $4000/tháng + Thưởng hiệu suất năm." },
-              { icon: <HiOutlineShieldCheck className="text-blue-500 text-xl" />, title: "Bảo hiểm toàn diện", desc: "Bảo hiểm sức khỏe cao cấp cho bạn và gia đình." },
-              { icon: <HiOutlineComputerDesktop className="text-blue-500 text-xl" />, title: "Thiết bị làm việc", desc: "Cung cấp MacBook Pro mới nhất và màn hình 4K." },
-              { icon: <HiOutlineGlobeAlt className="text-blue-500 text-xl" />, title: "Du lịch & Team building", desc: "Chuyến đi công ty hàng năm và các hoạt động nhóm." },
-            ].map((item, idx) => (
-              <div key={idx} className="bg-background p-4 rounded-2xl border border-card-border hover:border-blue-200 transition-colors group flex items-start gap-3">
-                <div className="w-10 h-10 bg-blue-50 dark:bg-blue-500/10 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                  {item.icon}
+        <div className="hidden lg:block w-[340px] shrink-0">
+          <div className="sticky top-24 space-y-4">
+            {/* Quick Info Card */}
+            <div className="bg-card-bg rounded-[24px] p-6 border-2 border-card-border">
+              <h3 className="text-[15px] font-bold text-text-main mb-4">Thông tin chung</h3>
+              <div className="space-y-4">
+                {quickInfoItems.map((item, idx) => (
+                  <div key={idx} className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-xl ${item.bg} flex items-center justify-center shrink-0 ${item.color}`}>
+                      {item.icon}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-[10px] text-text-muted font-bold uppercase tracking-wider leading-none mb-1">
+                        {item.label}
+                      </p>
+                      <p className={`text-[13px] font-bold text-text-main leading-tight ${item.extra ? "text-red-500" : ""}`}>
+                        {item.value}{item.extra}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* AI Phân tích hồ sơ */}
+            <AIMatchButton jobId={data.jobId} jobTitle={data.title} />
+
+            {/* Company Card nhỏ */}
+            <div className="bg-card-bg rounded-[24px] p-5 border-2 border-card-border">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-12 h-12 shrink-0 rounded-xl border-2 border-card-border overflow-hidden relative bg-background flex items-center justify-center">
+                  <Image
+                    src={companyLogo}
+                    alt={`Logo ${companyName}`}
+                    fill
+                    className="object-contain p-1.5"
+                  />
                 </div>
-                <div>
-                  <h4 className="font-bold text-text-main text-[14px] mb-0.5">{item.title}</h4>
-                  <p className="text-[13px] text-text-muted leading-relaxed">{item.desc}</p>
+                <div className="min-w-0">
+                  <p className="text-[13px] font-bold text-text-main truncate">{companyName}</p>
+                  <p className="text-[11px] text-text-muted">
+                    {formatLocation(data.province, data.commune)}
+                  </p>
                 </div>
               </div>
-            ))}
+              {data.companyId && (
+                <Link
+                  href={`/companies/${data.companyId}`}
+                  className="block text-center text-[13px] font-bold text-[#00c853] hover:underline py-2 rounded-xl bg-emerald-500/5 hover:bg-emerald-500/10 transition-colors"
+                >
+                  Xem trang công ty
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </div>
