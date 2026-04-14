@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   FiMapPin,
   FiDollarSign,
@@ -11,14 +12,11 @@ import {
 import { useJobs } from "@/hooks/useJobs";
 
 const JobForYou = () => {
-  const { jobs, isLoading, error } = useJobs({ page: 0, size: 6 });
-  const [currentPage, setCurrentPage] = useState(1);
-  const jobsPerPage = 6;
-
-  const totalPages = Math.ceil((jobs?.length || 0) / jobsPerPage);
-  const currentJobs =
-    jobs?.slice((currentPage - 1) * jobsPerPage, currentPage * jobsPerPage) ||
-    [];
+  const [currentPage, setCurrentPage] = useState(0);
+  const { jobs, pagination, isLoading, error } = useJobs({
+    page: currentPage,
+    size: 6,
+  });
 
   const formatSalary = (min, max) => {
     if (min == null && max == null) return "Thỏa thuận";
@@ -38,17 +36,61 @@ const JobForYou = () => {
               Việc làm <span className="text-[#00c853]">gợi ý</span>
             </h2>
           </div>
-          <button className="text-[12px] font-medium text-[#00c853] hover:underline uppercase tracking-wider">
+          <Link
+            href="/jobs"
+            className="text-[12px] font-medium text-[#00c853] hover:underline uppercase tracking-wider"
+          >
             Xem tất cả
-          </button>
+          </Link>
         </div>
 
+        {/* --- LOADING --- */}
+        {isLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="bg-card-bg rounded-2xl p-4 border-2 border-card-border h-[160px] animate-pulse"
+              >
+                <div className="flex gap-3">
+                  <div className="w-14 h-14 bg-card-border rounded-xl shrink-0" />
+                  <div className="flex-1 space-y-2 pt-1">
+                    <div className="h-4 bg-card-border rounded w-3/4" />
+                    <div className="h-3 bg-card-border rounded w-1/2" />
+                  </div>
+                </div>
+                <div className="mt-auto pt-8 flex gap-3">
+                  <div className="h-4 bg-card-border rounded w-20" />
+                  <div className="h-4 bg-card-border rounded w-16" />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* --- ERROR --- */}
+        {!isLoading && error && (
+          <div className="bg-red-50 dark:bg-red-900/10 text-red-500 text-sm px-6 py-4 rounded-2xl border border-red-200 dark:border-red-800 mb-8">
+            {error}
+          </div>
+        )}
+
+        {/* --- EMPTY --- */}
+        {!isLoading && !error && jobs.length === 0 && (
+          <div className="text-center py-16 px-4">
+            <p className="text-text-muted text-lg font-medium italic">
+              Chưa có việc làm nào.
+            </p>
+          </div>
+        )}
+
         {/* --- GRID LAYOUT --- */}
-        {!isLoading && !error && currentJobs.length > 0 && (
+        {!isLoading && !error && jobs.length > 0 && (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
-              {currentJobs.map((job) => (
-                <div
+              {jobs.map((job) => (
+                <Link
+                  href={`/jobs/${job.jobId}`}
                   key={job.jobId}
                   className="group bg-card-bg rounded-2xl p-4 border-2 border-card-border hover:border-[#00c853] transition-all duration-300 hover:shadow-lg flex flex-col justify-between h-[160px]"
                 >
@@ -100,7 +142,10 @@ const JobForYou = () => {
                           </span>
                         </div>
                       </div>
-                      <button className="text-text-muted hover:text-red-500 transition-all active:scale-90">
+                      <button
+                        onClick={(e) => e.preventDefault()}
+                        className="text-text-muted hover:text-red-500 transition-all active:scale-90"
+                      >
                         <FiHeart size={16} />
                       </button>
                     </div>
@@ -115,33 +160,35 @@ const JobForYou = () => {
                       </span>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
 
-            {/* --- PHÂN TRANG GỌN --- */}
-            {totalPages > 1 && (
+            {/* --- PHÂN TRANG SERVER-SIDE --- */}
+            {pagination.totalPages > 1 && (
               <div className="flex justify-center items-center gap-6">
                 <button
                   onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    setCurrentPage((prev) => Math.max(prev - 1, 0))
                   }
-                  disabled={currentPage === 1}
+                  disabled={currentPage === 0}
                   className="w-10 h-10 flex items-center justify-center border-2 border-card-border rounded-xl text-text-muted hover:text-[#00c853] hover:border-[#00c853] disabled:opacity-20 transition-all"
                 >
                   <FiChevronLeft size={20} />
                 </button>
 
                 <div className="text-[13px] font-medium text-text-muted">
-                  <span className="text-text-main">{currentPage}</span> /{" "}
-                  {totalPages}
+                  <span className="text-text-main">{currentPage + 1}</span> /{" "}
+                  {pagination.totalPages}
                 </div>
 
                 <button
                   onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    setCurrentPage((prev) =>
+                      Math.min(prev + 1, pagination.totalPages - 1)
+                    )
                   }
-                  disabled={currentPage === totalPages}
+                  disabled={pagination.last}
                   className="w-10 h-10 flex items-center justify-center border-2 border-card-border rounded-xl text-text-muted hover:text-[#00c853] hover:border-[#00c853] disabled:opacity-20 transition-all"
                 >
                   <FiChevronRight size={20} />

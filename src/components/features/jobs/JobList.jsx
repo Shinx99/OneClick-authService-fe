@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   FiMapPin,
   FiDollarSign,
@@ -69,9 +70,10 @@ const JobList = ({ filters = {} }) => {
       {!isLoading && !error && (
         <div className="flex flex-col gap-5">
           {jobs.map((job) => (
-            <div
+            <Link
+              href={`/jobs/${job.jobId}`}
               key={job.jobId}
-              className="group bg-card-bg rounded-[24px] p-6 border-2 border-card-border hover:border-[#00c853] hover:shadow-2xl hover:shadow-neutral-900/5 transition-all duration-500 relative"
+              className="group bg-card-bg rounded-[24px] p-6 border-2 border-card-border hover:border-[#00c853] hover:shadow-2xl hover:shadow-neutral-900/5 transition-all duration-500 relative block"
             >
               <div className="flex flex-col lg:flex-row lg:items-center gap-6">
                 {/* 1. Logo Section */}
@@ -148,7 +150,7 @@ const JobList = ({ filters = {} }) => {
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}

@@ -21,4 +21,20 @@ export const jobService = {
     return data.data;
   },
 
+  // -------------------------------------------------------
+  // GET JOB DETAIL BY ID (PUBLIC)
+  // -------------------------------------------------------
+  getJobById: async (jobId) => {
+    const { data } = await apiClient.get(`/recruitment/job/${jobId}`);
+    return data.data; // Unwrap ApiResponse → returns the job object
+  },
+
+  // -------------------------------------------------------
+  // GET RELATED JOBS BY JOB ID (PUBLIC)
+  // -------------------------------------------------------
+  getRelatedJobs: async (jobId) => {
+    const { data } = await apiClient.get(`/recruitment/job/${jobId}/related`);
+    return data.data; // Returns array of related jobs directly
+  },
+
 };
