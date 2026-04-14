@@ -13,7 +13,7 @@ import { useJobDetail } from "@/hooks/useJobDetail";
 // ==========================================
 const JobDetailSkeleton = () => (
   <div className="min-h-screen bg-background pb-20 pt-6 animate-pulse transition-colors duration-300">
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Breadcrumb skeleton */}
       <div className="flex items-center gap-2 mb-6">
         <div className="h-4 bg-card-border rounded w-20" />
@@ -21,43 +21,60 @@ const JobDetailSkeleton = () => (
         <div className="h-4 bg-card-border rounded w-32" />
       </div>
 
-      {/* Header skeleton */}
-      <div className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border mb-6">
-        <div className="flex gap-6 mb-6">
-          <div className="w-[88px] h-[88px] bg-card-border rounded-2xl shrink-0" />
-          <div className="flex-1 space-y-3">
-            <div className="h-7 bg-card-border rounded w-3/4" />
-            <div className="h-4 bg-card-border rounded w-1/3" />
-            <div className="flex gap-4">
-              <div className="h-4 bg-card-border rounded w-24" />
-              <div className="h-4 bg-card-border rounded w-20" />
-              <div className="h-4 bg-card-border rounded w-20" />
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Left column skeleton */}
+        <div className="flex-1 min-w-0">
+          {/* Header skeleton */}
+          <div className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border mb-6">
+            <div className="flex gap-6 mb-6">
+              <div className="w-[88px] h-[88px] bg-card-border rounded-2xl shrink-0" />
+              <div className="flex-1 space-y-3">
+                <div className="h-7 bg-card-border rounded w-3/4" />
+                <div className="h-4 bg-card-border rounded w-1/3" />
+                <div className="flex gap-4">
+                  <div className="h-4 bg-card-border rounded w-24" />
+                  <div className="h-4 bg-card-border rounded w-20" />
+                  <div className="h-4 bg-card-border rounded w-20" />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-16 bg-card-border/50 rounded-2xl" />
+
+          {/* Content skeletons */}
+          {[...Array(2)].map((_, i) => (
+            <div key={i} className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border mb-6">
+              <div className="h-6 bg-card-border rounded w-48 mb-4" />
+              <div className="space-y-3">
+                <div className="h-4 bg-card-border rounded w-full" />
+                <div className="h-4 bg-card-border rounded w-full" />
+                <div className="h-4 bg-card-border rounded w-5/6" />
+                <div className="h-4 bg-card-border rounded w-4/6" />
+              </div>
+            </div>
           ))}
         </div>
-        <div className="flex gap-3">
-          <div className="flex-1 h-12 bg-card-border rounded-2xl" />
-          <div className="w-40 h-12 bg-card-border rounded-2xl" />
-        </div>
-      </div>
 
-      {/* Content skeletons */}
-      {[...Array(2)].map((_, i) => (
-        <div key={i} className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border mb-6">
-          <div className="h-6 bg-card-border rounded w-48 mb-4" />
+        {/* Right sidebar skeleton */}
+        <div className="w-full lg:w-[340px] shrink-0">
+          <div className="bg-card-bg rounded-[24px] p-6 border-2 border-card-border mb-4">
+            <div className="space-y-4">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-card-border rounded-xl shrink-0" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-3 bg-card-border rounded w-16" />
+                    <div className="h-4 bg-card-border rounded w-28" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
           <div className="space-y-3">
-            <div className="h-4 bg-card-border rounded w-full" />
-            <div className="h-4 bg-card-border rounded w-full" />
-            <div className="h-4 bg-card-border rounded w-5/6" />
-            <div className="h-4 bg-card-border rounded w-4/6" />
+            <div className="h-12 bg-card-border rounded-2xl" />
+            <div className="h-12 bg-card-border rounded-2xl" />
           </div>
         </div>
-      ))}
+      </div>
     </div>
   </div>
 );
@@ -149,7 +166,7 @@ const JobDetailPage = ({ params }) => {
 
   return (
     <div className="min-h-screen bg-background pb-20 pt-6 transition-colors duration-300">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <div className="flex items-center text-sm font-medium text-text-muted gap-2 mb-6">
           <Link href="/" className="hover:text-green-600 transition-colors">
@@ -165,10 +182,10 @@ const JobDetailPage = ({ params }) => {
           </span>
         </div>
 
-        {/* Nội dung chính — 1 cột full width */}
+        {/* Nội dung chính — 2 cột: trái = job info, phải = sidebar */}
         <JobContent data={job} />
 
-        {/* Việc làm tương tự */}
+        {/* Việc làm tương tự — full width bên dưới */}
         <SimilarJobs jobId={jobId} />
       </div>
     </div>
