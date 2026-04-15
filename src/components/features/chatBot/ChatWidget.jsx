@@ -1,3 +1,6 @@
+
+
+// components/ChatWidget.js
 "use client";
 
 import { usePathname } from "next/navigation";
@@ -10,41 +13,53 @@ import {
 } from "react-icons/fa";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
-import ChatHandoffBanner from "./ChatHandoffBanner";
+// import ChatHandoffBanner from "./ChatHandoffBanner";
+import ChatQuickReplies from "./ChatQuickReplies";
+import { useAuth } from "@/context/AuthContext";
 import { useChat } from "./hooks/useChat";
 
 export default function ChatWidget({ isMinimized, onMinimize, onClose }) {
   const pathname = usePathname();
   const isAdminRoute = pathname?.startsWith("/admin");
+  const { user } = useAuth(); 
+  const userType = user?.role || "candidate";
   const {
     messages,
     mode,
     loading,
+    loadingMore,
+    hasMore,
     input,
     setInput,
     sendCurrentMessage,
     requestAdminHandoff,
+    loadMoreMessages,
     canSend,
     conversationId,
+    closeAndCreateNew, 
+    createNewConversation,
+    showHandoffBanner, 
   } = useChat();
+
+  const handleQuickReply = (message) => {
+    setInput(message);
+    setTimeout(() => sendCurrentMessage(), 100);
+  };
 
   return (
     <div className="flex h-full flex-col bg-card-bg transition-all duration-300">
-      {/* HEADER: NƠI CHỨA NÚT X VÀ NÚT THU NHỎ */}
+      {/* HEADER */}
       <div
         className="flex items-center gap-4 bg-[#00c853] px-6 py-5 text-white cursor-pointer select-none relative overflow-hidden shadow-lg"
         onClick={onMinimize}
       >
-        {/* Decor effect */}
         <div className="absolute -top-6 -right-6 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
 
-        {/* Avatar Area */}
         <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/20 backdrop-blur-md border border-white/20 shadow-inner">
           {mode === "admin" ? <FaHeadset size={20} /> : <FaRobot size={20} />}
           <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-[#00c853] bg-[#00e676] animate-pulse"></span>
         </div>
 
-        {/* Brand Info */}
         <div className="flex-1 min-w-0">
           <h3 className="text-[14px] font-black uppercase tracking-widest leading-none truncate">
             {isAdminRoute ? "Support Team" : "OneClick AI"}
@@ -54,13 +69,11 @@ export default function ChatWidget({ isMinimized, onMinimize, onClose }) {
           </p>
         </div>
 
-        {/* CONTROL GROUP: CHỨA NÚT THU NHỎ VÀ NÚT X (ĐÓNG) */}
         <div className="flex items-center gap-2 relative z-10">
-          {/* Nút Thu nhỏ (-) */}
           <button
             type="button"
             onClick={(e) => {
-              e.stopPropagation(); // Ngăn sự kiện click lan ra header
+              e.stopPropagation();
               onMinimize();
             }}
             className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 transition-all active:scale-90"
@@ -69,11 +82,10 @@ export default function ChatWidget({ isMinimized, onMinimize, onClose }) {
             {isMinimized ? <FaExpandAlt size={12} /> : <FaMinus size={14} />}
           </button>
 
-          {/* Nút Đóng (X) */}
           <button
             type="button"
             onClick={(e) => {
-              e.stopPropagation(); // Ngăn sự kiện click lan ra header
+              e.stopPropagation();
               onClose();
             }}
             className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 hover:bg-red-500 border border-white/10 transition-all active:scale-90"
@@ -87,17 +99,31 @@ export default function ChatWidget({ isMinimized, onMinimize, onClose }) {
       {/* BODY AREA */}
       {!isMinimized && (
         <div className="flex flex-1 flex-col overflow-hidden bg-background">
-          {mode === "waiting" && <ChatHandoffBanner />}
-          <ChatMessages messages={messages} loading={loading} />
+
+          <ChatQuickReplies
+            userType={userType}
+            mode={mode}
+            onSelect={handleQuickReply}
+            visible={messages.length < 5} // Chỉ hiển thị khi có ít tin nhắn
+          />
+
+          <ChatMessages
+            messages={messages}
+            loading={loading}
+            loadingMore={loadingMore}
+            hasMore={hasMore}
+            onLoadMore={loadMoreMessages}
+            showHandoffBanner={showHandoffBanner}
+          />
           <ChatInput
             value={input}
             onChange={setInput}
             onSend={sendCurrentMessage}
             canSend={canSend}
             onRequestHandoff={requestAdminHandoff}
+            onCloseAndCreateNew={closeAndCreateNew}
             mode={mode}
             disabled={loading}
-            conversationId={conversationId}
           />
         </div>
       )}
