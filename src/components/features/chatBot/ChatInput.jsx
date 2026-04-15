@@ -1,6 +1,6 @@
 "use client";
 
-import { FaPaperPlane } from "react-icons/fa";
+import { FaPaperPlane,  FaRobot, FaHeadset} from "react-icons/fa";
 
 export default function ChatInput({
   value,
@@ -10,6 +10,7 @@ export default function ChatInput({
   onRequestHandoff,
   mode,
   disabled,
+  onCloseAndCreateNew,
 }) {
   return (
     <div className="p-5 bg-card-bg border-t border-card-border transition-colors">
@@ -35,16 +36,28 @@ export default function ChatInput({
         </button>
       </div>
 
-      {mode === "ai" && (
-        <div className="mt-3 text-center">
+      {/* Nút chuyển đổi ở vị trí cũ (dưới input) */}
+      <div className="mt-3 text-center">
+        {mode === "ai" && (
           <button
             onClick={onRequestHandoff}
-            className="text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-[#00c853] transition-colors underline decoration-dotted underline-offset-4"
+            className="text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-[#00c853] transition-colors underline decoration-dotted underline-offset-4 flex items-center justify-center gap-1"
           >
+            <FaHeadset size={10} />
             Kết nối quản trị viên
           </button>
-        </div>
-      )}
+        )}
+        
+        {(mode === "waiting" || mode === "admin") && (
+          <button
+            onClick={onCloseAndCreateNew}  // Dùng trực tiếp
+            className="text-[10px] font-black uppercase tracking-widest text-amber-600 hover:text-amber-700 transition-colors underline decoration-dotted underline-offset-4 flex items-center justify-center gap-1"
+          >
+            <FaRobot size={10} />
+            Chat với AI
+          </button>
+        )}
+      </div>
     </div>
   );
 }
