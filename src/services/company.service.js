@@ -33,6 +33,16 @@ export const companyService = {
     }
   },
 
+  getJobsByCompanyId: async (companyId, params) => {
+    try {
+      const response = await api.get(`/recruitment/company/${companyId}/jobs`, { params });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching company jobs:", error);
+      throw error;
+    }
+  },
+
   // -------------------------------------------------------
   // UPLOAD COMPANY LOGO (ROLE_recruiter)
   // PUT /api/recruitment/company/logo/upload

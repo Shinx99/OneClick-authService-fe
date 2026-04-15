@@ -1,16 +1,16 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { FaFilter, FaChevronDown } from "react-icons/fa";
+
+import React, { useEffect, useState } from "react";
 import {
-  HiOutlineLocationMarker,
-  HiOutlineBriefcase,
-  HiOutlineOfficeBuilding,
-} from "react-icons/hi";
+  FaFilter,
+  FaBriefcase,
+  FaUsers,
+  FaMapMarkerAlt,
+  FaSearch,
+} from "react-icons/fa";
 import { companyService } from "@/services/company.service";
 
-// Mảng 63 tỉnh thành Việt Nam chuẩn
 const VIETNAM_PROVINCES = [
-  "Tất cả địa điểm",
   "Hà Nội",
   "TP. Hồ Chí Minh",
   "Đà Nẵng",
@@ -79,214 +79,167 @@ const VIETNAM_PROVINCES = [
 const CompanyFilter = ({
   onFilterChange,
   onReset,
-  currentIndustry = "Tất cả lĩnh vực",
-  currentScale = "Tất cả quy mô",
-  currentLocation = "Tất cả địa điểm",
+  currentKeyword = "",
+  currentIndustry = "",
+  currentScale = "",
+  currentLocation = "",
 }) => {
-  const [isIndustryOpen, setIsIndustryOpen] = useState(false);
-  const [isScaleOpen, setIsScaleOpen] = useState(false);
-  const [isLocOpen, setIsLocOpen] = useState(false);
+  // States lưu trữ options từ API
+  const [industryOptions, setIndustryOptions] = useState([]);
+  const [scaleOptions, setScaleOptions] = useState([]);
 
+  // States lưu trữ giá trị đang chọn
+  const [selectedKeyword, setSelectedKeyword] = useState(currentKeyword);
   const [selectedIndustry, setSelectedIndustry] = useState(currentIndustry);
   const [selectedScale, setSelectedScale] = useState(currentScale);
-  const [selectedLoc, setSelectedLoc] = useState(currentLocation);
-
-  const [industryOptions, setIndustryOptions] = useState(["Tất cả lĩnh vực"]);
-  const [scaleOptions, setScaleOptions] = useState(["Tất cả quy mô"]);
-  // Sử dụng danh sách tĩnh cho địa điểm
-  const [locations, setLocations] = useState(VIETNAM_PROVINCES);
+  const [selectedLocation, setSelectedLocation] = useState(currentLocation);
 
   useEffect(() => {
+    setSelectedKeyword(currentKeyword);
     setSelectedIndustry(currentIndustry);
     setSelectedScale(currentScale);
-    setSelectedLoc(currentLocation);
-  }, [currentIndustry, currentScale, currentLocation]);
+    setSelectedLocation(currentLocation);
+  }, [currentKeyword, currentIndustry, currentScale, currentLocation]);
 
   useEffect(() => {
     const fetchFilters = async () => {
       try {
         const res = await companyService.getCompanyFilters();
-        if (res && res.success) {
-          if (res.data.industries?.length > 0) {
-            setIndustryOptions(["Tất cả lĩnh vực", ...res.data.industries]);
+        if (res?.success) {
+          if (res.data?.industries?.length) {
+            setIndustryOptions(res.data.industries);
           }
-          if (res.data.companySizes?.length > 0) {
-            setScaleOptions(["Tất cả quy mô", ...res.data.companySizes]);
+          if (res.data?.companySizes?.length) {
+            setScaleOptions(res.data.companySizes);
           }
-          // Đã XÓA phần cập nhật locations từ API ở đây
         }
       } catch (error) {
         console.error("Lỗi khi tải bộ lọc:", error);
       }
     };
+
     fetchFilters();
   }, []);
 
-  const handleResetClick = () => {
-    setSelectedIndustry("Tất cả lĩnh vực");
-    setSelectedScale("Tất cả quy mô");
-    setSelectedLoc("Tất cả địa điểm");
-    setIsIndustryOpen(false);
-    setIsScaleOpen(false);
-    setIsLocOpen(false);
+  const handleReset = () => {
+    setSelectedKeyword("");
+    setSelectedIndustry("");
+    setSelectedScale("");
+    setSelectedLocation("");
     onReset?.();
   };
 
-  const toggleDropdown = (dropdownName) => {
-    if (dropdownName === "industry") {
-      setIsIndustryOpen(!isIndustryOpen);
-      setIsScaleOpen(false);
-      setIsLocOpen(false);
-    } else if (dropdownName === "scale") {
-      setIsScaleOpen(!isScaleOpen);
-      setIsIndustryOpen(false);
-      setIsLocOpen(false);
-    } else if (dropdownName === "location") {
-      setIsLocOpen(!isLocOpen);
-      setIsIndustryOpen(false);
-      setIsScaleOpen(false);
+  const handleChange = (type, value) => {
+    //if (type === "keyword") setSelectedKeyword(value);
+    if (type === "industry") setSelectedIndustry(value);
+    if (type === "sizeRange") setSelectedScale(value);
+    if (type === "location") setSelectedLocation(value);
+
+    // Gửi dữ liệu lên component cha để lọc
+    onFilterChange?.(type, value);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      onFilterChange?.("keyword", selectedKeyword);
     }
   };
 
   return (
-    <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 transition-all">
-      {/* Tiêu đề Bộ lọc */}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold flex items-center gap-2 text-[#00c853]">
-          <FaFilter size={18} /> Bộ lọc
-        </h2>
-        <button
-          onClick={handleResetClick}
-          className="text-xs text-gray-400 hover:text-red-500 transition-colors font-bold uppercase tracking-wider cursor-pointer"
-        >
-          Xóa hết
-        </button>
-      </div>
+    <div className="w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-1 items-center">
+        {/* CỘT 1: Tiêu đề bộ lọc */}
+        <div className="flex items-center gap-4 p-1">
+          <div className="w-12 h-12 bg-[#00c853] rounded-2xl flex items-center justify-center text-white shadow-lg shadow-green-200">
+            <FaFilter size={20} />
+          </div>
+          <div>
+            <h2 className="font-black text-text-main text-[15px] uppercase leading-tight">
+              Bộ lọc <br /> công ty
+            </h2>
+          </div>
+        </div>
 
-      {/* Nhóm 1: Lĩnh vực */}
-      <div className="relative mb-6">
-        <h3 className="font-bold text-sm mb-3 text-gray-700 flex items-center gap-2 uppercase">
-          <HiOutlineBriefcase className="text-[#00c853]" /> LĨNH VỰC
-        </h3>
-        <div
-          onClick={() => toggleDropdown("industry")}
-          className={`flex items-center justify-between px-4 py-2.5 rounded-full border transition-all duration-300 cursor-pointer bg-white ${
-            isIndustryOpen ? "border-[#00c853]" : "border-[#00c853]"
-          }`}
-        >
-          <span className="text-sm font-bold text-gray-800 line-clamp-1">
-            {selectedIndustry}
-          </span>
-          <FaChevronDown
-            className={`text-gray-500 transition-transform flex-shrink-0 ${isIndustryOpen ? "rotate-180" : ""}`}
-            size={12}
+        {/* CỘT 2: Ô SEARCH */}
+        <div className="relative group">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#00c853]">
+            <FaSearch size={16} />
+          </div>
+          <input
+            type="text"
+            placeholder="Nhập tên + Enter..."
+            value={selectedKeyword}
+            onChange={(e) => setSelectedKeyword(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="w-full pl-11 pr-4 py-3.5 bg-background border border-card-border rounded-2xl text-sm font-bold text-gray-700 outline-none focus:border-[#00c853] transition-all hover:bg-gray-50 placeholder:font-normal"
           />
         </div>
-        {isIndustryOpen && (
-          <div className="absolute z-[52] w-full mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 max-h-60 overflow-y-auto">
+
+        {/* CỘT 3: Lĩnh vực */}
+        <div className="relative group">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#00c853]">
+            <FaBriefcase size={16} />
+          </div>
+          <select
+            value={selectedIndustry}
+            onChange={(e) => handleChange("industry", e.target.value)}
+            className="w-full pl-11 pr-4 py-3.5 bg-background border border-card-border rounded-2xl text-sm font-bold text-gray-700 outline-none focus:border-[#00c853] transition-all appearance-none cursor-pointer hover:bg-gray-50"
+          >
+            <option value="">Tất cả lĩnh vực</option>
             {industryOptions.map((item, idx) => (
-              <div
-                key={idx}
-                onClick={() => {
-                  setSelectedIndustry(item);
-                  setIsIndustryOpen(false);
-                  onFilterChange?.(
-                    "industry",
-                    item === "Tất cả lĩnh vực" ? "" : item,
-                  );
-                }}
-                className={`px-4 py-3 text-sm cursor-pointer transition-colors
-                  ${selectedIndustry === item ? "bg-[#00c853] text-white font-bold" : "text-gray-500 hover:bg-gray-50"}`}
-              >
+              <option key={`ind-${idx}`} value={item}>
                 {item}
-              </div>
+              </option>
             ))}
-          </div>
-        )}
-      </div>
-
-      {/* Nhóm 2: Quy mô công ty */}
-      <div className="relative mb-6">
-        <h3 className="font-bold text-sm mb-3 text-gray-700 flex items-center gap-2 uppercase">
-          <HiOutlineOfficeBuilding className="text-[#00c853]" /> QUY MÔ
-        </h3>
-        <div
-          onClick={() => toggleDropdown("scale")}
-          className={`flex items-center justify-between px-4 py-2.5 rounded-full border transition-all duration-300 cursor-pointer bg-white ${
-            isScaleOpen ? "border-[#00c853]" : "border-[#00c853]"
-          }`}
-        >
-          <span className="text-sm font-bold text-gray-800 line-clamp-1">
-            {selectedScale}
-          </span>
-          <FaChevronDown
-            className={`text-gray-500 transition-transform flex-shrink-0 ${isScaleOpen ? "rotate-180" : ""}`}
-            size={12}
-          />
+          </select>
         </div>
-        {isScaleOpen && (
-          <div className="absolute z-[51] w-full mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 max-h-60 overflow-y-auto">
+
+        {/* CỘT 4: Quy mô */}
+        <div className="relative group">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#00c853]">
+            <FaUsers size={16} />
+          </div>
+          <select
+            value={selectedScale}
+            onChange={(e) => handleChange("sizeRange", e.target.value)}
+            className="w-full pl-11 pr-4 py-3.5 bg-background border border-card-border rounded-2xl text-sm font-bold text-gray-700 outline-none focus:border-[#00c853] transition-all appearance-none cursor-pointer hover:bg-gray-50"
+          >
+            <option value="">Tất cả quy mô</option>
             {scaleOptions.map((item, idx) => (
-              <div
-                key={idx}
-                onClick={() => {
-                  setSelectedScale(item);
-                  setIsScaleOpen(false);
-                  onFilterChange?.(
-                    "scale",
-                    item === "Tất cả quy mô" ? "" : item,
-                  );
-                }}
-                className={`px-4 py-3 text-sm cursor-pointer transition-colors
-                  ${selectedScale === item ? "bg-[#00c853] text-white font-bold" : "text-gray-500 hover:bg-gray-50"}`}
-              >
+              <option key={`scale-${idx}`} value={item}>
                 {item}
-              </div>
+              </option>
             ))}
-          </div>
-        )}
-      </div>
-
-      {/* Nhóm 3: Địa điểm */}
-      <div className="relative">
-        <h3 className="font-bold text-sm mb-3 text-gray-700 flex items-center gap-2 uppercase">
-          <HiOutlineLocationMarker className="text-[#00c853]" /> ĐỊA ĐIỂM
-        </h3>
-        <div
-          onClick={() => toggleDropdown("location")}
-          className={`flex items-center justify-between px-4 py-2.5 rounded-full border transition-all duration-300 cursor-pointer bg-white ${
-            isLocOpen ? "border-[#00c853]" : "border-[#00c853]"
-          }`}
-        >
-          <span className="text-sm font-bold text-gray-800 line-clamp-1">
-            {selectedLoc}
-          </span>
-          <FaChevronDown
-            className={`text-gray-500 transition-transform flex-shrink-0 ${isLocOpen ? "rotate-180" : ""}`}
-            size={12}
-          />
+          </select>
         </div>
-        {isLocOpen && (
-          <div className="absolute z-[50] w-full mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 max-h-60 overflow-y-auto custom-scrollbar">
-            {locations.map((loc, idx) => (
-              <div
-                key={idx}
-                onClick={() => {
-                  setSelectedLoc(loc);
-                  setIsLocOpen(false);
-                  onFilterChange?.(
-                    "location",
-                    loc === "Tất cả địa điểm" ? "" : loc,
-                  );
-                }}
-                className={`px-4 py-3 text-sm cursor-pointer transition-colors
-                  ${selectedLoc === loc ? "bg-[#00c853] text-white font-bold" : "text-gray-500 hover:bg-gray-50"}`}
-              >
-                {loc}
-              </div>
-            ))}
+
+        {/* CỘT 5: Địa điểm & Nút Xóa */}
+        <div className="flex items-center gap-1">
+          <div className="relative flex-1 group">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#00c853]">
+              <FaMapMarkerAlt size={16} />
+            </div>
+            <select
+              value={selectedLocation}
+              onChange={(e) => handleChange("location", e.target.value)}
+              className="w-full pl-11 pr-4 py-3.5 bg-background border border-card-border rounded-2xl text-sm font-bold text-gray-700 outline-none focus:border-[#00c853] transition-all appearance-none cursor-pointer hover:bg-gray-50"
+            >
+              <option value="">Tất cả địa điểm</option>
+              {VIETNAM_PROVINCES.map((item, idx) => (
+                <option key={`loc-${idx}`} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
           </div>
-        )}
+
+          <button
+            onClick={handleReset}
+            className="whitespace-nowrap p-1.5 py-3.5 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all rounded-xl font-bold text-xs uppercase shadow-sm cursor-pointer"
+          >
+            Xóa hết
+          </button>
+        </div>
       </div>
     </div>
   );

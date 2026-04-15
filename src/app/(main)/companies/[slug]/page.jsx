@@ -3,7 +3,6 @@ import CompanyBanner from "@/components/features/companies/detail/CompanyBanner"
 import CompanyOverview from "@/components/features/companies/detail/CompanyOverview";
 import CompanyContact from "@/components/features/companies/detail/CompanyContact";
 import CompanyJobs from "@/components/features/companies/detail/CompanyJobs";
-import CompanyReviews from "@/components/features/companies/detail/CompanyReviews";
 import { notFound } from "next/navigation";
 import { companyService } from "@/services/company.service"; // Nhập service đã viết
 
@@ -52,16 +51,12 @@ export default async function CompanyDetailPage({ params }) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-24">
           <div className="lg:col-span-2 space-y-8">
             <CompanyOverview description={mappedData.description} />
-            <CompanyReviews
-              reviews={mappedData.reviews}
-              rating={mappedData.rating}
-            />
+            <CompanyJobs companyId={mappedData.companyId} />{" "}
           </div>
 
           <div className="lg:col-span-1 space-y-8">
-            <div className="sticky top-24 space-y-8">
+            <div className=" top-24 space-y-8">
               <CompanyContact contact={mappedData} />
-              <CompanyJobs jobs={mappedData.jobs} />
             </div>
           </div>
         </div>

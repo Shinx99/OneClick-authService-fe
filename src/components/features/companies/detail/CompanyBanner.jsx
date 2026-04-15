@@ -13,7 +13,6 @@ const CompanyBanner = ({ company = {} }) => {
       {/* Image Banner */}
       <div className="relative h-64 md:h-80 w-full overflow-hidden rounded-[2rem]">
         <Image
-          // Kiểm tra URL hợp lệ, lưu ý: DB của bạn có thể dùng backgroundUrl thay vì cover
           src={
             isValidUrl(company.backgroundUrl || company.cover)
               ? company.backgroundUrl || company.cover
@@ -53,10 +52,6 @@ const CompanyBanner = ({ company = {} }) => {
                 {company.industry || "Ngành nghề"}
               </span>
             </h1>
-            <p className="text-gray-500 text-sm mt-1 font-medium line-clamp-1">
-              {/* Nếu DB không có slogan, bạn có thể dùng overview cắt ngắn, hoặc giữ nguyên nếu đã tự thêm trường slogan */}
-              {company.slogan || company.overview || "Slogan công ty"}
-            </p>
           </div>
         </div>
 

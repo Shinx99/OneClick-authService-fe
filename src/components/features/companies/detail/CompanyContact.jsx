@@ -1,8 +1,6 @@
 import React from "react";
 import { FaGlobe, FaUsers, FaMapMarkerAlt } from "react-icons/fa";
 
-// Chuyển thành Server Component (Xóa "use client")
-// Component này nhận object contact từ trang cha thông qua props
 const CompanyContact = ({ contact = {} }) => {
   return (
     <div className="bg-card-bg p-6 rounded-3xl border border-card-border space-y-6 transition-all shadow-sm hover:shadow-md">

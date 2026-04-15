@@ -3,10 +3,8 @@ import CompanyContent from "@/components/features/companies/CompanyContent";
 import { companyService } from "@/services/company.service";
 
 // Đảm bảo trang luôn lấy dữ liệu mới từ Server
-export const dynamic = "force-dynamic";
 
 export default async function CompaniesPage() {
-  // Dữ liệu mặc định để tránh lỗi trắng trang
   let initialData = {
     content: [],
     totalElements: 0,
@@ -17,7 +15,7 @@ export default async function CompaniesPage() {
   try {
     const response = await companyService.getAllCompanies({
       page: 0,
-      size: 9,
+      size: 12,
     });
 
     if (response && response.success) {
