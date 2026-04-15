@@ -1,3 +1,6 @@
+import React from "react";
+import CompanyCard from "./CompanyCard";
+
 const CompanyList = ({
   companies = [],
   totalPages,
@@ -5,9 +8,9 @@ const CompanyList = ({
   onPageChange,
 }) => {
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       {companies.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {companies.map((company) => (
             <CompanyCard key={company.companyId} company={company} />
           ))}
@@ -18,9 +21,8 @@ const CompanyList = ({
         </div>
       )}
 
-      {/* Phân trang thật từ API */}
       {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 pt-8">
+        <div className="flex justify-center items-center gap-2 pt-4">
           {[...Array(totalPages)].map((_, i) => (
             <button
               key={i}
@@ -40,3 +42,5 @@ const CompanyList = ({
     </div>
   );
 };
+
+export default CompanyList;
