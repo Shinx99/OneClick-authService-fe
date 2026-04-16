@@ -55,7 +55,7 @@ const CompanyHot = () => {
                       className="w-12 h-12 object-contain mb-2 transition-transform duration-300 group-hover:scale-110"
                     />
                   ) : (
-                    <div className="w-12 h-12 bg-gray-200 rounded-full mb-2 flex items-center justify-center text-gray-500 font-bold group-hover:bg-green-100 group-hover:text-green-600 transition-colors">
+                    <div className="w-12 h-12 bg-gray-200 dark:bg-slate-700 rounded-full mb-2 flex items-center justify-center text-gray-500 dark:text-slate-300 font-bold group-hover:bg-green-100 group-hover:text-green-600 transition-colors">
                       {company.companyName?.charAt(0)}
                     </div>
                   )}
@@ -64,7 +64,7 @@ const CompanyHot = () => {
                     {company.companyName}
                   </span>
 
-                  <p className="text-[9px] text-gray-400 dark:text-slate-600 font-bold mt-1 uppercase">
+                  <p className="text-[9px] text-gray-400 dark:text-slate-400 font-bold mt-1 uppercase">
                     {company.industry || "Lĩnh vực khác"}
                   </p>
                 </div>

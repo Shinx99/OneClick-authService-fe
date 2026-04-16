@@ -28,7 +28,7 @@ html.dark {
   --background: #0f172a;
   --foreground: #f8fafc;
   --card-bg: #1e293b;
-  --card-border: #334155;
+  --card-border: #1e293b;
   --text-main: #f1f5f9;
   --text-muted: #94a3b8;
 }
@@ -36,6 +36,10 @@ html.dark {
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
   /* Tránh dùng inline nếu bị lỗi build */
   --animate-scan: scan 2s linear infinite;
   --animate-shine: shine 1.5s ease-in-out infinite;
