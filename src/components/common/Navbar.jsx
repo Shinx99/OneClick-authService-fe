@@ -227,7 +227,7 @@ const Header = () => {
                                   Việc làm đã lưu
                                 </Link>
                                 <Link
-                                  href="/jobs/applied"
+                                  href="/applications"
                                   className="text-sm text-text-muted hover:text-[#00c853]"
                                   onClick={() => setDropdownOpen(false)}
                                 >

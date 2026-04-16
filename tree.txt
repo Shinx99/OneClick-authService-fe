@@ -93,6 +93,8 @@ OneClick-authService-fe
 │   │   │   │   │   └── page.jsx
 │   │   │   │   ├── setup
 │   │   │   │   │   └── page.jsx
+│   │   │   │   ├── social-profile
+│   │   │   │   │   └── page.jsx
 │   │   │   │   └── team
 │   │   │   │       └── page.jsx
 │   │   │   └── layout.jsx
@@ -187,6 +189,7 @@ OneClick-authService-fe
 │   │   │   │   ├── ChatHandoffBanner.jsx
 │   │   │   │   ├── ChatInput.jsx
 │   │   │   │   ├── ChatMessages.jsx
+│   │   │   │   ├── ChatQuickReplies.js
 │   │   │   │   ├── ChatWidget.jsx
 │   │   │   │   ├── chatBot.md
 │   │   │   │   └── hooks
@@ -200,8 +203,7 @@ OneClick-authService-fe
 │   │   │   │       ├── CompanyBanner.jsx
 │   │   │   │       ├── CompanyContact.jsx
 │   │   │   │       ├── CompanyJobs.jsx
-│   │   │   │       ├── CompanyOverview.jsx
-│   │   │   │       └── CompanyReviews.jsx
+│   │   │   │       └── CompanyOverview.jsx
 │   │   │   ├── cv
 │   │   │   │   └── CVManagementContent.jsx
 │   │   │   ├── edit-profile
@@ -241,6 +243,9 @@ OneClick-authService-fe
 │   │   │   │   │   ├── CandidateCard.jsx
 │   │   │   │   │   ├── SearchFilters.jsx
 │   │   │   │   │   └── SearchResults.jsx
+│   │   │   │   ├── setting
+│   │   │   │   │   ├── PersonalInfoManager.jsx
+│   │   │   │   │   └── SocialProfileManager.jsx
 │   │   │   │   └── team
 │   │   │   │       └── TeamManager.jsx
 │   │   │   ├── home
