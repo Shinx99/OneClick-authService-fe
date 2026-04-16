@@ -8,7 +8,7 @@ const nextConfig = {
         hostname: "res.cloudinary.com",
         pathname: "/**",
       },
-     {
+      {
         protocol: "https",
         hostname: "cdn.haitrieu.com", // Thêm dòng này để sửa lỗi logo VNG
         pathname: "/**",

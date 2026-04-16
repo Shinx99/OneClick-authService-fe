@@ -11,8 +11,8 @@ import {
   FaTrash,
   FaTimes,
   FaSpinner,
-  FaCheck,
-  FaInfoCircle,
+  FaBookOpen,
+  FaShieldAlt,
 } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { resumeService } from "@/services/resume.service";
@@ -83,7 +83,7 @@ const Custom3DToggle = ({ checked, onChange }) => {
   );
 };
 
-const CVManagementContent = () => {
+const CVManagementContent = ({ onRefresh }) => {
   // --- STATES QUẢN LÝ CV ---
   const [documents, setDocuments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -92,32 +92,6 @@ const CVManagementContent = () => {
   const [previewUrl, setPreviewUrl] = useState(null);
   const fileInputRef = useRef(null);
 
-  // --- STATE TRẠNG THÁI TÌM VIỆC ---
-  const [isSearching, setIsSearching] = useState(true);
-  const [allowSearch, setAllowSearch] = useState(true);
-
-  // --- HÀM XỬ LÝ BẬT/TẮT VÀ GỌI TOAST ---
-  const handleToggleSearching = () => {
-    toast.dismiss(); // Xóa các toast cũ để tránh spam
-    const newState = !isSearching;
-    setIsSearching(newState);
-    if (newState) {
-      toast.success("Đã bật trạng thái tìm việc!");
-    } else {
-      toast("Đã tắt trạng thái tìm việc.", { icon: "⚠️" });
-    }
-  };
-
-  const handleToggleSearchable = () => {
-    toast.dismiss(); // Xóa các toast cũ để tránh spam
-    const newState = !allowSearch;
-    setAllowSearch(newState);
-    if (newState) {
-      toast.success("Đã cho phép NTD tìm kiếm hồ sơ!");
-    } else {
-      toast("Đã ẩn hồ sơ khỏi tìm kiếm.", { icon: "⚠️" });
-    }
-  };
 
   // --- LOGIC API CV ---
   useEffect(() => {
@@ -192,6 +166,9 @@ const CVManagementContent = () => {
 
       setDocuments(formattedDocs);
       toast.success("Tải lên CV thành công!", { id: "upload-process" }); // Cập nhật toast cũ
+
+      onRefresh?.(); // Trigger refresh CVManagement
+
     } catch (error) {
       toast.error(error.message || "Upload thất bại. Vui lòng thử lại!", {
         id: "upload-process",
@@ -212,6 +189,9 @@ const CVManagementContent = () => {
       );
       setActiveMenu(null);
       toast.success("Đã cập nhật CV mặc định!", { id: "set-default" });
+
+      onRefresh?.(); // Trigger refresh CVManagement
+
     } catch (error) {
       toast.error("Lỗi khi đặt CV mặc định.", { id: "set-default" });
     }
@@ -226,6 +206,9 @@ const CVManagementContent = () => {
         setDocuments(documents.filter((doc) => doc.id !== id));
         setActiveMenu(null);
         toast.success("Đã xóa CV thành công!", { id: "delete-cv" });
+
+        onRefresh?.(); // Trigger refresh CVManagement
+
       } catch (error) {
         toast.error("Xóa CV thất bại!", { id: "delete-cv" });
       }
@@ -408,102 +391,91 @@ const CVManagementContent = () => {
 
         {/* CỘT PHỤ (4 phần): TRẠNG THÁI */}
         <div className="lg:col-span-4 sticky top-24 space-y-6">
-          <div className="bg-card-bg p-7 rounded-[2rem] shadow-sm border border-card-border">
-            <h3 className="font-black mb-8 flex items-center gap-2.5 text-text-main uppercase text-xs tracking-widest">
-              <span className="w-1.5 h-5 bg-[#00c853] rounded-full"></span> Cài
-              đặt hồ sơ
-            </h3>
 
-            {/* Mục 1: Đang tìm việc */}
-            <div className="mb-8">
-              <div className="flex items-start justify-between gap-4 mb-4">
-                <div>
-                  <h4
-                    className={`text-[17px] font-bold transition-colors ${isSearching ? "text-text-main" : "text-text-muted"}`}
-                  >
-                    Trạng thái tìm việc
-                  </h4>
-                  <p
-                    className={`text-sm font-semibold mt-1 transition-colors ${isSearching ? "text-[#00c853]" : "text-gray-400"}`}
-                  >
-                    {isSearching ? "Đang Bật" : "Đang Tắt"}
-                  </p>
-                </div>
-                <Custom3DToggle
-                  checked={isSearching}
-                  onChange={handleToggleSearching}
-                />
+          {/* Hướng dẫn sử dụng */}
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+            {/* Header */}
+            <div className="px-5 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/50 flex items-center justify-center shrink-0">
+                <FaBookOpen className="text-blue-500" size={13} />
               </div>
-              <p className="text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed text-justify bg-gray-50 dark:bg-[#252525] p-4 rounded-xl border border-gray-100 dark:border-gray-800/50">
-                Bật tìm việc giúp hồ sơ nổi bật hơn và tăng 80% cơ hội Nhà tuyển
-                dụng chủ động săn đón bạn.
-              </p>
+              <h3 className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
+                Cách hoạt động
+              </h3>
             </div>
 
-            <hr className="border-gray-100 dark:border-gray-800 mb-8" />
+            {/* Steps */}
+            <div className="p-5 space-y-4">
 
-            {/* Mục 2: Cho phép tìm kiếm hồ sơ */}
-            <div>
-              <div className="flex items-start justify-between gap-4 mb-4">
-                <div>
-                  <h4
-                    className={`text-[17px] font-bold transition-colors ${allowSearch ? "text-[#00c853]" : "text-gray-500"}`}
-                  >
-                    Tìm kiếm hồ sơ
-                  </h4>
-                  <p
-                    className={`text-sm font-semibold mt-1 transition-colors ${allowSearch ? "text-[#00c853]" : "text-gray-400"}`}
-                  >
-                    {allowSearch ? "Đang Mở công khai" : "Đang Khóa"}
+              {/* Step 1 */}
+              <div className="flex gap-3">
+                <div className="flex flex-col items-center">
+                  <div className="w-7 h-7 rounded-full bg-blue-500 text-white text-xs font-bold flex items-center justify-center shrink-0">
+                    1
+                  </div>
+                  <div className="w-px flex-1 bg-zinc-200 dark:bg-zinc-700 mt-1.5" />
+                </div>
+                <div className="pb-4 min-w-0">
+                  <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 mb-0.5">
+                    Tải CV lên
+                  </p>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                    Hệ thống tự động đọc và điền thông tin — học vấn, kinh nghiệm, kỹ năng — vào hồ sơ ứng viên của bạn. Bạn có thể kiểm tra và chỉnh sửa trước khi lưu.
                   </p>
                 </div>
-                <Custom3DToggle
-                  checked={allowSearch}
-                  onChange={handleToggleSearchable}
-                />
               </div>
 
-              <p className="text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed text-justify mb-5">
-                Các Nhà tuyển dụng uy tín có thể xem thông tin kỹ năng và kinh
-                nghiệm trên CV mặc định của bạn.
-              </p>
-
-              {allowSearch && (
-                <div className="space-y-3.5 bg-green-50/50 dark:bg-green-950/20 p-5 rounded-2xl border border-green-100 dark:border-green-900 animate-in fade-in zoom-in-95 duration-300">
-                  <div className="flex items-start gap-3">
-                    <div className="mt-0.5 w-5 h-5 rounded-full border border-[#00c853] flex items-center justify-center shrink-0 bg-green-100 dark:bg-green-900 shadow-inner">
-                      <FaCheck className="text-[#00c853] text-[9px]" />
-                    </div>
-                    <p className="text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed">
-                      Nhận <strong>Lời mời kết nối</strong> trực tiếp từ HR các
-                      công ty lớn.
-                    </p>
+              {/* Step 2 */}
+              <div className="flex gap-3">
+                <div className="flex flex-col items-center">
+                  <div className="w-7 h-7 rounded-full bg-violet-500 text-white text-xs font-bold flex items-center justify-center shrink-0">
+                    2
                   </div>
-                  <div className="flex items-start gap-3">
-                    <div className="mt-0.5 w-5 h-5 rounded-full border border-[#00c853] flex items-center justify-center shrink-0 bg-green-100 dark:bg-green-900 shadow-inner">
-                      <FaCheck className="text-[#00c853] text-[9px]" />
-                    </div>
-                    <p className="text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed">
-                      Thông tin SĐT/Email được bảo mật tuyệt đối cho đến khi bạn
-                      đồng ý.
-                    </p>
+                  <div className="w-px flex-1 bg-zinc-200 dark:bg-zinc-700 mt-1.5" />
+                </div>
+                <div className="pb-4 min-w-0">
+                  <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 mb-0.5">
+                    Hoàn thiện hồ sơ
+                  </p>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                    Xem lại thông tin được parse, bổ sung thêm dự án, chứng chỉ, hoặc mô tả bản thân. Hồ sơ càng đầy đủ, gợi ý việc làm của AI càng chính xác.
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div className="flex gap-3">
+                <div className="flex flex-col items-center">
+                  <div className="w-7 h-7 rounded-full bg-emerald-500 text-white text-xs font-bold flex items-center justify-center shrink-0">
+                    3
                   </div>
                 </div>
-              )}
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 mb-0.5">
+                    Cho phép HR tìm kiếm hồ sơ này
+                  </p>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                    Bật nút <span className="font-medium text-zinc-700 dark:text-zinc-300">"Cho phép HR tìm kiếm"</span> trên hồ sơ để xuất hiện trong kết quả tìm kiếm của nhà tuyển dụng. Tắt bất kỳ lúc nào để ẩn ngay lập tức.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Privacy Assurance */}
+            <div className="mx-5 mb-5 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900 p-3.5 flex gap-2.5 items-start">
+              <FaShieldAlt className="text-emerald-500 mt-0.5 shrink-0" size={13} />
+              <div>
+                <p className="text-xs font-semibold text-emerald-800 dark:text-emerald-400 mb-0.5">
+                  Bạn kiểm soát hoàn toàn
+                </p>
+                <p className="text-xs text-emerald-700 dark:text-emerald-500 leading-relaxed">
+                  Thông tin CV chỉ dùng để điền hồ sơ — không chia sẻ với bên thứ ba. HR chỉ tìm thấy hồ sơ khi bạn chủ động cho phép.
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Banner Tip AI */}
-          <div className="bg-amber-50 dark:bg-amber-950/30 p-5 rounded-2xl border border-amber-200 dark:border-amber-900 flex gap-3 items-start">
-            <FaInfoCircle
-              className="text-amber-500 mt-0.5 shrink-0"
-              size={16}
-            />
-            <p className="text-xs text-amber-800 dark:text-amber-400 leading-relaxed">
-              <strong>Mẹo:</strong> Hãy đặt CV tốt nhất làm mặc định để hệ thống
-              AI OneClick gợi ý việc làm chính xác hơn.
-            </p>
-          </div>
         </div>
       </div>
 
