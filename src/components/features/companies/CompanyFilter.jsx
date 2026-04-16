@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation"; // 1. IMPORT USEROUTER ĐỂ CHUYỂN TRANG
 import {
   FaFilter,
   FaBriefcase,
@@ -9,6 +10,7 @@ import {
   FaSearch,
 } from "react-icons/fa";
 import { companyService } from "@/services/company.service";
+import FormatLocationDisplay from "@/utils/FormatLocation";
 
 const VIETNAM_PROVINCES = [
   "Hà Nội",
@@ -84,15 +86,21 @@ const CompanyFilter = ({
   currentScale = "",
   currentLocation = "",
 }) => {
-  // States lưu trữ options từ API
+  const router = useRouter(); // 2. KHỞI TẠO ROUTER
+
   const [industryOptions, setIndustryOptions] = useState([]);
   const [scaleOptions, setScaleOptions] = useState([]);
 
-  // States lưu trữ giá trị đang chọn
   const [selectedKeyword, setSelectedKeyword] = useState(currentKeyword);
   const [selectedIndustry, setSelectedIndustry] = useState(currentIndustry);
   const [selectedScale, setSelectedScale] = useState(currentScale);
   const [selectedLocation, setSelectedLocation] = useState(currentLocation);
+
+  // === CÁC STATE MỚI CHO DROPDOWN GỢI Ý ===
+  const [suggestions, setSuggestions] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     setSelectedKeyword(currentKeyword);
@@ -101,6 +109,7 @@ const CompanyFilter = ({
     setSelectedLocation(currentLocation);
   }, [currentKeyword, currentIndustry, currentScale, currentLocation]);
 
+  // Fetch bộ lọc
   useEffect(() => {
     const fetchFilters = async () => {
       try {
@@ -117,32 +126,78 @@ const CompanyFilter = ({
         console.error("Lỗi khi tải bộ lọc:", error);
       }
     };
-
     fetchFilters();
   }, []);
+
+  // === XỬ LÝ CLICK RA NGOÀI ĐỂ ĐÓNG DROPDOWN ===
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // === TÌM KIẾM GỢI Ý KHI GÕ ===
+  useEffect(() => {
+    if (!selectedKeyword || selectedKeyword.trim() === "") {
+      setSuggestions([]);
+      setShowDropdown(false);
+      return;
+    }
+
+    const delayDebounceFn = setTimeout(async () => {
+      setIsLoadingSuggestions(true);
+      try {
+        const res = await companyService.getAllCompanies({
+          keyword: selectedKeyword,
+          page: 0,
+          size: 4,
+        });
+        if (res?.success && res?.data?.content) {
+          setSuggestions(res.data.content);
+          setShowDropdown(true);
+        }
+      } catch (error) {
+        console.error("Lỗi khi tải gợi ý:", error);
+      } finally {
+        setIsLoadingSuggestions(false);
+      }
+    }, 400);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [selectedKeyword]);
 
   const handleReset = () => {
     setSelectedKeyword("");
     setSelectedIndustry("");
     setSelectedScale("");
     setSelectedLocation("");
+    setShowDropdown(false);
     onReset?.();
   };
 
   const handleChange = (type, value) => {
-    //if (type === "keyword") setSelectedKeyword(value);
     if (type === "industry") setSelectedIndustry(value);
     if (type === "sizeRange") setSelectedScale(value);
     if (type === "location") setSelectedLocation(value);
 
-    // Gửi dữ liệu lên component cha để lọc
     onFilterChange?.(type, value);
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
+      setShowDropdown(false);
       onFilterChange?.("keyword", selectedKeyword);
     }
+  };
+
+  // 3.CHUYỂN TRANG BẰNG COMPANY ID
+  const handleSelectSuggestion = (companyId) => {
+    setShowDropdown(false);
+    router.push(`/companies/${companyId}`);
   };
 
   return (
@@ -160,19 +215,92 @@ const CompanyFilter = ({
           </div>
         </div>
 
-        {/* CỘT 2: Ô SEARCH */}
-        <div className="relative group">
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#00c853]">
+        {/* CỘT 2: Ô SEARCH CÓ KÈM DROPDOWN */}
+        <div className="relative group" ref={dropdownRef}>
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#00c853] z-10">
             <FaSearch size={16} />
           </div>
           <input
             type="text"
-            placeholder="Nhập tên + Enter..."
+            placeholder="Nhập tên công ty...."
             value={selectedKeyword}
             onChange={(e) => setSelectedKeyword(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full pl-11 pr-4 py-3.5 bg-background border border-card-border rounded-2xl text-sm font-bold text-gray-700 outline-none focus:border-[#00c853] transition-all hover:bg-gray-50 placeholder:font-normal"
+            onFocus={() => selectedKeyword && setShowDropdown(true)}
+            className="w-full pl-11 pr-4 py-3.5 bg-background border border-card-border rounded-2xl text-sm font-bold text-gray-700 outline-none focus:border-[#00c853] transition-all hover:bg-gray-50 placeholder:font-normal relative z-10"
           />
+
+          {/* ================= PHẦN HIỂN THỊ DROPDOWN TỰ ĐỘNG ================= */}
+          {showDropdown && selectedKeyword && (
+            <div className="absolute top-[110%] left-0 w-full min-w-[340px] bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden">
+              <div className="p-3 text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-50">
+                Gợi ý công ty
+              </div>
+
+              <div className="max-h-[320px] overflow-y-auto">
+                {isLoadingSuggestions ? (
+                  <div className="p-5 text-center text-sm text-gray-400 italic">
+                    Đang tìm kiếm...
+                  </div>
+                ) : suggestions.length > 0 ? (
+                  suggestions.map((company) => (
+                    <div
+                      key={company.companyId}
+                      // 4. TRUYỀN ID CÔNG TY VÀO SỰ KIỆN CLICK MỚI
+                      onClick={() => handleSelectSuggestion(company.companyId)}
+                      className="flex items-center gap-3 p-3 hover:bg-green-50 cursor-pointer border-b border-gray-50 transition-colors"
+                    >
+                      <div className="w-12 h-12 rounded-lg border border-gray-100 bg-white flex items-center justify-center p-1 flex-shrink-0">
+                        <img
+                          src={company.logoUrl}
+                          alt={company.companyName}
+                          className="w-full h-full object-contain"
+                          onError={(e) => {
+                            e.target.src = "https://via.placeholder.com/150";
+                          }}
+                        />
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-[15px] font-bold text-gray-800 truncate">
+                          {company.companyName}
+                        </h4>
+                        <div className="flex items-center gap-2 text-[13px] text-gray-500 mt-1">
+                          <span className="truncate">
+                            {company.industry || "Đa lĩnh vực"}
+                          </span>
+                          <span className="text-gray-300">•</span>
+                          <span className="truncate flex items-center gap-1">
+                            <FaMapMarkerAlt
+                              size={11}
+                              className="text-gray-400"
+                            />
+                            {FormatLocationDisplay(company.provinceCode) ||
+                              "Cập nhật sau"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-5 text-center text-sm text-gray-400">
+                    Không tìm thấy công ty nào phù hợp.
+                  </div>
+                )}
+              </div>
+
+              <div
+                onClick={() => {
+                  setShowDropdown(false);
+                  onFilterChange?.("keyword", selectedKeyword);
+                }}
+                className="p-3 text-center text-sm font-black text-[#00c853] hover:bg-green-50/50 cursor-pointer transition-colors border-t border-gray-50 uppercase tracking-wide"
+              >
+                Xem tất cả kết quả cho "{selectedKeyword}"
+              </div>
+            </div>
+          )}
+          {/* ================= KẾT THÚC DROPDOWN ================= */}
         </div>
 
         {/* CỘT 3: Lĩnh vực */}
