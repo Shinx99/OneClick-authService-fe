@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import candidateService from "@/services/candidate.service.js";
 import toast, { ToastIcon } from "react-hot-toast";
+import { success } from "zod";
 
 export const useCandidateProfile = () => {
 
@@ -69,6 +70,20 @@ export const useCandidateProfile = () => {
         }
     };
 
+    // Delete avatar
+    const deleteAvatar = async () => {
+        setIsUpdating(true);
+        try {
+            await candidateService.deleteAvatar();
+            setProfile(prev => ({ ...prev, avatarUrl: null }));
+            return { success: true }
+        } catch {
+            return { success: false };
+        } finally {
+            setIsUpdating(false);
+        }
+    }
+
 
     // Update background
     const updateBackground = async (file) => {
@@ -87,6 +102,21 @@ export const useCandidateProfile = () => {
     }
 
 
+    // Delete background
+    const deleteBackground = async () => {
+        setIsUpdating(true);
+        try {
+            await candidateService.deleteBackground();
+            setProfile(prev => ({ ...prev, backgroundUrl: null }));
+            return { success: true };
+        } catch {
+            return { success: false }
+        } finally {
+            setIsUpdating(false);
+        }
+    }
+
+
     return {
         profile,
         isLoading,
@@ -94,7 +124,9 @@ export const useCandidateProfile = () => {
         error,
         updateProfile,
         updateAvatar,
+        deleteAvatar,
         updateBackground,
+        deleteBackground,
         refreshProfile: fetchProfile
     };
 };
