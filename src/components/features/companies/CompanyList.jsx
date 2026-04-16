@@ -27,7 +27,7 @@ const CompanyList = ({
             <button
               key={i}
               onClick={() => onPageChange(i)}
-              className={`w-10 h-10 rounded-xl font-black transition-all active:scale-90
+              className={`w-10 h-10 rounded-xl font-black transition-all active:scale-90 hover:scale-105 cursor-pointer
                 ${
                   currentPage === i
                     ? "bg-[#00c853] text-white shadow-lg"

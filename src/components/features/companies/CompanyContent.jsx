@@ -29,7 +29,7 @@ const CompanyContent = ({ initialData }) => {
         keyword: filters.keyword,
         sizeRange: filters.sizeRange,
         page: page,
-        size: 12, // Tăng size lên 12 để khớp với hàng 4 công ty (4x3)
+        size: 12,
       });
 
       if (res.success) {
