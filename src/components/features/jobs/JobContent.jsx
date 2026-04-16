@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation"; 
 import {
   FiClock,
   FiUsers,
@@ -24,8 +25,10 @@ import {
   HiOutlineComputerDesktop,
   HiOutlineGlobeAlt,
 } from "react-icons/hi2";
+import { toast } from "react-hot-toast"; 
 import ApplyModal from "./ApplyModal";
 import AIMatchButton from "./AIMatchButton";
+import { useAuth } from "@/context/AuthContext"; 
 
 // Fallback avatar
 const FALLBACK_LOGO =
@@ -101,12 +104,84 @@ const isDeadlinePassed = (dateStr) => {
 };
 
 const JobContent = ({ data }) => {
+  const router = useRouter();  
+  const { isAuthenticated, user } = useAuth();  
   const [showApplyModal, setShowApplyModal] = useState(false);
+
+  // DEBUG: Log thông tin user và role
+  React.useEffect(() => {
+    console.log("========== DEBUG AUTH INFO ==========");
+    console.log("isAuthenticated:", isAuthenticated);
+    console.log("Full user object:", user);
+    console.log("user?.role:", user?.role);
+    console.log("user?.roles:", user?.roles);  // Có thể role là mảng
+    console.log("user?.user?.role:", user?.user?.role); // Nếu role nested
+    console.log("typeof user?.role:", typeof user?.role);
+    console.log("====================================");
+  }, [isAuthenticated, user]);
 
   const statusInfo = STATUS_CONFIG[data.status?.toLowerCase()] || STATUS_CONFIG.active;
   const companyLogo = data.companyLogoUrl || FALLBACK_LOGO;
   const companyName = data.companyName || "Công ty ẩn danh";
   const deadlinePassed = isDeadlinePassed(data.applicationDeadline);
+
+  /**
+   * Xử lý khi click nút "Ứng tuyển ngay"
+   * Kiểm tra đăng nhập và role trước khi mở modal
+   */
+  const handleApplyClick = () => {
+    // 1. Kiểm tra đã đăng nhập chưa
+    if (!isAuthenticated) {
+      toast.error("Vui lòng đăng nhập để ứng tuyển việc làm", {
+        duration: 3000,
+        position: "top-center",
+      });
+      
+      // Lưu lại URL hiện tại để sau khi login quay lại
+      sessionStorage.setItem("redirectAfterLogin", window.location.pathname);
+      
+      // Chuyển hướng đến trang login
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
+      return;
+    }
+
+    // 2. Kiểm tra role có phải candidate không
+    const isCandidate = user?.roles?.includes('candidate') || user?.roles?.includes('ROLE_candidate');
+
+    if (!isCandidate) {
+      toast.error("Chỉ ứng viên mới có thể ứng tuyển việc làm", {
+        duration: 3000,
+        position: "top-center",
+      });
+      
+      // Nếu là employer, chuyển hướng về trang chủ hoặc register candidate
+      if (user?.roles === "recruiter") {
+        setTimeout(() => {
+          router.push("/");
+        }, 1500);
+      }
+      return;
+    }
+
+    // 3. Kiểm tra job đã hết hạn chưa
+    if (deadlinePassed) {
+      toast.error("Công việc này đã hết hạn ứng tuyển", {
+        duration: 3000,
+        position: "top-center",
+      });
+      return;
+    }
+
+    // 4. Tất cả OK, mở modal ứng tuyển
+    setShowApplyModal(true);
+  };
+
+  // const handleApplySuccess = () => {
+  //   setShowApplyModal(false);
+  //   toast.success("Ứng tuyển thành công! Nhà tuyển dụng sẽ liên hệ với bạn sớm.");
+  // };
 
   // Thông tin nhanh items
   const quickInfoItems = [
@@ -239,7 +314,8 @@ const JobContent = ({ data }) => {
             {/* Action buttons — nằm cuối card header */}
             <div className="flex flex-col sm:flex-row gap-3 mt-6">
               <button
-                onClick={() => !deadlinePassed && setShowApplyModal(true)}
+                // onClick={() => !deadlinePassed && setShowApplyModal(true)}
+                onClick={handleApplyClick}
                 disabled={deadlinePassed}
                 className={`flex-1 py-3.5 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${
                   deadlinePassed
@@ -407,6 +483,7 @@ const JobContent = ({ data }) => {
         <ApplyModal
           job={{ id: data.jobId, company: companyName, title: data.title }}
           onClose={() => setShowApplyModal(false)}
+          //onSuccess={handleApplySuccess}
         />
       )}
     </>
