@@ -13,7 +13,7 @@ const RestrictedWrapper = ({ children }) => {
   return (
     <div className="relative w-full min-h-[65vh] rounded-[2rem] ">
       {/* --- DEV TOOL MÔ PHỎNG (Xóa khi có BE) --- */}
-      <div className="absolute right-0 z-[100] flex gap-2 p-2 bg-card-bg border-2 border-card-border rounded-xl shadow-sm">
+      <div className="absolute center z-[100] flex gap-2 p-2 bg-card-bg border-2 border-card-border rounded-xl shadow-sm">
         <button
           onClick={() => setAccountStatus("unverified")}
           className={`px-3 py-1 text-xs font-medium rounded-lg transition-all ${

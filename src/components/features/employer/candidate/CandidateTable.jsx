@@ -1,206 +1,199 @@
 "use client";
 import React from "react";
-import { MdOutlineMoreVert, MdOutlineEmail, MdOutlineCalendarToday } from "react-icons/md";
+import { FaRegFilePdf, FaEnvelope, FaPhone } from "react-icons/fa";
+import { MdOutlineMoreVert, MdKeyboardArrowDown } from "react-icons/md";
+import toast from "react-hot-toast";
 
-const candidates = [
-  {
-    id: 1,
-    name: "Nguyen Van A",
-    avatar: "NV",
-    position: "Senior Java Developer",
-    department: "Kỹ thuật",
-    status: "Phỏng vấn",
-    match: 92,
-    appliedDate: "2024-10-15",
+// Đồng bộ màu sắc trạng thái
+const STATUS_CONFIG = {
+  APPLIED: {
+    label: "Mới ứng tuyển",
+    cls: "bg-slate-100 text-slate-600 border-slate-200",
   },
-  {
-    id: 2,
-    name: "Tran Thi B",
-    avatar: "TT",
-    position: "Product Designer",
-    department: "Thiết kế",
-    status: "Sàng lọc",
-    match: 85,
-    appliedDate: "2024-10-14",
+  REVIEWING: {
+    label: "Đang xem xét",
+    cls: "bg-blue-50 text-blue-600 border-blue-200",
   },
-  {
-    id: 3,
-    name: "Hoang ThanhC",
-    avatar: "HT",
-    position: "Marketing Manager",
-    department: "Marketing",
-    status: "Đề xuất",
-    match: 78,
-    appliedDate: "2024-10-12",
+  INTERVIEW: {
+    label: "Phỏng vấn",
+    cls: "bg-purple-50 text-purple-600 border-purple-200",
   },
-  {
-    id: 4,
-    name: "Ngo Van D",
-    avatar: "NV",
-    position: "QA Engineer",
-    department: "Đảm bảo chất lượng",
-    status: "Mới",
-    match: 70,
-    appliedDate: "2024-10-16",
+  OFFERED: {
+    label: "Đề nghị Offer",
+    cls: "bg-orange-50 text-orange-600 border-orange-200",
   },
-  {
-    id: 5,
-    name: "Pham Minh E",
-    avatar: "PM",
-    position: "Fullstack Engineer",
-    department: "Kỹ thuật",
-    status: "Phỏng vấn",
-    match: 88,
-    appliedDate: "2024-10-13",
+  HIRED: {
+    label: "Đã tuyển",
+    cls: "bg-emerald-50 text-emerald-600 border-emerald-200",
   },
-  {
-    id: 6,
-    name: "Le Thi F",
-    avatar: "LT",
-    position: "UX Researcher",
-    department: "Thiết kế",
-    status: "Từ chối",
-    match: 45,
-    appliedDate: "2024-10-10",
+  REJECTED: {
+    label: "Từ chối",
+    cls: "bg-rose-50 text-rose-600 border-rose-200",
   },
-];
-
-const statusColors = {
-  "Mới": "bg-blue-50 text-blue-700",
-  "Sàng lọc": "bg-amber-50 text-amber-700",
-  "Phỏng vấn": "bg-violet-50 text-violet-700",
-  "Đề xuất": "bg-emerald-50 text-emerald-700",
-  "Từ chối": "bg-red-50 text-red-600",
 };
 
-const CandidateTable = () => {
+const CandidateTable = ({ candidates, setCandidates }) => {
+  // Hàm xử lý đổi trạng thái ngay trên Bảng
+  const handleStatusChange = (candidateId, newStatus) => {
+    const candidate = candidates.find((c) => c.id === candidateId);
+    if (!candidate) return;
+
+    // Cập nhật mảng gốc
+    setCandidates((prev) =>
+      prev.map((c) => (c.id === candidateId ? { ...c, status: newStatus } : c)),
+    );
+
+    // Bật thông báo
+    toast.success(
+      `Đã đổi trạng thái ${candidate.name} thành ${STATUS_CONFIG[newStatus].label}`,
+    );
+  };
+
   return (
-    <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
-      {/* Filter Bar */}
-      <div className="flex items-center justify-between p-5 border-b border-slate-100">
-        <div className="flex items-center gap-3">
-          <button className="px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg">
-            Tất cả ứng viên
-          </button>
-          <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-500">
-            <MdOutlineCalendarToday className="w-4 h-4" />
-            <span>01/10/2024 - 30/10/2024</span>
-          </div>
-          <input
-            type="text"
-            placeholder="Tìm kiếm tên ứng viên..."
-            className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all w-60"
-          />
-        </div>
-        <button className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-emerald-600 border border-emerald-200 rounded-lg hover:bg-emerald-50 transition-all">
-          + Thêm bộ lọc
-        </button>
-      </div>
-
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-slate-100 bg-slate-50/50">
-              <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Ứng viên
-              </th>
-              <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Vị trí
-              </th>
-              <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Phòng ban
-              </th>
-              <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Trạng thái
-              </th>
-              <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Phù hợp %
-              </th>
-              <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Ngày ứng tuyển
-              </th>
-              <th className="text-right text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">
-                Thao tác
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {candidates.map((c, index) => (
-              <tr
-                key={c.id}
-                className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors"
+    <div className="h-full overflow-y-auto overflow-x-auto custom-scrollbar">
+      <table className="w-full text-left border-collapse min-w-[950px]">
+        <thead className="sticky top-0 bg-slate-50 dark:bg-slate-800/80 backdrop-blur-sm z-10 shadow-sm border-b border-slate-200 dark:border-slate-700">
+          <tr>
+            <th className="px-6 py-4 w-12 text-center">
+              <input
+                type="checkbox"
+                className="w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
+              />
+            </th>
+            <th className="px-4 py-4 text-[12px] font-bold text-slate-400 uppercase tracking-wider">
+              Ứng viên
+            </th>
+            <th className="px-4 py-4 text-[12px] font-bold text-slate-400 uppercase tracking-wider">
+              Vị trí & Kinh nghiệm
+            </th>
+            {/* Tăng độ rộng cột trạng thái một chút để chứa cái dropdown */}
+            <th className="px-4 py-4 text-[12px] font-bold text-slate-400 uppercase tracking-wider w-[180px]">
+              Trạng thái
+            </th>
+            <th className="px-4 py-4 text-[12px] font-bold text-slate-400 uppercase tracking-wider">
+              Mức độ phù hợp
+            </th>
+            <th className="px-4 py-4 text-[12px] font-bold text-slate-400 uppercase tracking-wider">
+              Ngày nộp
+            </th>
+            <th className="px-6 py-4 text-[12px] font-bold text-slate-400 uppercase tracking-wider text-right">
+              Thao tác
+            </th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+          {candidates.length === 0 && (
+            <tr>
+              <td
+                colSpan="7"
+                className="px-6 py-20 text-center text-slate-500 font-medium"
               >
-                <td className="px-5 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-white text-xs font-bold">
-                      {c.avatar}
-                    </div>
-                    <p className="text-sm font-semibold text-slate-700">{c.name}</p>
-                  </div>
-                </td>
-                <td className="px-5 py-4">
-                  <p className="text-sm text-slate-600">{c.position}</p>
-                </td>
-                <td className="px-5 py-4">
-                  <p className="text-sm text-slate-500">{c.department}</p>
-                </td>
-                <td className="px-5 py-4">
-                  <span
-                    className={`inline-flex px-2.5 py-1 rounded-full text-xs font-semibold ${
-                      statusColors[c.status] || "bg-slate-100 text-slate-600"
-                    }`}
-                  >
-                    {c.status}
-                  </span>
-                </td>
-                <td className="px-5 py-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-emerald-500 rounded-full"
-                        style={{ width: `${c.match}%` }}
-                      />
-                    </div>
-                    <span className="text-sm font-medium text-slate-700">{c.match}%</span>
-                  </div>
-                </td>
-                <td className="px-5 py-4">
-                  <p className="text-sm text-slate-400">{c.appliedDate}</p>
-                </td>
-                <td className="px-5 py-4">
-                  <div className="flex items-center justify-end gap-1">
-                    <button className="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all">
-                      <MdOutlineEmail className="w-4 h-4" />
-                    </button>
-                    <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
-                      <MdOutlineMoreVert className="w-4 h-4" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                Không tìm thấy ứng viên nào phù hợp với bộ lọc.
+              </td>
+            </tr>
+          )}
 
-      {/* Footer */}
-      <div className="flex items-center justify-between px-5 py-4 border-t border-slate-100">
-        <p className="text-sm text-slate-400">
-          Hiển thị 1 đến {candidates.length} trong tổng số 186 kết quả
-        </p>
-        <div className="flex items-center gap-1">
-          <button className="px-3 py-1.5 text-sm text-slate-400 hover:bg-slate-100 rounded-lg transition-all">
-            Trước
-          </button>
-          <button className="px-3 py-1.5 text-sm bg-emerald-600 text-white rounded-lg">1</button>
-          <button className="px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-100 rounded-lg transition-all">2</button>
-          <button className="px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-100 rounded-lg transition-all">3</button>
-          <button className="px-3 py-1.5 text-sm text-slate-400 hover:bg-slate-100 rounded-lg transition-all">
-            Tiếp
-          </button>
-        </div>
-      </div>
+          {candidates.map((c) => (
+            <tr
+              key={c.id}
+              className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group"
+            >
+              <td className="px-6 py-4 text-center">
+                <input
+                  type="checkbox"
+                  className="w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
+                />
+              </td>
+              <td className="px-4 py-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-[15px] font-bold shrink-0">
+                    {c.name.charAt(0)}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[14px] font-bold text-slate-800 dark:text-white cursor-pointer hover:text-emerald-600 transition-colors truncate">
+                      {c.name}
+                    </p>
+                    <p className="text-[12px] text-slate-500 mt-0.5">
+                      {c.time}
+                    </p>
+                  </div>
+                </div>
+              </td>
+              <td className="px-4 py-4">
+                <p className="text-[13px] font-bold text-slate-700 dark:text-slate-300 truncate">
+                  {c.role}
+                </p>
+                <p className="text-[12px] text-slate-500 mt-0.5">
+                  {c.exp} kinh nghiệm
+                </p>
+              </td>
+
+              {/* ===== CỘT TRẠNG THÁI (ĐÃ CHUYỂN THÀNH SELECT BOX) ===== */}
+              <td className="px-4 py-4">
+                <div className="relative w-fit">
+                  <select
+                    value={c.status}
+                    onChange={(e) => handleStatusChange(c.id, e.target.value)}
+                    className={`appearance-none outline-none pl-3 pr-8 py-1.5 rounded-md text-[11px] font-bold border cursor-pointer transition-colors shadow-sm ${STATUS_CONFIG[c.status]?.cls} hover:opacity-80`}
+                  >
+                    {Object.entries(STATUS_CONFIG).map(([key, config]) => (
+                      // Thêm bg-white cho các option để khi xổ xuống nó không bị dính màu của class cha
+                      <option
+                        key={key}
+                        value={key}
+                        className="bg-white text-slate-700 font-medium"
+                      >
+                        {config.label}
+                      </option>
+                    ))}
+                  </select>
+                  {/* Icon mũi tên giả lập chèn lên trên thẻ select */}
+                  <MdKeyboardArrowDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-current opacity-60 pointer-events-none" />
+                </div>
+              </td>
+
+              <td className="px-4 py-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-24 h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full ${c.match >= 80 ? "bg-emerald-500" : "bg-amber-500"} rounded-full`}
+                      style={{ width: `${c.match}%` }}
+                    />
+                  </div>
+                  <span className="text-[12px] font-bold text-slate-700 dark:text-slate-300">
+                    {c.match}%
+                  </span>
+                </div>
+              </td>
+              <td className="px-4 py-4 text-[13px] font-medium text-slate-500">
+                {c.date || "—"}
+              </td>
+              <td className="px-6 py-4">
+                <div className="flex items-center justify-end gap-1.5 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button
+                    className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all"
+                    title="Xem CV"
+                  >
+                    <FaRegFilePdf size={16} />
+                  </button>
+                  <button
+                    className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                    title="Gửi Email"
+                  >
+                    <FaEnvelope size={16} />
+                  </button>
+                  <button
+                    className="p-2 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-all"
+                    title="Thêm"
+                  >
+                    <MdOutlineMoreVert size={18} />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

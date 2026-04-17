@@ -1,30 +1,28 @@
-import React from "react";
-import CandidateTable from "@/components/features/employer/candidate/CandidateTable";
-import CandidateStats from "@/components/features/employer/candidate/CandidateStats";
+"use client";
+import React, { Suspense } from "react";
 import RestrictedWrapper from "@/components/features/employer/auth/RestrictedWrapper";
+import CandidateManager from "@/components/features/employer/candidate/CandidateManager";
 
 export default function CandidatePage() {
   return (
     <RestrictedWrapper>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-bold text-slate-800">
-              Quản lý ứng viên
-            </h2>
-            <p className="text-sm text-slate-400 mt-1">
-              Xem xét và quản lý quy trình ứng viên của bạn
-            </p>
+      {/* Next.js bắt buộc useSearchParams() phải được bọc trong <Suspense> 
+        khi dùng ở Client Component để tránh lỗi render server-side.
+      */}
+      <Suspense
+        fallback={
+          <div className="flex items-center justify-center h-[calc(100vh-8rem)]">
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-8 h-8 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-sm font-bold text-slate-400">
+                Đang khởi tạo quy trình tuyển dụng ứng viên...
+              </p>
+            </div>
           </div>
-        </div>
-
-        {/* Table */}
-        <CandidateTable />
-
-        {/* Stats */}
-        <CandidateStats />
-      </div>
+        }
+      >
+        <CandidateManager />
+      </Suspense>
     </RestrictedWrapper>
   );
 }

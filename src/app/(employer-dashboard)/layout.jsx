@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useAuth } from "@/context/AuthContext";
@@ -9,10 +9,10 @@ import TopNav from "@/components/common/employer-dashboard/TopNav";
 import FloatingChatButton from "@/components/ui/FloatingChatButton";
 
 export default function EmployerDashboardLayout({ children }) {
-  const {isRecruiter, isLoading} = useAuth();
+  const { isRecruiter, isLoading } = useAuth();
   const router = useRouter();
 
-  const hasAccess = isRecruiter || isLoading; // Cho phép truy cập nếu đang tải hoặc là recruiter
+  const hasAccess = isRecruiter || isLoading;
 
   useEffect(() => {
     if (!hasAccess && !isLoading) {
@@ -21,7 +21,6 @@ export default function EmployerDashboardLayout({ children }) {
     }
   }, [hasAccess, isLoading, router]);
 
-  // Hiển thị loading khi đang kiểm tra
   if (isLoading || !hasAccess) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50">
@@ -31,17 +30,18 @@ export default function EmployerDashboardLayout({ children }) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
-      {/* Sidebar */}
+    // 1. Gỡ bỏ class "flex" ở div ngoài cùng
+    <div className="min-h-screen bg-slate-50">
+      {/* Sidebar (Đang set fixed left-0 w-64) */}
       <Sidebar />
 
-      {/* Main Content Area (offset by sidebar width) */}
-      <div className="flex-1 flex flex-col min-h-screen ml-64">
+      {/* 2. Dùng pl-64 (Padding-left 256px) để chứa vừa vặn không bị đẩy ra ngoài màn hình */}
+      <div className="flex flex-col min-h-screen pl-64 w-full">
         {/* Top Navigation */}
         <TopNav />
 
-        {/* Page Content */}
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 p-6">
+        {/* 3. Thêm "flex flex-col min-h-0" để truyền chiều cao xuống cho bảng Kanban, giúp nó tự cuộn bên trong */}
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 p-6 flex flex-col min-h-0">
           {children}
           <FloatingChatButton />
         </main>
