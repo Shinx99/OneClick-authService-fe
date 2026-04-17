@@ -1,71 +1,72 @@
 "use client";
 import React from "react";
 import {
-  MdOutlinePeople,
-  MdOutlinePersonAdd,
-  MdOutlineAutoGraph,
-  MdOutlineCalendarToday,
-} from "react-icons/md";
+  FaInbox,
+  FaRegEye,
+  FaRegCalendarCheck,
+  FaRegHandshake,
+} from "react-icons/fa";
 
-const stats = [
-  {
-    label: "Tổng ứng viên",
-    value: "1,284",
-    icon: MdOutlinePeople,
-    iconBg: "bg-emerald-50",
-    iconColor: "text-emerald-600",
-    change: "+12%",
-    changeColor: "text-emerald-600",
-  },
-  {
-    label: "Mới trong tuần",
-    value: "42",
-    icon: MdOutlinePersonAdd,
-    iconBg: "bg-blue-50",
-    iconColor: "text-blue-600",
-    change: "+8%",
-    changeColor: "text-emerald-600",
-  },
-  {
-    label: "Tỷ lệ phù hợp",
-    value: "78%",
-    icon: MdOutlineAutoGraph,
-    iconBg: "bg-violet-50",
-    iconColor: "text-violet-600",
-    change: "+3%",
-    changeColor: "text-emerald-600",
-  },
-  {
-    label: "Phỏng vấn",
-    value: "12",
-    icon: MdOutlineCalendarToday,
-    iconBg: "bg-amber-50",
-    iconColor: "text-amber-600",
-    change: "+5",
-    changeColor: "text-emerald-600",
-  },
-];
+const CandidateStats = ({ candidates }) => {
+  // Tự động tính toán số liệu dựa trên mảng CV thực tế
+  const total = candidates.length;
+  const appliedCount = candidates.filter((c) => c.status === "APPLIED").length;
+  const interviewingCount = candidates.filter(
+    (c) => c.status === "INTERVIEW",
+  ).length;
+  const hiredCount = candidates.filter((c) =>
+    ["OFFERED", "HIRED"].includes(c.status),
+  ).length;
 
-const CandidateStats = () => {
+  const stats = [
+    {
+      label: "Tổng CV tiếp nhận",
+      value: total,
+      icon: FaInbox,
+      bg: "bg-blue-50 text-blue-600",
+    },
+    {
+      label: "CV mới (Chưa xem)",
+      value: appliedCount,
+      icon: FaRegEye,
+      bg: "bg-rose-50 text-rose-600",
+    },
+    {
+      label: "Đang phỏng vấn",
+      value: interviewingCount,
+      icon: FaRegCalendarCheck,
+      bg: "bg-amber-50 text-amber-600",
+    },
+    {
+      label: "Đã tuyển dụng",
+      value: hiredCount,
+      icon: FaRegHandshake,
+      bg: "bg-emerald-50 text-emerald-600",
+    },
+  ];
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {stats.map((stat) => {
+      {stats.map((stat, idx) => {
         const Icon = stat.icon;
         return (
           <div
-            key={stat.label}
-            className="bg-white rounded-xl border border-slate-100 p-5 hover:shadow-md transition-shadow duration-200"
+            key={idx}
+            className="bg-white dark:bg-slate-800 rounded-[1.5rem] border-2 border-slate-100 dark:border-slate-700 p-5 flex items-center gap-5 hover:shadow-md transition-all group"
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className={`p-2.5 rounded-lg ${stat.iconBg}`}>
-                <Icon className={`w-5 h-5 ${stat.iconColor}`} />
-              </div>
-              <span className={`text-xs font-semibold ${stat.changeColor}`}>
-                {stat.change}
-              </span>
+            <div
+              className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${stat.bg} group-hover:scale-110 transition-transform`}
+            >
+              <Icon size={24} />
             </div>
-            <p className="text-2xl font-bold text-slate-800">{stat.value}</p>
-            <p className="text-sm text-slate-400 mt-1">{stat.label}</p>
+            <div>
+              <p className="text-3xl font-black text-slate-800 dark:text-white leading-none mb-1">
+                {stat.value}
+              </p>
+              <p className="text-[13px] font-bold text-slate-500 uppercase tracking-wide">
+                {stat.label}
+              </p>
+            </div>
           </div>
         );
       })}
