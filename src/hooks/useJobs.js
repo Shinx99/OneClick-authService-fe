@@ -27,8 +27,8 @@ export function useJobs(filters = {}) {
       const data = await jobService.getAllJobs(filters);
       setJobs(data?.content || []);
       setPagination({
-        page: data?.page ?? 0,
-        size: data?.size ?? 6,
+        page: data?.pageNumber ?? 0,
+        size: data?.pageSize ?? 6,
         totalElements: data?.totalElements ?? 0,
         totalPages: data?.totalPages ?? 0,
         last: data?.last ?? true,

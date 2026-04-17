@@ -37,4 +37,42 @@ export const jobService = {
     return data.data; // Returns array of related jobs directly
   },
 
+  // -------------------------------------------------------
+  // CREATE JOB (ROLE_recruiter)
+  // -------------------------------------------------------
+  createJob: async (body) => {
+    const { data } = await apiClient.post("/recruitment/job/create", body);
+    return data; // { timestamp, status, success, message, data: { jobId, ... } }
+  },
+
+  // -------------------------------------------------------
+  // UPDATE JOB (ROLE_recruiter) — only send changed fields
+  // -------------------------------------------------------
+  updateJob: async (jobId, body) => {
+    const { data } = await apiClient.put(`/recruitment/job/${jobId}`, body);
+    return data;
+  },
+
+  // -------------------------------------------------------
+  // DELETE JOB — soft delete (ROLE_recruiter)
+  // -------------------------------------------------------
+  deleteJob: async (jobId) => {
+    const { data } = await apiClient.delete(`/recruitment/job/${jobId}`);
+    return data;
+  },
+
+  // -------------------------------------------------------
+  // UPLOAD JOB IMAGE (ROLE_recruiter) — multipart/form-data
+  // -------------------------------------------------------
+  uploadJobImage: async (jobId, file) => {
+    const formData = new FormData();
+    formData.append("jobImage", file);
+    const { data } = await apiClient.put(
+      `/recruitment/job/${jobId}/image/upload`,
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+    return data;
+  },
+
 };

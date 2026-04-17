@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   FaSearch,
   FaMapMarkerAlt,
@@ -12,6 +13,7 @@ import { FiMapPin, FiDollarSign, FiBriefcase } from "react-icons/fi";
 import { jobService } from "@/services/job.service";
 
 const SearchBar = ({ className, onSearch }) => {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -22,7 +24,7 @@ const SearchBar = ({ className, onSearch }) => {
 
   // Debounced fetch suggestions
   const fetchSuggestions = useCallback(async (keyword) => {
-    if (!keyword || keyword.trim().length < 2) {
+    if (!keyword || keyword.trim().length < 1) {
       setSuggestions([]);
       setShowDropdown(false);
       return;
@@ -55,11 +57,11 @@ const SearchBar = ({ className, onSearch }) => {
     }, 400);
   };
 
-  // Select a suggestion → apply keyword filter
+  // Select a suggestion → navigate to job detail page
   const handleSelectSuggestion = (job) => {
     setQuery(job.title);
     setShowDropdown(false);
-    if (onSearch) onSearch(job.title);
+    router.push(`/jobs/${job.jobId}`);
   };
 
   // Click "Tìm kiếm" button
@@ -103,9 +105,9 @@ const SearchBar = ({ className, onSearch }) => {
 
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
-      <div className="bg-card-bg rounded-full p-2 flex flex-col md:flex-row items-center shadow-2xl mx-auto border border-card-border transition-all w-full max-w-6xl">
+      <div className="bg-white dark:bg-card-bg rounded-full p-2 flex flex-col md:flex-row items-center shadow-2xl shadow-black/15 dark:shadow-black/20 mx-auto border-0 transition-all w-full max-w-6xl">
         {/* 1. Danh mục Nghề */}
-        <div className="hidden md:flex items-center px-5 py-2 border-r border-card-border cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800/50 rounded-l-full transition-colors group">
+        <div className="hidden md:flex items-center px-5 py-2 border-r border-gray-200 dark:border-card-border cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-800/50 rounded-l-full transition-colors group">
           <div className="p-2 rounded-full mr-3 text-[#00c853] bg-green-50 dark:bg-green-500/10 transition-colors">
             <FaListUl size={14} />
           </div>
@@ -115,8 +117,8 @@ const SearchBar = ({ className, onSearch }) => {
         </div>
 
         {/* 2. Ô nhập tên công việc */}
-        <div className="flex-[2] flex items-center px-6 w-full border-b md:border-b-0 md:border-r border-card-border py-4 md:py-0">
-          <FaSearch className="text-text-muted mr-3 shrink-0" />
+        <div className="flex-[2] flex items-center px-6 w-full border-b md:border-b-0 md:border-r border-gray-200 dark:border-card-border py-4 md:py-0">
+          <FaSearch className="text-gray-400 dark:text-text-muted mr-3 shrink-0" />
           <input
             ref={inputRef}
             type="text"
@@ -127,20 +129,20 @@ const SearchBar = ({ className, onSearch }) => {
               if (suggestions.length > 0) setShowDropdown(true);
             }}
             placeholder="Vị trí tuyển dụng, tên công ty..."
-            className="outline-none bg-transparent text-text-main w-full text-sm placeholder:text-text-muted font-medium"
+            className="outline-none bg-transparent text-gray-800 dark:text-text-main w-full text-sm placeholder:text-gray-400 dark:placeholder:text-text-muted font-medium"
           />
         </div>
 
         {/* 3. Ô chọn địa điểm */}
         <div className="flex-1 flex items-center px-6 w-full py-4 md:py-0 group cursor-pointer">
-          <FaMapMarkerAlt className="text-text-muted mr-3 shrink-0 group-hover:text-[#00c853] transition-colors" />
+          <FaMapMarkerAlt className="text-gray-400 dark:text-text-muted mr-3 shrink-0 group-hover:text-[#00c853] transition-colors" />
           <input
             type="text"
             placeholder="Địa điểm"
-            className="outline-none bg-transparent text-text-main w-full text-sm cursor-pointer placeholder:text-text-muted font-medium"
+            className="outline-none bg-transparent text-gray-800 dark:text-text-main w-full text-sm cursor-pointer placeholder:text-gray-400 dark:placeholder:text-text-muted font-medium"
             readOnly
           />
-          <FaChevronDown className="text-text-muted ml-2 size-3 group-hover:text-[#00c853] transition-colors" />
+          <FaChevronDown className="text-gray-400 dark:text-text-muted ml-2 size-3 group-hover:text-[#00c853] transition-colors" />
         </div>
 
         {/* Nút Tìm kiếm */}
