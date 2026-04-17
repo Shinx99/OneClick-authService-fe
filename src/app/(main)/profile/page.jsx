@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { useCandidateProfile } from "@/hooks/useCandidateProfile";
 import ProfileHeader from "@/components/features/profile/ProfileHeader";
 import ExperienceList from "@/components/features/profile/ExperienceList";
 import SkillList from "@/components/features/profile/SkillList";
@@ -14,6 +15,7 @@ const ProfilePage = () => {
 
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
+  const { profile } = useCandidateProfile();
 
 
   useEffect(() => {
@@ -37,6 +39,8 @@ const ProfilePage = () => {
     return null;
   }
 
+  const skills = profile?.skills || [];
+
   return (
     <div className="min-h-screen bg-background pt-8 pb-12 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -50,7 +54,7 @@ const ProfilePage = () => {
           <div className="lg:col-span-2 space-y-6">
             <ExperienceList />
             <EducationList />
-            <SkillList />
+            <SkillList skills={skills} />
           </div>
           <div className="lg:col-span-1 space-y-6">
             <ReferenceLink />

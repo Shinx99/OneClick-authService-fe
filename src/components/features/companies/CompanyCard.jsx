@@ -3,22 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaMapMarkerAlt, FaArrowRight } from "react-icons/fa";
 
-// --- Hàm dịch mã bưu chính ---
-const formatLocationDisplay = (code) => {
-  if (!code) return "Toàn quốc";
-  const locations = {
-    100000: "Hà Nội",
-    700000: "TP. Hồ Chí Minh",
-    500000: "Đà Nẵng",
-    750000: "Bình Dương",
-    760000: "Đồng Nai",
-    180000: "Hải Phòng",
-    940000: "Cần Thơ",
-    570000: "Khánh Hòa",
-  };
-  return locations[String(code).trim()] || code;
-};
-
+import FormatLocationDisplay from "@/utils/FormatLocation";
 const CompanyCard = ({ company = {} }) => {
   const getImageUrl = (url) => {
     if (!url) return "/images/company-placeholder.png";
@@ -51,7 +36,7 @@ const CompanyCard = ({ company = {} }) => {
 
         <div className="flex items-center gap-2 text-gray-400 text-xs mb-5 font-medium">
           <FaMapMarkerAlt size={10} className="group-hover:text-[#00c853]" />
-          <span>{formatLocationDisplay(company.provinceCode)}</span>
+          <span>{FormatLocationDisplay(company.provinceCode)}</span>
         </div>
 
         <div className="w-full mt-auto py-2.5 border border-[#00c853] text-[#00c853] text-sm font-bold rounded-xl flex items-center justify-center gap-2 group-hover:bg-[#00c853] group-hover:text-white transition-all">

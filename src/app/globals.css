@@ -11,20 +11,8 @@
   --text-muted: #64748b;
 }
 
-/* Tự động kích hoạt biến Dark Mode khi trình duyệt/hệ thống bật Dark */
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f172a;
-    --foreground: #f8fafc;
-    --card-bg: #1e293b;
-    --card-border: #334155;
-    --text-main: #f1f5f9;
-    --text-muted: #94a3b8;
-  }
-} */
-
-/* Chỉ bật dark mode khi có class 'dark' trên html */
-html.dark {
+/* Dark Mode được kiểm soát bởi next-themes thông qua class "dark" trên <html> */
+.dark {
   --background: #0f172a;
   --foreground: #f8fafc;
   --card-bg: #1e293b;
@@ -44,6 +32,7 @@ html.dark {
   --animate-scan: scan 2s linear infinite;
   --animate-shine: shine 1.5s ease-in-out infinite;
 }
+
 
 @layer base {
   body {

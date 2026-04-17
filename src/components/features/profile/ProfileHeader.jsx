@@ -1,15 +1,16 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { FaMapMarkerAlt, FaCamera, FaTimes, FaUpload } from "react-icons/fa";
+import { FaMapMarkerAlt, FaCamera, FaTimes, FaUpload, FaTrash } from "react-icons/fa";
 import Link from "next/link";
 import { useCandidateProfile } from "@/hooks/useCandidateProfile";
+import toast from "react-hot-toast";
 
 
 // -------------------------------------------------------------------------
 // MODAL XEM / THAY ẢNH
 // -------------------------------------------------------------------------
-const ImageModal = ({ isOpen, onClose, imageUrl, title, onUpload, isUpdating }) => {
+const ImageModal = ({ isOpen, onClose, imageUrl, title, onUpload, onDelete, isUpdating }) => {
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -62,14 +63,29 @@ const ImageModal = ({ isOpen, onClose, imageUrl, title, onUpload, isUpdating }) 
           <p className="text-sm text-text-muted">
             Hỗ trợ JPG, PNG, WEBP. Tối đa 5MB.
           </p>
-          <button
-            disabled={isUpdating}
-            onClick={() => inputRef.current?.click()}
-            className="flex items-center gap-2 px-6 py-2.5 bg-[#00c853] hover:bg-[#00a846] text-white font-black rounded-xl shadow-lg active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
-          >
-            <FaUpload className="w-4 h-4" />
-            {isUpdating ? "Đang tải lên..." : "Thay đổi ảnh"}
-          </button>
+
+          <div className="flex items-center gap-2">
+            {imageUrl && imageUrl !== "/images/avatar-placeholder.jpg" && (
+              <button
+                type="button"
+                disabled={isUpdating}
+                onClick={() => onDelete?.()}
+                className="flex items-center gap-2 px-4 py-2.5 border border-red-300 dark:border-red-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 font-black rounded-xl transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed text-sm"
+              >
+                <FaTrash className="w-3.5 h-3.5" />
+                Xóa ảnh
+              </button>
+            )}
+            <button
+              disabled={isUpdating}
+              onClick={() => inputRef.current?.click()}
+              className="flex items-center gap-2 px-6 py-2.5 bg-[#00c853] hover:bg-[#00a846] text-white font-black rounded-xl shadow-lg active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed text-sm"
+            >
+              <FaUpload className="w-4 h-4" />
+              {isUpdating ? "Đang tải lên..." : "Thay đổi ảnh"}
+            </button>
+          </div>
+
           <input
             ref={inputRef}
             type="file"
@@ -77,7 +93,6 @@ const ImageModal = ({ isOpen, onClose, imageUrl, title, onUpload, isUpdating }) 
             className="hidden"
             onChange={(e) => {
               onUpload(e.target.files[0]);
-              onClose();
             }}
           />
         </div>
@@ -91,7 +106,7 @@ const ImageModal = ({ isOpen, onClose, imageUrl, title, onUpload, isUpdating }) 
 // PROFILE HEADER
 // -------------------------------------------------------------------------
 const ProfileHeader = () => {
-  const { profile, updateProfile, updateAvatar, updateBackground, isUpdating } =
+  const { profile, updateProfile, updateAvatar, deleteAvatar, updateBackground, deleteBackground, isUpdating } =
     useCandidateProfile();
 
   const [coverDragging, setCoverDragging] = useState(false);
@@ -122,11 +137,12 @@ const ProfileHeader = () => {
 
   // Cleanup blob URLs
   useEffect(() => {
-    return () => {
-      if (coverPreview.startsWith("blob:")) URL.revokeObjectURL(coverPreview);
-      if (avatarPreview.startsWith("blob:")) URL.revokeObjectURL(avatarPreview);
-    };
-  }, [coverPreview, avatarPreview]);
+    return () => { if (coverPreview.startsWith("blob:")) URL.revokeObjectURL(coverPreview); };
+  }, [coverPreview]);
+
+  useEffect(() => {
+    return () => { if (avatarPreview.startsWith("blob:")) URL.revokeObjectURL(avatarPreview); };
+  }, [avatarPreview]);
 
   // Upload ảnh bìa
   const handleCoverUpload = async (file) => {
@@ -135,8 +151,25 @@ const ProfileHeader = () => {
     prevCoverRef.current = coverPreview;
     setCoverPreview(objectUrl);
     const result = await updateBackground(file);
-    if (!result.success) setCoverPreview(prevCoverRef.current);
+    if (result.success) {
+      setModal({ open: false, type: null });
+    } else {
+      setCoverPreview(prevCoverRef.current);
+    }
   };
+
+  // Delete cover
+  const handleCoverDelete = async () => {
+    const result = await deleteBackground();
+
+    if (result?.success) {
+      setCoverPreview("/images/avatar-placeholder.jpg");
+      setModal({ open: false, type: null });
+      toast.success("Đã xóa ảnh bìa");
+    } else {
+      toast.error("Xóa ảnh thất bại, thử lại sau");
+    }
+  }
 
   // Upload avatar
   const handleAvatarUpload = async (file) => {
@@ -145,14 +178,27 @@ const ProfileHeader = () => {
     prevAvatarRef.current = avatarPreview;
     setAvatarPreview(objectUrl);
     const result = await updateAvatar(file);
-    if (!result.success) setAvatarPreview(prevAvatarRef.current);
+    if (result.success) {
+      setModal({ open: false, type: null });
+    } else {
+      setCoverPreview(prevAvatarRef.current);
+    }
   };
 
-  const handleCoverRemove = async () => {
-    setCoverPreview("/images/cover-placeholder.jpg");
-    await updateProfile({ backgroundUrl: null });
+  // delete avatar
+  const handleAvatarDelete = async () => {
+    const result = await deleteAvatar();
+
+    if (result?.success) {
+      setAvatarPreview("/images/avatar-placeholder.jpg");
+      setModal({ open: false, type: null });
+      toast.success("Đã xóa ảnh đại diện");
+    } else {
+      toast.error("Xóa ảnh thất bại, thử lại sau");
+    }
   };
 
+  // display profile
   const displayFullName = profile
     ? `${profile.surname ?? ""} ${profile.name ?? ""}`.trim()
     : "Tên của bạn";
@@ -170,6 +216,7 @@ const ProfileHeader = () => {
         imageUrl={coverPreview}
         title="Ảnh bìa"
         onUpload={handleCoverUpload}
+        onDelete={handleCoverDelete}
         isUpdating={isUpdating}
       />
 
@@ -180,6 +227,7 @@ const ProfileHeader = () => {
         imageUrl={avatarPreview}
         title="Ảnh đại diện"
         onUpload={handleAvatarUpload}
+        onDelete={handleAvatarDelete}
         isUpdating={isUpdating}
       />
 
@@ -187,7 +235,7 @@ const ProfileHeader = () => {
         {/* Cover Photo */}
         <div
           className={`h-48 md:h-56 lg:h-64 relative overflow-hidden rounded-t-3xl cursor-pointer transition-all group ${coverDragging ? "ring-4 ring-[#00c853]/50 scale-[1.01]" : ""} ${isUpdating ? "opacity-70 pointer-events-none" : ""}`}
-          onClick={() => setModal({ open: true, type: "cover" })} // ✅ mở modal thay vì trigger input
+          onClick={() => setModal({ open: true, type: "cover" })} // mở modal 
           onDragOver={(e) => { e.preventDefault(); setCoverDragging(true); }}
           onDragLeave={() => setCoverDragging(false)}
           onDrop={(e) => {
@@ -197,7 +245,7 @@ const ProfileHeader = () => {
           }}
         >
           <Image
-            src={coverPreview}
+            src={coverPreview || "/images/avatar-placeholder.jpg"}
             alt="Cover photo"
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -214,14 +262,6 @@ const ProfileHeader = () => {
             <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg text-sm font-bold text-gray-800">
               Xem / Thay ảnh bìa
             </div>
-            {coverPreview !== "/images/avatar-placeholder.jpg" && (
-              <button
-                onClick={(e) => { e.stopPropagation(); handleCoverRemove(); }}
-                className="bg-red-500/90 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-red-600 backdrop-blur-sm transition-all"
-              >
-                Xóa
-              </button>
-            )}
           </div>
         </div>
 

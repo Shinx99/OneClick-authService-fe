@@ -1,30 +1,25 @@
 "use client";
 import React from "react";
-import { FaPlus, FaLightbulb } from "react-icons/fa";
+import { FaLightbulb } from "react-icons/fa";
 
 const SkillList = ({ skills = [] }) => {
   return (
     <div className="bg-card-bg p-6 rounded-3xl shadow-sm border border-card-border transition-all">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold flex items-center gap-2 text-text-main">
-          <FaLightbulb className="text-[#00c853]" />
-          Kỹ năng
-        </h2>
-        {/* Nút chỉnh sửa nhanh dẫn đến trang edit */}
-        <button className="p-2 text-gray-400 hover:text-[#00c853] transition-colors active:scale-90">
-          <FaPlus size={16} />
-        </button>
+      {/* Tiêu đề */}
+      <div className="flex items-center gap-2 mb-6">
+        <FaLightbulb className="text-[#00c853]" />
+        <h2 className="text-xl font-bold text-text-main">Kỹ năng</h2>
       </div>
 
-      {/* Hiển thị danh sách tag kỹ năng */}
+      {/* Danh sách kỹ năng */}
       <div className="flex flex-wrap gap-3">
         {skills.length > 0 ? (
-          skills.map((skill) => (
+          skills.map((skill, index) => (
             <span
-              key={skill.id}
-              className="px-5 py-2 rounded-full bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 text-sm font-bold border border-blue-100 dark:border-blue-900/30 hover:bg-[#00c853] hover:text-white hover:border-[#00c853] transition-all cursor-default shadow-sm"
+              key={index}
+              className="px-5 py-2 rounded-full bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 text-sm font-bold border border-blue-100 dark:border-blue-900/30 shadow-sm"
             >
-              {skill.name}
+              {skill}
             </span>
           ))
         ) : (
@@ -32,11 +27,6 @@ const SkillList = ({ skills = [] }) => {
             Chưa có thông tin kỹ năng.
           </p>
         )}
-
-        {/* Nút thêm kỹ năng mới cho UI - Giữ nguyên form dashed của bạn */}
-        <button className="px-5 py-2 rounded-full border border-dashed border-card-border text-text-muted text-sm font-bold hover:border-[#00c853] hover:text-[#00c853] transition-all active:scale-95">
-          + Thêm kỹ năng
-        </button>
       </div>
     </div>
   );

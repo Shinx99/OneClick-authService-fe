@@ -56,9 +56,9 @@ const CompanyBanner = ({ company = {} }) => {
         </div>
 
         {/* Button Theo dõi */}
-        <button className="bg-[#00c853] text-white px-8 py-3 rounded-full font-bold shadow-lg active:scale-95 mb-2 whitespace-nowrap transition-transform hover:opacity-90">
+        {/* <button className="bg-[#00c853] text-white px-8 py-3 rounded-full font-bold shadow-lg active:scale-95 mb-2 whitespace-nowrap transition-transform hover:opacity-90">
           Theo dõi
-        </button>
+        </button> */}
       </div>
     </div>
   );
