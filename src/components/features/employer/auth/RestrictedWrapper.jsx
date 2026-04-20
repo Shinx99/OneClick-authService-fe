@@ -11,9 +11,10 @@ const RestrictedWrapper = ({ children }) => {
   const [accountStatus, setAccountStatus] = useState("unverified");
 
   return (
-    <div className="relative w-full min-h-[65vh] rounded-[2rem] ">
+    // Bỏ min-h và rounded đi để Wrapper tự động ôm trọn children
+    <div className="relative w-full h-full flex flex-col">
       {/* --- DEV TOOL MÔ PHỎNG (Xóa khi có BE) --- */}
-      <div className="absolute center z-[100] flex gap-2 p-2 bg-card-bg border-2 border-card-border rounded-xl shadow-sm">
+      <div className="absolute top-0 right-0 z-40 flex gap-2 p-2 bg-card-bg border border-card-border rounded-xl shadow-sm">
         <button
           onClick={() => setAccountStatus("unverified")}
           className={`px-3 py-1 text-xs font-medium rounded-lg transition-all ${
@@ -38,7 +39,7 @@ const RestrictedWrapper = ({ children }) => {
 
       {/* --- NỘI DUNG BỊ MỜ (BACKGROUND) --- */}
       <div
-        className={`transition-all duration-700 w-full h-full ${
+        className={`transition-all duration-700 w-full flex-1 ${
           accountStatus !== "verified"
             ? "opacity-30 grayscale-[40%] pointer-events-none select-none blur-[4px]"
             : "opacity-100 blur-0"
@@ -47,16 +48,18 @@ const RestrictedWrapper = ({ children }) => {
         {children}
       </div>
 
-      {/* --- POP-UP OVERLAY (CHỈ HIỆN KHI BỊ KHÓA) --- */}
+      {/* --- POP-UP OVERLAY (ĐÃ FIX LỖI ĐỔ BÓNG GIỚI HẠN) --- */}
       {accountStatus !== "verified" && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center animate-in fade-in duration-500">
-          {/* Lớp Overlay trong suốt để chặn click */}
-          <div className="absolute inset-0 bg-background/10 backdrop-blur-[2px] rounded-[2rem] z-40"></div>
+        // FIX 1: Đổi absolute thành fixed.
+        // Dùng left-0 trên mobile, và left-64 trên PC để né đúng cái Sidebar 256px ra.
+        <div className="fixed top-0 right-0 bottom-0 left-0 md:left-64 z-[100] flex items-center justify-center animate-in fade-in duration-500">
+          {/* FIX 2: Bỏ rounded-[2rem] đi. Lớp mờ này giờ sẽ trải phẳng phiu ra sát 4 mép màn hình bên phải */}
+          <div className="absolute inset-0 bg-slate-900/30 dark:bg-black/60 backdrop-blur-sm z-40 transition-colors duration-300"></div>
 
           {/* Hộp thoại Pop-up */}
-          <div className="relative z-50 bg-card-bg border-2 border-card-border rounded-[2.5rem] p-10 max-w-md w-full mx-4 shadow-2xl flex flex-col items-center text-center animate-in zoom-in-90 duration-500">
+          <div className="relative z-50 bg-card-bg border border-card-border rounded-[2.5rem] p-10 max-w-md w-full mx-4 shadow-2xl dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col items-center text-center animate-in zoom-in-90 duration-500">
             {/* Icon Khóa */}
-            <div className="w-20 h-20 bg-indigo-50 dark:bg-indigo-500/10 border-2 border-indigo-100 dark:border-indigo-500/20 rounded-full flex items-center justify-center mb-6 shadow-inner relative">
+            <div className="w-20 h-20 bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 rounded-full flex items-center justify-center mb-6 shadow-inner relative">
               <div className="absolute inset-0 bg-indigo-400/20 rounded-full animate-ping opacity-50"></div>
               <FiLock className="text-3xl text-indigo-500 relative z-10" />
             </div>
@@ -79,7 +82,7 @@ const RestrictedWrapper = ({ children }) => {
             {/* Nút Call to action */}
             <button
               onClick={() => router.push("/employer/setup")}
-              className="w-full py-4 bg-indigo-600 hover:bg-indSigo-700 text-white rounded-xl font-medium transition-all shadow-lg shadow-indigo-500/20 active:scale-95 flex items-center justify-center gap-2 text-[13px] uppercase tracking-widest"
+              className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium transition-all shadow-lg shadow-indigo-500/20 active:scale-95 flex items-center justify-center gap-2 text-[13px] uppercase tracking-widest"
             >
               Vui lòng xác thực ngay <FiArrowRight size={16} />
             </button>

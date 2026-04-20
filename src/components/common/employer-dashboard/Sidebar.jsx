@@ -9,12 +9,10 @@ import {
   MdOutlineSearch,
   MdOutlineBusiness,
   MdOutlineSettings,
-  MdOutlineHelpOutline,
   MdOutlineLogout,
   MdManageAccounts,
   MdOutlinePublic,
-  MdChevronLeft,
-  MdChevronRight,
+  MdChevronRight, // Vẫn giữ lại để làm icon xổ xuống cho menu con
 } from "react-icons/md";
 import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
@@ -71,7 +69,7 @@ const Sidebar = () => {
   const router = useRouter();
   const { logout } = useAuth();
 
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  // Chỉ giữ lại state để quản lý việc mở/đóng menu con (Tin tuyển dụng)
   const [openMenu, setOpenMenu] = useState(null);
 
   const handleLogout = async () => {
@@ -85,38 +83,20 @@ const Sidebar = () => {
   };
 
   return (
-    <aside
-      className={`min-h-screen bg-[#0f172a] flex flex-col justify-between fixed left-0 top-0 bottom-0 z-40 transition-all duration-300 ${
-        isCollapsed ? "w-20" : "w-64"
-      }`}
-    >
-      {/* Toggle */}
-      <button
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute -right-3 top-8 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center text-white"
-      >
-        {isCollapsed ? <MdChevronRight /> : <MdChevronLeft />}
-      </button>
-
+    <aside className="min-h-screen bg-[#0f172a] flex flex-col justify-between fixed left-0 top-0 bottom-0 z-40 w-64 border-r border-slate-800">
       {/* TOP */}
       <div>
         {/* Logo */}
-        <div
-          className={`pt-6 pb-8 flex items-center ${
-            isCollapsed ? "justify-center" : "px-6"
-          }`}
-        >
+        <div className="pt-6 pb-8 flex items-center px-6">
           <Link href="/employer/dashboard" className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-[#e8f5e9] rounded-full flex items-center justify-center">
+            <div className="w-9 h-9 bg-[#e8f5e9] rounded-full flex items-center justify-center shrink-0">
               <svg className="w-6 h-6 text-[#00c853]" viewBox="0 0 24 24">
                 <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,11 17,8 17,8Z" />
               </svg>
             </div>
-            {!isCollapsed && (
-              <div>
-                <span className="text-white font-bold">One-Click</span>
-              </div>
-            )}
+            <div>
+              <span className="text-white font-bold text-lg">One-Click</span>
+            </div>
           </Link>
         </div>
 
@@ -138,40 +118,33 @@ const Sidebar = () => {
                       onClick={() =>
                         setOpenMenu(openMenu === item.name ? null : item.name)
                       }
-                      className={`w-full flex items-center rounded-xl ${
-                        isCollapsed ? "justify-center p-3" : "gap-3 px-4 py-3"
-                      } ${
+                      className={`w-full flex items-center rounded-xl gap-3 px-4 py-3 transition-colors ${
                         isParentActive
                           ? "text-emerald-400"
                           : "text-slate-400 hover:bg-white/5 hover:text-white"
                       }`}
                     >
-                      <Icon className="w-5 h-5" />
-
-                      {!isCollapsed && (
-                        <>
-                          <span className="flex-1 text-left">{item.name}</span>
-                          <MdChevronRight
-                            className={`transition ${
-                              openMenu === item.name ? "rotate-90" : ""
-                            }`}
-                          />
-                        </>
-                      )}
+                      <Icon className="w-5 h-5 shrink-0" />
+                      <span className="flex-1 text-left">{item.name}</span>
+                      <MdChevronRight
+                        className={`transition-transform duration-200 ${
+                          openMenu === item.name ? "rotate-90" : ""
+                        }`}
+                      />
                     </button>
 
                     {/* CHILD */}
-                    {!isCollapsed && openMenu === item.name && (
-                      <ul className="ml-6 mt-1 space-y-1">
+                    {openMenu === item.name && (
+                      <ul className="ml-6 mt-1 space-y-1 animate-in fade-in slide-in-from-top-2 duration-200">
                         {item.children.map((child) => {
                           const isActive = pathname.startsWith(child.href);
                           return (
                             <li key={child.name}>
                               <Link
                                 href={child.href}
-                                className={`block px-4 py-2 rounded-lg text-sm ${
+                                className={`block px-4 py-2 rounded-lg text-sm transition-colors ${
                                   isActive
-                                    ? "bg-emerald-500/10 text-emerald-400"
+                                    ? "bg-emerald-500/10 text-emerald-400 font-medium"
                                     : "text-slate-400 hover:bg-white/5 hover:text-white"
                                 }`}
                               >
@@ -194,16 +167,14 @@ const Sidebar = () => {
                 <li key={item.name}>
                   <Link
                     href={item.href}
-                    className={`flex items-center rounded-xl ${
-                      isCollapsed ? "justify-center p-3" : "gap-3 px-4 py-3"
-                    } ${
+                    className={`flex items-center rounded-xl gap-3 px-4 py-3 transition-colors ${
                       isActive
-                        ? "bg-emerald-500/10 text-emerald-400"
+                        ? "bg-emerald-500/10 text-emerald-400 font-medium"
                         : "text-slate-400 hover:bg-white/5 hover:text-white"
                     }`}
                   >
-                    <Icon className="w-5 h-5" />
-                    {!isCollapsed && <span>{item.name}</span>}
+                    <Icon className="w-5 h-5 shrink-0" />
+                    <span>{item.name}</span>
                   </Link>
                 </li>
               );
@@ -216,12 +187,10 @@ const Sidebar = () => {
       <div className="px-3 pb-6 space-y-2">
         <button
           onClick={handleLogout}
-          className={`w-full flex items-center rounded-xl text-slate-400 hover:text-red-400 ${
-            isCollapsed ? "justify-center p-3" : "gap-3 px-4 py-3"
-          }`}
+          className="w-full flex items-center rounded-xl text-slate-400 hover:text-rose-400 hover:bg-white/5 gap-3 px-4 py-3 transition-colors"
         >
-          <MdOutlineLogout className="w-5 h-5" />
-          {!isCollapsed && <span>Đăng xuất</span>}
+          <MdOutlineLogout className="w-5 h-5 shrink-0" />
+          <span>Đăng xuất</span>
         </button>
       </div>
     </aside>
