@@ -5,166 +5,182 @@ import {
   FaTimesCircle,
   FaLightbulb,
   FaRocket,
-  FaDiceD6,
+  FaChartLine,
 } from "react-icons/fa";
 
-const AIAnalysisDashboard = ({ jobId }) => {
-  const data = {
-    score: 87,
-    matchLevel: "Rất phù hợp",
-    analysis:
-      "Hồ sơ của bạn có nền tảng kỹ thuật rất sát với yêu cầu của dự án, đặc biệt là phần React và tư duy xử lý logic.",
-    skills: [
-      {
-        name: "ReactJS / Next.js",
-        status: "match",
-        detail: "Kinh nghiệm 2 năm trùng khớp",
-      },
-      {
-        name: "Tailwind CSS",
-        status: "match",
-        detail: "Đã sử dụng trong 3 dự án",
-      },
-      {
-        name: "TypeScript",
-        status: "missing",
-        detail: "JD yêu cầu mức độ trung cấp",
-      },
-      {
-        name: "Docker/CI-CD",
-        status: "missing",
-        detail: "Điểm cộng lớn nếu có",
-      },
-    ],
+const AIAnalysisDashboard = ({ jobId, matchResult }) => {
+  // Nếu không có dữ liệu, hiển thị loading
+  if (!matchResult || matchResult.matchScore === undefined) {
+    return (
+      <div className="flex items-center justify-center p-12">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00c853] mx-auto mb-4"></div>
+          <p className="text-text-muted">Đang phân tích dữ liệu...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const score = Math.round(matchResult.matchScore);
+  const matchLevel = score >= 80 ? "Rất phù hợp" :
+                     score >= 60 ? "Phù hợp" :
+                     score >= 40 ? "Có thể phù hợp" : "Cần cải thiện";
+  
+  const getScoreColor = () => {
+    if (score >= 80) return "#10B981"; // green
+    if (score >= 60) return "#3B82F6"; // blue
+    if (score >= 40) return "#F59E0B"; // orange
+    return "#EF4444"; // red
   };
 
-  const radius = 80;
+  const radius = 100;
   const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (circumference * data.score) / 100;
+  const strokeDashoffset = circumference - (circumference * score) / 100;
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      {/* --- PHẦN ĐIỂM SỐ (CARD CHÍNH) --- */}
-      <div className="relative overflow-hidden bg-white rounded-[2.5rem] border border-slate-200/60 shadow-xl shadow-indigo-500/5 p-8 md:p-12">
-        {/* Decor nền mờ */}
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-indigo-500/5 rounded-full blur-3xl"></div>
-
-        <div className="relative z-10 flex flex-col lg:flex-row items-center gap-10">
-          {/* Radial Progress */}
-          <div className="relative flex items-center justify-center">
-            <svg className="w-44 h-44 transform -rotate-90">
+    <div className="space-y-6">
+      {/* === CARD ĐIỂM MATCH === */}
+      <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+        <div className="flex flex-col lg:flex-row items-center gap-8">
+          {/* Circular Progress */}
+          <div className="relative flex-shrink-0">
+            <svg className="w-56 h-56 transform -rotate-90">
               <circle
-                cx="88"
-                cy="88"
+                cx="112"
+                cy="112"
                 r={radius}
-                stroke="#F1F5F9"
+                stroke="#E5E7EB"
                 strokeWidth="12"
                 fill="transparent"
               />
               <circle
-                cx="88"
-                cy="88"
+                cx="112"
+                cy="112"
                 r={radius}
-                stroke="url(#gradientScore)"
+                stroke={getScoreColor()}
                 strokeWidth="12"
                 fill="transparent"
                 strokeDasharray={circumference}
-                style={{ strokeDashoffset }}
+                strokeDashoffset={strokeDashoffset}
                 strokeLinecap="round"
-                className="transition-all duration-[1500ms] ease-out"
+                className="transition-all duration-1000 ease-out"
               />
-              <defs>
-                <linearGradient
-                  id="gradientScore"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="100%"
-                >
-                  <stop offset="0%" stopColor="#4F46E5" />
-                  <stop offset="100%" stopColor="#10B981" />
-                </linearGradient>
-              </defs>
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-5xl font-black text-slate-800 tracking-tighter">
-                {data.score}%
+              <span className="text-5xl font-black text-gray-800">
+                {score}%
               </span>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
+              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide mt-1">
                 Match Rate
               </span>
             </div>
           </div>
 
-          {/* Nội dung chữ */}
+          {/* Thông tin phân tích */}
           <div className="flex-1 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-xs font-black uppercase tracking-wider mb-4 border border-emerald-100">
-              <FaRocket size={10} className="animate-bounce" />{" "}
-              {data.matchLevel}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-50 text-green-700 text-sm font-bold mb-4">
+              <FaRocket size={14} />
+              {matchLevel}
             </div>
-            <h2 className="text-3xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
-              Phân tích từ <span className="text-indigo-600">OneClick AI</span>
-            </h2>
-            <p className="text-slate-600 leading-relaxed text-lg font-medium italic">
-              &quot;{data.analysis}&quot;
+            <h3 className="text-2xl font-bold text-gray-800 mb-3">
+              Kết quả phân tích CV
+            </h3>
+            <p className="text-gray-600 leading-relaxed">
+              {matchResult.matchReason || "Đang phân tích chi tiết..."}
             </p>
           </div>
         </div>
       </div>
 
-      {/* --- CHI TIẾT KỸ NĂNG --- */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {data.skills.map((skill, index) => (
-          <div
-            key={index}
-            className="p-5 bg-white border border-slate-100 rounded-3xl flex items-center justify-between hover:shadow-md transition-all"
-          >
-            <div className="flex items-center gap-4">
-              <div
-                className={`p-3 rounded-2xl ${skill.status === "match" ? "bg-emerald-50 text-emerald-500" : "bg-rose-50 text-rose-500"}`}
-              >
-                {skill.status === "match" ? (
-                  <FaCheckCircle size={18} />
-                ) : (
-                  <FaTimesCircle size={18} />
-                )}
-              </div>
-              <div>
-                <h4 className="font-bold text-slate-800 text-sm">
-                  {skill.name}
-                </h4>
-                <p className="text-xs text-slate-400">{skill.detail}</p>
-              </div>
+      {/* === KỸ NĂNG PHÙ HỢP === */}
+      {matchResult.matchedSkills && matchResult.matchedSkills.length > 0 && (
+        <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 bg-green-100 rounded-xl">
+              <FaCheckCircle className="text-green-600 text-xl" />
             </div>
+            <h3 className="text-xl font-bold text-gray-800">
+              Kỹ năng phù hợp
+            </h3>
+            <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">
+              {matchResult.matchedSkills.length}
+            </span>
           </div>
-        ))}
-      </div>
+          <div className="flex flex-wrap gap-3">
+            {matchResult.matchedSkills.map((skill, index) => (
+              <div
+                key={index}
+                className="px-4 py-2 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm font-medium hover:shadow-md transition-all"
+              >
+                {skill}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
-      {/* --- LỜI KHUYÊN --- */}
-      <div className="bg-slate-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden">
-        <FaDiceD6 className="absolute -bottom-10 -right-10 text-9xl text-white/5 rotate-12" />
-        <div className="relative z-10 flex items-start gap-5">
-          <div className="p-3 bg-indigo-500 rounded-2xl">
-            <FaLightbulb className="text-yellow-300" size={20} />
+      {/* === KỸ NĂNG CÒN THIẾU === */}
+      {matchResult.missingSkills && matchResult.missingSkills.length > 0 && (
+        <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 bg-orange-100 rounded-xl">
+              <FaTimesCircle className="text-orange-600 text-xl" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-800">
+              Kỹ năng cần bổ sung
+            </h3>
+            <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded-full">
+              {matchResult.missingSkills.length}
+            </span>
           </div>
-          <div>
-            <h4 className="text-lg font-bold mb-3 uppercase tracking-wider">
-              Chiến lược tối ưu
-            </h4>
-            <div className="space-y-2">
-              <p className="text-sm text-slate-300 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span>
-                Bổ sung từ khóa &quot;JavaScript&quot; vào phần kỹ năng chuyên
-                môn.
-              </p>
-              <p className="text-sm text-slate-300 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span>
-                Mô tả chi tiết hơn về cách tối ưu Performance dự án.
-              </p>
+          <div className="flex flex-wrap gap-3">
+            {matchResult.missingSkills.map((skill, index) => (
+              <div
+                key={index}
+                className="px-4 py-2 bg-orange-50 border border-orange-200 rounded-xl text-orange-700 text-sm font-medium hover:shadow-md transition-all"
+              >
+                {skill}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* === GỢI Ý CẢI THIỆN === */}
+      {matchResult.improvementTips && matchResult.improvementTips.length > 0 && (
+        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl shadow-lg p-8 border border-indigo-100">
+          <div className="flex items-start gap-4">
+            <div className="p-3 bg-indigo-600 rounded-xl shadow-lg">
+              <FaLightbulb className="text-yellow-300 text-2xl" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <FaChartLine className="text-indigo-600" />
+                Gợi ý cải thiện
+              </h3>
+              <ul className="space-y-3">
+                {matchResult.improvementTips.map((tip, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full mt-2"></span>
+                    <span className="text-gray-700 text-base leading-relaxed">
+                      {tip}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* Hiển thị khi không có dữ liệu chi tiết */}
+      {(!matchResult.matchedSkills || matchResult.matchedSkills.length === 0) &&
+       (!matchResult.missingSkills || matchResult.missingSkills.length === 0) &&
+       (!matchResult.improvementTips || matchResult.improvementTips.length === 0) && (
+        <div className="bg-gray-50 rounded-2xl p-8 text-center border border-gray-200">
+          <p className="text-gray-500">Đang tổng hợp phân tích chi tiết...</p>
+        </div>
+      )}
     </div>
   );
 };
