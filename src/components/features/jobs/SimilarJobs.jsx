@@ -22,11 +22,20 @@ const formatVND = (value) => {
 };
 
 const formatSalary = (min, max) => {
-  const fMin = formatVND(min);
-  const fMax = formatVND(max);
-  if (fMin && fMax) return `${fMin} – ${fMax}`;
-  if (fMin) return `Từ ${fMin}`;
-  if (fMax) return `Tới ${fMax}`;
+  // Nếu cả 2 đều null hoặc 0 -> Thỏa thuận
+  if (!min && !max) return "Thỏa thuận";
+
+  const fmt = (val) => {
+    if (val >= 1000) {
+      return `$${(val / 1000).toFixed(1).replace(".0", "")}K`;
+    }
+    return `$${val}`;
+  };
+
+  // Trả về các trường hợp
+  if (min != null && max != null) return `${fmt(min)} - ${fmt(max)}`;
+  if (min != null && max == null) return `Từ ${fmt(min)}`;
+  if (min == null && max != null) return `Đến ${fmt(max)}`;
   return "Thỏa thuận";
 };
 
@@ -43,7 +52,7 @@ const JOB_TYPE_LABELS = {
 const formatTimeAgo = (dateStr) => {
   if (!dateStr) return "";
   const diffDays = Math.floor(
-    (new Date() - new Date(dateStr)) / (1000 * 60 * 60 * 24)
+    (new Date() - new Date(dateStr)) / (1000 * 60 * 60 * 24),
   );
   if (diffDays === 0) return "Hôm nay";
   if (diffDays === 1) return "1 ngày trước";
@@ -182,7 +191,9 @@ const SimilarJobs = ({ jobId }) => {
                   {/* Job type */}
                   <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-orange-600 dark:text-orange-400 bg-orange-500/10 px-2.5 py-1.5 rounded-lg border border-orange-500/15">
                     <FiBriefcase size={12} />
-                    {JOB_TYPE_LABELS[job.jobType?.toLowerCase()] || job.jobType || "N/A"}
+                    {JOB_TYPE_LABELS[job.jobType?.toLowerCase()] ||
+                      job.jobType ||
+                      "N/A"}
                   </span>
 
                   {/* Time ago */}

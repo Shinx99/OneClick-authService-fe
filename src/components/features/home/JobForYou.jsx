@@ -15,9 +15,10 @@ const JobForYou = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const { jobs, pagination, isLoading, error } = useJobs({
     page: currentPage,
-    size: 12,
+    size: 12, // Xin đúng 12 job từ Backend
   });
 
+  // 1. Hàm format Lương
   const formatSalary = (min, max) => {
     if (min == null && max == null) return "Thỏa thuận";
     const fmt = (v) => (v >= 1000 ? `${(v / 1000).toFixed(0)}K` : `$${v}`);
@@ -25,8 +26,66 @@ const JobForYou = () => {
     return min != null ? `>${fmt(min)}` : `<${fmt(max)}`;
   };
 
+  // 2. Hàm format thời gian
+  const formatTimeAgo = (dateString) => {
+    if (!dateString) return "Mới cập nhật";
+
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now - date) / 1000);
+
+    if (diffInSeconds < 60) return "Vừa xong";
+
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) return `${diffInMinutes} phút trước`;
+
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) return `${diffInHours} giờ trước`;
+
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays < 30) return `${diffInDays} ngày trước`;
+
+    const diffInMonths = Math.floor(diffInDays / 30);
+    return `${diffInMonths} tháng trước`;
+  };
+
+  // 3. Hàm xử lý trạng thái
+  const getStatusConfig = (status) => {
+    if (!status)
+      return {
+        label: "N/A",
+        styles: "text-gray-500 bg-gray-500/5 border-gray-500/10",
+      };
+
+    switch (status.toUpperCase()) {
+      case "ACTIVE":
+      case "OPEN":
+      case "PUBLISHED":
+        return {
+          label: "Đang tuyển",
+          styles: "text-emerald-500 bg-emerald-500/5 border-emerald-500/10",
+        };
+      case "CLOSED":
+      case "EXPIRED":
+        return {
+          label: "Đã đóng",
+          styles: "text-red-500 bg-red-500/5 border-red-500/10",
+        };
+      case "PENDING":
+        return {
+          label: "Chờ duyệt",
+          styles: "text-amber-500 bg-amber-500/5 border-amber-500/10",
+        };
+      default:
+        return {
+          label: status,
+          styles: "text-blue-500 bg-blue-500/5 border-blue-500/10",
+        };
+    }
+  };
+
   return (
-    <section className=" py-2 bg-background transition-colors duration-500">
+    <section className="py-2 bg-background transition-colors duration-500">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* --- HEADER GỌN GÀNG --- */}
         <div className="flex items-center justify-between mb-4 pb-4 border-b-2 border-card-border">
@@ -153,10 +212,12 @@ const JobForYou = () => {
                     {/* Badge trạng thái nhỏ */}
                     <div className="flex items-center justify-between pt-2 border-t border-card-border/50">
                       <span className="text-[10px] text-text-muted font-normal uppercase tracking-tighter opacity-50">
-                        2 ngày trước
+                        {formatTimeAgo(job.createdAt)}
                       </span>
-                      <span className="text-[9px] font-medium text-emerald-500 bg-emerald-500/5 px-2 py-0.5 rounded-md border border-emerald-500/10 uppercase">
-                        Active
+                      <span
+                        className={`text-[9px] font-medium px-2 py-0.5 rounded-md border uppercase ${getStatusConfig(job.status).styles}`}
+                      >
+                        {getStatusConfig(job.status).label}
                       </span>
                     </div>
                   </div>

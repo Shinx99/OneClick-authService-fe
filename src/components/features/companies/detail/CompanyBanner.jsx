@@ -39,7 +39,7 @@ const CompanyBanner = ({ company = {} }) => {
               }
               alt={`${company.companyName || "Company"} logo`}
               fill
-              className="object-contain p-2"
+              className="object-contain "
             />
           </div>
 
