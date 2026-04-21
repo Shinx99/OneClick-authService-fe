@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import {
   FiClock,
   FiUsers,
@@ -25,10 +25,10 @@ import {
   HiOutlineComputerDesktop,
   HiOutlineGlobeAlt,
 } from "react-icons/hi2";
-import { toast } from "react-hot-toast"; 
+import { toast } from "react-hot-toast";
 import ApplyModal from "./ApplyModal";
 import AIMatchButton from "./AIMatchButton";
-import { useAuth } from "@/context/AuthContext"; 
+import { useAuth } from "@/context/AuthContext";
 
 // Fallback avatar
 const FALLBACK_LOGO =
@@ -57,15 +57,32 @@ const JOB_TYPE_LABELS = {
 };
 
 const STATUS_CONFIG = {
-  active: { text: "Đang tuyển", bg: "bg-emerald-500/10", color: "text-emerald-500", border: "border-emerald-500/20" },
-  pending: { text: "Chờ duyệt", bg: "bg-yellow-500/10", color: "text-yellow-500", border: "border-yellow-500/20" },
-  closed: { text: "Đã đóng", bg: "bg-gray-500/10", color: "text-gray-500", border: "border-gray-500/20" },
+  active: {
+    text: "Đang tuyển",
+    bg: "bg-emerald-500/10",
+    color: "text-emerald-500",
+    border: "border-emerald-500/20",
+  },
+  pending: {
+    text: "Chờ duyệt",
+    bg: "bg-yellow-500/10",
+    color: "text-yellow-500",
+    border: "border-yellow-500/20",
+  },
+  closed: {
+    text: "Đã đóng",
+    bg: "bg-gray-500/10",
+    color: "text-gray-500",
+    border: "border-gray-500/20",
+  },
 };
 
 // Helpers
 const formatTimeAgo = (dateStr) => {
   if (!dateStr) return "";
-  const diffDays = Math.floor((new Date() - new Date(dateStr)) / (1000 * 60 * 60 * 24));
+  const diffDays = Math.floor(
+    (new Date() - new Date(dateStr)) / (1000 * 60 * 60 * 24),
+  );
   if (diffDays === 0) return "Hôm nay";
   if (diffDays === 1) return "1 ngày trước";
   if (diffDays < 30) return `${diffDays} ngày trước`;
@@ -75,7 +92,11 @@ const formatTimeAgo = (dateStr) => {
 
 const formatVND = (value) => {
   if (value == null) return null;
-  return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND", maximumFractionDigits: 0 }).format(value);
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+    maximumFractionDigits: 0,
+  }).format(value);
 };
 
 const formatSalaryRange = (min, max) => {
@@ -95,7 +116,11 @@ const formatLocation = (province, commune) => {
 
 const formatDeadline = (dateStr) => {
   if (!dateStr) return "Không giới hạn";
-  return new Date(dateStr).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" });
+  return new Date(dateStr).toLocaleDateString("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
 };
 
 const isDeadlinePassed = (dateStr) => {
@@ -104,8 +129,8 @@ const isDeadlinePassed = (dateStr) => {
 };
 
 const JobContent = ({ data }) => {
-  const router = useRouter();  
-  const { isAuthenticated, user } = useAuth();  
+  const router = useRouter();
+  const { isAuthenticated, user } = useAuth();
   const [showApplyModal, setShowApplyModal] = useState(false);
 
   // DEBUG: Log thông tin user và role
@@ -114,13 +139,14 @@ const JobContent = ({ data }) => {
     console.log("isAuthenticated:", isAuthenticated);
     console.log("Full user object:", user);
     console.log("user?.role:", user?.role);
-    console.log("user?.roles:", user?.roles);  // Có thể role là mảng
+    console.log("user?.roles:", user?.roles); // Có thể role là mảng
     console.log("user?.user?.role:", user?.user?.role); // Nếu role nested
     console.log("typeof user?.role:", typeof user?.role);
     console.log("====================================");
   }, [isAuthenticated, user]);
 
-  const statusInfo = STATUS_CONFIG[data.status?.toLowerCase()] || STATUS_CONFIG.active;
+  const statusInfo =
+    STATUS_CONFIG[data.status?.toLowerCase()] || STATUS_CONFIG.active;
   const companyLogo = data.companyLogoUrl || FALLBACK_LOGO;
   const companyName = data.companyName || "Công ty ẩn danh";
   const deadlinePassed = isDeadlinePassed(data.applicationDeadline);
@@ -136,10 +162,10 @@ const JobContent = ({ data }) => {
         duration: 3000,
         position: "top-center",
       });
-      
+
       // Lưu lại URL hiện tại để sau khi login quay lại
       sessionStorage.setItem("redirectAfterLogin", window.location.pathname);
-      
+
       // Chuyển hướng đến trang login
       setTimeout(() => {
         router.push("/login");
@@ -148,14 +174,16 @@ const JobContent = ({ data }) => {
     }
 
     // 2. Kiểm tra role có phải candidate không
-    const isCandidate = user?.roles?.includes('candidate') || user?.roles?.includes('ROLE_candidate');
+    const isCandidate =
+      user?.roles?.includes("candidate") ||
+      user?.roles?.includes("ROLE_candidate");
 
     if (!isCandidate) {
       toast.error("Chỉ ứng viên mới có thể ứng tuyển việc làm", {
         duration: 3000,
         position: "top-center",
       });
-      
+
       // Nếu là employer, chuyển hướng về trang chủ hoặc register candidate
       if (user?.roles === "recruiter") {
         setTimeout(() => {
@@ -202,7 +230,8 @@ const JobContent = ({ data }) => {
     {
       icon: <FiBriefcase size={18} />,
       label: "Hình thức",
-      value: JOB_TYPE_LABELS[data.jobType?.toLowerCase()] || data.jobType || "N/A",
+      value:
+        JOB_TYPE_LABELS[data.jobType?.toLowerCase()] || data.jobType || "N/A",
       color: "text-orange-500",
       bg: "bg-orange-500/10",
     },
@@ -235,6 +264,25 @@ const JobContent = ({ data }) => {
     },
   ];
 
+  const FormattedList = ({ text }) => {
+    if (!text) return null;
+
+    // Tách thành các dòng, lọc dòng rỗng, bỏ dấu "- " ở đầu
+    const items = text
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0)
+      .map((line) => line.replace(/^-\s*/, ""));
+
+    return (
+      <ul className="list-disc pl-5 space-y-2 text-text-muted text-[15px] leading-relaxed marker:text-[#00c853]">
+        {items.map((item, idx) => (
+          <li key={idx}>{item}</li>
+        ))}
+      </ul>
+    );
+  };
+
   return (
     <>
       <div className="flex flex-col lg:flex-row gap-6">
@@ -252,7 +300,7 @@ const JobContent = ({ data }) => {
                   src={companyLogo}
                   alt={`Logo ${companyName}`}
                   fill
-                  className="object-contain p-2"
+                  className="object-contain"
                 />
               </div>
 
@@ -265,14 +313,21 @@ const JobContent = ({ data }) => {
                 {/* Company name + Status badge */}
                 <div className="flex items-center gap-2.5 mb-3 flex-wrap">
                   {data.companyId ? (
-                    <Link href={`/companies/${data.companyId}`} className="text-[15px] font-bold text-[#00c853] hover:underline">
+                    <Link
+                      href={`/companies/${data.companyId}`}
+                      className="text-[15px] font-bold text-[#00c853] hover:underline"
+                    >
                       {companyName}
                     </Link>
                   ) : (
-                    <span className="text-[15px] font-bold text-[#00c853]">{companyName}</span>
+                    <span className="text-[15px] font-bold text-[#00c853]">
+                      {companyName}
+                    </span>
                   )}
                   <span className="w-1 h-1 rounded-full bg-text-muted/40 shrink-0" />
-                  <span className={`${statusInfo.bg} ${statusInfo.color} ${statusInfo.border} border text-[10px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap uppercase tracking-wider`}>
+                  <span
+                    className={`${statusInfo.bg} ${statusInfo.color} ${statusInfo.border} border text-[10px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap uppercase tracking-wider`}
+                  >
                     {statusInfo.text}
                   </span>
                 </div>
@@ -280,13 +335,16 @@ const JobContent = ({ data }) => {
                 {/* Meta: thời gian, ứng viên, lượt xem */}
                 <div className="flex flex-wrap items-center gap-4 text-[12px] text-text-muted font-medium">
                   <span className="flex items-center gap-1.5">
-                    <FiClock size={14} className="opacity-60" /> {formatTimeAgo(data.createdAt)}
+                    <FiClock size={14} className="opacity-60" />{" "}
+                    {formatTimeAgo(data.createdAt)}
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <FiUsers size={14} className="opacity-60" /> {data.applicationCount ?? 0} ứng viên
+                    <FiUsers size={14} className="opacity-60" />{" "}
+                    {data.applicationCount ?? 0} ứng viên
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <FiEye size={14} className="opacity-60" /> {data.viewCount ?? 0} lượt xem
+                    <FiEye size={14} className="opacity-60" />{" "}
+                    {data.viewCount ?? 0} lượt xem
                   </span>
                 </div>
               </div>
@@ -295,16 +353,24 @@ const JobContent = ({ data }) => {
             {/* Quick Info Grid — chỉ hiện trên mobile (lg trở xuống) */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-6 lg:hidden">
               {quickInfoItems.map((item, idx) => (
-                <div key={idx} className="flex items-center gap-3 bg-background rounded-2xl p-3 border border-card-border">
-                  <div className={`w-9 h-9 rounded-xl ${item.bg} flex items-center justify-center shrink-0 ${item.color}`}>
+                <div
+                  key={idx}
+                  className="flex items-center gap-3 bg-background rounded-2xl p-3 border border-card-border"
+                >
+                  <div
+                    className={`w-9 h-9 rounded-xl ${item.bg} flex items-center justify-center shrink-0 ${item.color}`}
+                  >
                     {item.icon}
                   </div>
                   <div className="min-w-0">
                     <p className="text-[10px] text-text-muted font-bold uppercase tracking-wider leading-none mb-1">
                       {item.label}
                     </p>
-                    <p className={`text-[13px] font-bold text-text-main leading-tight truncate ${item.extra ? "text-red-500" : ""}`}>
-                      {item.value}{item.extra}
+                    <p
+                      className={`text-[13px] font-bold text-text-main leading-tight truncate ${item.extra ? "text-red-500" : ""}`}
+                    >
+                      {item.value}
+                      {item.extra}
                     </p>
                   </div>
                 </div>
@@ -337,34 +403,24 @@ const JobContent = ({ data }) => {
             <h2 className="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
               <FiFileText className="text-blue-500 text-xl" /> Mô tả công việc
             </h2>
-            <div
-              className="text-text-muted text-[15px] leading-relaxed space-y-3 prose prose-sm max-w-none
-                         prose-ul:list-disc prose-ul:pl-5 prose-ul:space-y-2 prose-ul:marker:text-text-muted
-                         prose-ol:list-decimal prose-ol:pl-5 prose-ol:space-y-2
-                         prose-p:mb-3 prose-a:text-blue-500 prose-a:underline"
-              dangerouslySetInnerHTML={{ __html: data.description }}
-            />
+            <FormattedList text={data.description} />
           </div>
 
           {/* 3. YÊU CẦU ỨNG VIÊN */}
           <div className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border">
             <h2 className="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
-              <FiCheckCircle className="text-blue-500 text-xl" /> Yêu cầu ứng viên
+              <FiCheckCircle className="text-blue-500 text-xl" /> Yêu cầu ứng
+              viên
             </h2>
-            <div
-              className="text-text-muted text-[15px] leading-relaxed space-y-3 prose prose-sm max-w-none
-                         prose-ul:list-disc prose-ul:pl-5 prose-ul:space-y-2 prose-ul:marker:text-text-muted
-                         prose-ol:list-decimal prose-ol:pl-5 prose-ol:space-y-2
-                         prose-p:mb-3 prose-a:text-blue-500 prose-a:underline"
-              dangerouslySetInnerHTML={{ __html: data.requirement }}
-            />
+            <FormattedList text={data.requirement} />
           </div>
 
           {/* 4. CHUYÊN NGÀNH ƯU TIÊN */}
           {data.majorPreferred && (
             <div className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border">
               <h2 className="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
-                <FiBookOpen className="text-blue-500 text-xl" /> Chuyên ngành ưu tiên
+                <FiBookOpen className="text-blue-500 text-xl" /> Chuyên ngành ưu
+                tiên
               </h2>
               <p className="text-text-muted text-[15px] leading-relaxed">
                 {data.majorPreferred}
@@ -390,31 +446,6 @@ const JobContent = ({ data }) => {
               </div>
             </div>
           )}
-
-          {/* 6. QUYỀN LỢI */}
-          <div className="bg-card-bg rounded-[24px] p-6 md:p-8 border-2 border-card-border">
-            <h2 className="text-lg font-bold text-text-main mb-5 flex items-center gap-2">
-              <FiStar className="text-blue-500 text-xl" /> Quyền lợi
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {[
-                { icon: <HiOutlineCurrencyDollar className="text-blue-500 text-xl" />, title: "Mức lương cạnh tranh", desc: "Lên đến $4000/tháng + Thưởng hiệu suất năm." },
-                { icon: <HiOutlineShieldCheck className="text-blue-500 text-xl" />, title: "Bảo hiểm toàn diện", desc: "Bảo hiểm sức khỏe cao cấp cho bạn và gia đình." },
-                { icon: <HiOutlineComputerDesktop className="text-blue-500 text-xl" />, title: "Thiết bị làm việc", desc: "Cung cấp MacBook Pro mới nhất và màn hình 4K." },
-                { icon: <HiOutlineGlobeAlt className="text-blue-500 text-xl" />, title: "Du lịch & Team building", desc: "Chuyến đi công ty hàng năm và các hoạt động nhóm." },
-              ].map((item, idx) => (
-                <div key={idx} className="bg-background p-4 rounded-2xl border border-card-border hover:border-blue-200 transition-colors group flex items-start gap-3">
-                  <div className="w-10 h-10 bg-blue-50 dark:bg-blue-500/10 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                    {item.icon}
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-text-main text-[14px] mb-0.5">{item.title}</h4>
-                    <p className="text-[13px] text-text-muted leading-relaxed">{item.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
 
         {/* ==========================================
@@ -424,19 +455,26 @@ const JobContent = ({ data }) => {
           <div className="sticky top-24 space-y-4">
             {/* Quick Info Card */}
             <div className="bg-card-bg rounded-[24px] p-6 border-2 border-card-border">
-              <h3 className="text-[15px] font-bold text-text-main mb-4">Thông tin chung</h3>
+              <h3 className="text-[15px] font-bold text-text-main mb-4">
+                Thông tin chung
+              </h3>
               <div className="space-y-4">
                 {quickInfoItems.map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-xl ${item.bg} flex items-center justify-center shrink-0 ${item.color}`}>
+                    <div
+                      className={`w-10 h-10 rounded-xl ${item.bg} flex items-center justify-center shrink-0 ${item.color}`}
+                    >
                       {item.icon}
                     </div>
                     <div className="min-w-0">
                       <p className="text-[10px] text-text-muted font-bold uppercase tracking-wider leading-none mb-1">
                         {item.label}
                       </p>
-                      <p className={`text-[13px] font-bold text-text-main leading-tight ${item.extra ? "text-red-500" : ""}`}>
-                        {item.value}{item.extra}
+                      <p
+                        className={`text-[13px] font-bold text-text-main leading-tight ${item.extra ? "text-red-500" : ""}`}
+                      >
+                        {item.value}
+                        {item.extra}
                       </p>
                     </div>
                   </div>
@@ -459,7 +497,9 @@ const JobContent = ({ data }) => {
                   />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[13px] font-bold text-text-main truncate">{companyName}</p>
+                  <p className="text-[13px] font-bold text-text-main truncate">
+                    {companyName}
+                  </p>
                   <p className="text-[11px] text-text-muted">
                     {formatLocation(data.province, data.commune)}
                   </p>

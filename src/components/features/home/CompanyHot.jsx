@@ -25,13 +25,12 @@ const CompanyHot = () => {
   }, []);
 
   return (
-    <section className="py-10 bg-background transition-colors duration-300">
+    <section className="py-8 bg-background transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-10">
+        <div className="text-center mb-5">
           <h2 className="text-2xl md:text-3xl font-bold text-text-main uppercase tracking-tight">
             Công ty hàng đầu về nhân sự
           </h2>
-          <div className="w-16 h-1 bg-[#00c853] mx-auto mt-3 rounded-full"></div>
         </div>
 
         {isLoading ? (
