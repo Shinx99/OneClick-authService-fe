@@ -22,7 +22,7 @@ const CompanyCard = ({ company = {} }) => {
             src={getImageUrl(company.logoUrl)}
             alt={company.companyName || "Company"}
             fill
-            className="object-contain p-2"
+            className="object-contain rounded-xl"
           />
         </div>
 

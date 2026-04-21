@@ -83,7 +83,7 @@ const JobList = ({ filters = {} }) => {
                       src={job.companyLogoUrl}
                       alt={job.companyName || "Company"}
                       fill
-                      className="object-contain p-2"
+                      className="object-contain"
                     />
                   ) : (
                     <span className="text-[#00c853] font-medium text-2xl uppercase italic leading-none">
@@ -181,10 +181,7 @@ const JobList = ({ filters = {} }) => {
             onClick={() =>
               filters.onPageChange &&
               filters.onPageChange(
-                Math.min(
-                  (pagination.page || 0) + 1,
-                  pagination.totalPages - 1
-                )
+                Math.min((pagination.page || 0) + 1, pagination.totalPages - 1),
               )
             }
             disabled={pagination.last}

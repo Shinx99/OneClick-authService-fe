@@ -15,7 +15,7 @@ const JobForYou = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const { jobs, pagination, isLoading, error } = useJobs({
     page: currentPage,
-    size: 6,
+    size: 12,
   });
 
   const formatSalary = (min, max) => {
@@ -26,10 +26,10 @@ const JobForYou = () => {
   };
 
   return (
-    <section className="py-12 bg-background transition-colors duration-500">
+    <section className=" py-2 bg-background transition-colors duration-500">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* --- HEADER GỌN GÀNG --- */}
-        <div className="flex items-center justify-between mb-8 pb-4 border-b-2 border-card-border">
+        <div className="flex items-center justify-between mb-4 pb-4 border-b-2 border-card-border">
           <div className="flex items-center gap-3">
             <div className="w-1 h-6 bg-[#00c853] rounded-full"></div>
             <h2 className="text-xl font-medium text-text-main tracking-tight uppercase italic">
@@ -47,10 +47,10 @@ const JobForYou = () => {
         {/* --- LOADING --- */}
         {isLoading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
-            {[...Array(6)].map((_, i) => (
+            {[...Array(12)].map((_, i) => (
               <div
                 key={i}
-                className="bg-card-bg rounded-2xl p-4 border-2 border-card-border h-[160px] animate-pulse"
+                className="bg-card-bg rounded-2xl p-2 border-2 border-card-border h-[160px] animate-pulse"
               >
                 <div className="flex gap-3">
                   <div className="w-14 h-14 bg-card-border rounded-xl shrink-0" />
@@ -87,7 +87,7 @@ const JobForYou = () => {
         {/* --- GRID LAYOUT --- */}
         {!isLoading && !error && jobs.length > 0 && (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
               {jobs.map((job) => (
                 <Link
                   href={`/jobs/${job.jobId}`}
@@ -102,7 +102,7 @@ const JobForYou = () => {
                           src={job.companyLogoUrl}
                           alt={job.companyName || "Company"}
                           fill
-                          className="object-contain p-1.5"
+                          className="object-contain"
                         />
                       ) : (
                         <span className="text-[#00c853] font-medium text-xl uppercase italic">
@@ -166,7 +166,7 @@ const JobForYou = () => {
 
             {/* --- PHÂN TRANG SERVER-SIDE --- */}
             {pagination.totalPages > 1 && (
-              <div className="flex justify-center items-center gap-6">
+              <div className="flex justify-center items-center gap-6 ">
                 <button
                   onClick={() =>
                     setCurrentPage((prev) => Math.max(prev - 1, 0))
@@ -178,14 +178,16 @@ const JobForYou = () => {
                 </button>
 
                 <div className="text-[13px] font-medium text-text-muted">
-                  <span className="text-text-main">{currentPage + 1}</span> /{" "}
-                  {pagination.totalPages}
+                  <span className="text-text-main cursor-pointer">
+                    {currentPage + 1}
+                  </span>{" "}
+                  / {pagination.totalPages}
                 </div>
 
                 <button
                   onClick={() =>
                     setCurrentPage((prev) =>
-                      Math.min(prev + 1, pagination.totalPages - 1)
+                      Math.min(prev + 1, pagination.totalPages - 1),
                     )
                   }
                   disabled={pagination.last}
