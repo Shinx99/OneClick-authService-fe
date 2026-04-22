@@ -100,11 +100,23 @@ const formatVND = (value) => {
 };
 
 const formatSalaryRange = (min, max) => {
-  const fMin = formatVND(min);
-  const fMax = formatVND(max);
-  if (fMin && fMax) return `${fMin} - ${fMax}`;
-  if (fMin) return `Từ ${fMin}`;
-  if (fMax) return `Tới ${fMax}`;
+  // Nếu cả 2 đều null hoặc 0 -> Thỏa thuận
+  if (!min && !max) return "Thỏa thuận";
+
+  // Hàm chuyển đổi số sang dạng K (ví dụ: 1200 -> $1.2K, 2000 -> $2K)
+  const fmt = (val) => {
+    if (val >= 1000) {
+      // toFixed(1) để lấy 1 số lẻ (1.2K), replace('.0', '') để xóa số 0 vô nghĩa (2.0K -> 2K)
+      return `$${(val / 1000).toFixed(1).replace(".0", "")}K`;
+    }
+    return `$${val}`; // Nếu dưới 1000 thì giữ nguyên (ví dụ: $800)
+  };
+
+  // Trả về các trường hợp
+  if (min != null && max != null) return `${fmt(min)} - ${fmt(max)}`;
+  if (min != null && max == null) return `Từ ${fmt(min)}`;
+  if (min == null && max != null) return `Đến ${fmt(max)}`;
+
   return "Thỏa thuận";
 };
 
