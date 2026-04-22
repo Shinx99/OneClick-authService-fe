@@ -82,7 +82,7 @@ const EmployerNavbar = () => {
                 </Link>
               </div>
               <div className="w-48">
-                <Link href="/employer-register" className="block w-full">
+                <Link href="/register" className="block w-full">
                   <Button variant="primary">Đăng ký Nhà Tuyển Dụng</Button>
                 </Link>
               </div>

@@ -26,7 +26,7 @@ const HeroArea = () => {
             </p>
             <div className="flex flex-wrap gap-4">
               <div className="w-32">
-                <Link href="/employer-register" className="block w-full">
+                <Link href="/register" className="block w-full">
                   <Button variant="primary">Đăng ký</Button>
                 </Link>
               </div>
