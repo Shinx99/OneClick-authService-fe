@@ -446,7 +446,7 @@ const JobContent = ({ data }) => {
               <h2 className="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
                 <FiTag className="text-blue-500 text-xl" /> Kỹ năng yêu cầu
               </h2>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 uppercase">
                 {data.skills.map((skill) => (
                   <span
                     key={skill.skillId}
