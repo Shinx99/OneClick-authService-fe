@@ -23,6 +23,17 @@ export const companyService = {
     return response.data;
   },
 
+  // -------------------------------------------------------
+  // CREATE COMPANY (ROLE_recruiter)
+  // POST /api/recruitment/company
+  // Body: CreateCompanyRequest (xem spec BE)
+  // Trả về: { success, message, data: CompanyDTO }
+  // -------------------------------------------------------
+  createCompany: async (payload) => {
+    const response = await api.post('recruitment/company', payload);
+    return response.data;
+  },
+
   getCompanyFilters: async () => {
     try {
       const response = await api.get('recruitment/company/filters');

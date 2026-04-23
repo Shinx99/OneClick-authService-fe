@@ -9,12 +9,34 @@ import React, {
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { authService } from "@/services/auth.service";
+import { ensureRecruiterOnboarded } from "@/services/recruiter.service";
 import { refreshTokenOnce } from "@/lib/apiClient/api.config";
 
 export const ROLES = {
   ADMIN: "admin",
   RECRUITER: "recruiter",
   CANDIDATE: "candidate",
+};
+
+// Gọi ngầm onboarding cho recruiter. Không block UI, không hiện loading.
+// Lỗi network/500 → toast nhẹ, KHÔNG throw để không phá flow login.
+const runRecruiterOnboarding = async (parsedUser) => {
+  if (!parsedUser?.roles?.includes(ROLES.RECRUITER)) return;
+  try {
+    await ensureRecruiterOnboarded();
+  } catch (err) {
+    console.warn("Onboarding recruiter thất bại:", err);
+    toast.error("Không thể khởi tạo hồ sơ, vui lòng đăng nhập lại");
+  }
+};
+
+// Xoá toàn bộ flag local liên quan đến công ty (tránh user A nhìn thấy
+// trạng thái công ty của user B vì localStorage chia sẻ giữa các session).
+const clearCompanyLocalFlags = () => {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem("hasCompany");
+  localStorage.removeItem("companyStatus");
+  localStorage.removeItem("companyId");
 };
 
 // Đã bỏ : any
@@ -53,6 +75,8 @@ export const AuthProvider = ({ children }) => {
           const parsedUser = parseUser(result);
           setUser(parsedUser);
           setIsAuthenticated(true);
+          // Recruiter: chạy ngầm onboarding khi F5 (không await để không chặn UI)
+          runRecruiterOnboarding(parsedUser);
         } else {
           setUser(null);
           setIsAuthenticated(false);
@@ -79,6 +103,8 @@ export const AuthProvider = ({ children }) => {
       setError(null);
       try {
         const result = await authService.login(email, password);
+        // Xoá flag của session cũ trước khi set user mới
+        clearCompanyLocalFlags();
         const parsedUser = parseUser(result);
         setUser(parsedUser);
         setIsAuthenticated(true);
@@ -87,8 +113,11 @@ export const AuthProvider = ({ children }) => {
 
         const roles = parsedUser.roles;
         if (roles.includes(ROLES.ADMIN)) router.push("/admin");
-        else if (roles.includes(ROLES.RECRUITER))
+        else if (roles.includes(ROLES.RECRUITER)) {
+          // Chờ onboarding xong rồi mới redirect để dashboard có ngữ cảnh đúng.
+          await runRecruiterOnboarding(parsedUser);
           router.push("/employer/dashboard");
+        }
         else if (roles.includes(ROLES.CANDIDATE)) {
           router.push("/");
         }
@@ -200,11 +229,13 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
     try {
       await authService.logout();
+      clearCompanyLocalFlags();
       setUser(null);
       setIsAuthenticated(false);
       router.push("/login");
     } catch (err) {
       console.error("Logout error:", err);
+      clearCompanyLocalFlags();
       setUser(null);
       setIsAuthenticated(false);
       router.push("/login");
@@ -223,6 +254,8 @@ export const AuthProvider = ({ children }) => {
       try {
         const result = await authService.googleLogin(credentialResponse);
         if (result.accessToken) {
+          // Xoá flag của session cũ trước khi set user mới
+          clearCompanyLocalFlags();
           const parsedUser = parseUser(result);
           setUser(parsedUser);
           setIsAuthenticated(true);
@@ -230,8 +263,10 @@ export const AuthProvider = ({ children }) => {
 
           const roles = parsedUser.roles;
           if (roles.includes(ROLES.ADMIN)) router.push("/admin");
-          else if (roles.includes(ROLES.RECRUITER))
+          else if (roles.includes(ROLES.RECRUITER)) {
+            await runRecruiterOnboarding(parsedUser);
             router.push("/employer/dashboard");
+          }
           else if (roles.includes(ROLES.CANDIDATE)) router.push("/");
           else router.push("/");
 
