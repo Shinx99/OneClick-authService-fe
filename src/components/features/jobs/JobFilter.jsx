@@ -94,7 +94,7 @@ const JobFilter = ({ filters = {}, onFilterChange }) => {
             onChange={(e) =>
               handleChange(
                 "salaryMin",
-                e.target.value === "" ? "" : Number(e.target.value)
+                e.target.value === "" ? "" : Number(e.target.value),
               )
             }
             className="w-1/2 px-3 py-2.5 rounded-xl text-[13px] bg-background/60 dark:bg-background border border-card-border text-text-main placeholder:text-text-muted/50 focus:outline-none focus:border-[#00c853] focus:ring-2 focus:ring-[#00c853]/10 transition-all"
@@ -108,7 +108,7 @@ const JobFilter = ({ filters = {}, onFilterChange }) => {
             onChange={(e) =>
               handleChange(
                 "salaryMax",
-                e.target.value === "" ? "" : Number(e.target.value)
+                e.target.value === "" ? "" : Number(e.target.value),
               )
             }
             className="w-1/2 px-3 py-2.5 rounded-xl text-[13px] bg-background/60 dark:bg-background border border-card-border text-text-main placeholder:text-text-muted/50 focus:outline-none focus:border-[#00c853] focus:ring-2 focus:ring-[#00c853]/10 transition-all"
@@ -129,7 +129,7 @@ const JobFilter = ({ filters = {}, onFilterChange }) => {
           onChange={(e) =>
             handleChange(
               "experienceMax",
-              e.target.value === "" ? "" : Number(e.target.value)
+              e.target.value === "" ? "" : Number(e.target.value),
             )
           }
           className="w-full px-3 py-2.5 rounded-xl text-[13px] bg-background/60 dark:bg-background border border-card-border text-text-main placeholder:text-text-muted/50 focus:outline-none focus:border-[#00c853] focus:ring-2 focus:ring-[#00c853]/10 transition-all"
@@ -139,7 +139,12 @@ const JobFilter = ({ filters = {}, onFilterChange }) => {
       {/* Reset Filters */}
       <button
         onClick={() =>
-          onFilterChange({ page: 0, size: 6, sortBy: "createdAt", sortDir: "desc" })
+          onFilterChange({
+            page: 0,
+            size: 6,
+            sortBy: "createdAt",
+            sortDir: "desc",
+          })
         }
         className="w-full py-2.5 rounded-xl text-[12px] font-bold uppercase tracking-wider text-text-muted border border-card-border hover:border-red-400 hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all"
       >

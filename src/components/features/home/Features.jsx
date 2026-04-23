@@ -21,7 +21,7 @@ const Features = () => {
   ];
 
   return (
-    <section className="py-12 bg-background transition-colors duration-300">
+    <section className="py-6 bg-background transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((item, index) => (

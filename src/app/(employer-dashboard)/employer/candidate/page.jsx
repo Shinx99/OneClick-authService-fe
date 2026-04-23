@@ -6,9 +6,6 @@ import CandidateManager from "@/components/features/employer/candidate/Candidate
 export default function CandidatePage() {
   return (
     <RestrictedWrapper>
-      {/* Next.js bắt buộc useSearchParams() phải được bọc trong <Suspense> 
-        khi dùng ở Client Component để tránh lỗi render server-side.
-      */}
       <Suspense
         fallback={
           <div className="flex items-center justify-center h-[calc(100vh-8rem)]">

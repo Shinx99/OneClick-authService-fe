@@ -4,7 +4,7 @@ import { FaRocket, FaUserTie } from "react-icons/fa";
 
 const CallToAction = () => {
   return (
-    <section className="bg-background py-16 md:py-20 transition-colors duration-300 overflow-hidden">
+    <section className="bg-background transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative group">
           {/* LỚP NỀN HIỆU ỨNG (Glow) - Chỉ hiện ở Dark Mode */}
@@ -58,7 +58,7 @@ const CallToAction = () => {
                 </Link>
 
                 <Link
-                  href="/employer/register"
+                  href="/register"
                   className="inline-flex items-center justify-center gap-3 bg-white/5 dark:bg-white/10 backdrop-blur-sm border border-card-border hover:border-[#00c853]/50 text-text-main px-8 py-4 rounded-full font-bold text-sm transition-all duration-300 w-full sm:w-auto"
                 >
                   <FaUserTie className="text-[#00c853]" />

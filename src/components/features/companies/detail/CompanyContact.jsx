@@ -13,7 +13,7 @@ const CompanyContact = ({ contact = {} }) => {
             <FaGlobe />
           </div>
           <div className="overflow-hidden">
-            <p className="text-[10px] text-gray-400 font-black uppercase tracking-wider">
+            <p className="text-[10px] text-gray-600 font-black uppercase tracking-wider">
               Website
             </p>
             {contact.websiteUrl ? (
@@ -37,11 +37,11 @@ const CompanyContact = ({ contact = {} }) => {
             <FaUsers />
           </div>
           <div>
-            <p className="text-[10px] text-gray-400 font-black uppercase tracking-wider">
+            <p className="text-[10px] text-gray-600 font-black uppercase tracking-wider">
               Quy mô
             </p>
-            <p className="text-sm font-bold text-text-main">
-              {contact.size || "Chưa xác định"}
+            <p className="text-sm ml-2  text-text-main">
+              {contact.size || "Chưa xác định"} nhân sự
             </p>
           </div>
         </div>
@@ -52,7 +52,7 @@ const CompanyContact = ({ contact = {} }) => {
             <FaMapMarkerAlt />
           </div>
           <div>
-            <p className="text-[10px] text-gray-400 font-black uppercase tracking-wider">
+            <p className="text-[10px] text-gray-600 font-black uppercase tracking-wider">
               Địa chỉ
             </p>
             <p className="text-sm font-medium text-text-muted leading-snug">
