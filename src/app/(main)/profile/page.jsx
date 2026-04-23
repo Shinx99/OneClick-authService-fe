@@ -40,6 +40,8 @@ const ProfilePage = () => {
   }
 
   const skills = profile?.skills || [];
+  const educations = profile?.educations || [];
+  const experiences = profile?.experiences || [];
 
   return (
     <div className="min-h-screen bg-background pt-8 pb-12 transition-colors duration-300">
@@ -52,8 +54,8 @@ const ProfilePage = () => {
         </section>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
-            <ExperienceList />
-            <EducationList />
+            <ExperienceList experiences={experiences} />
+            <EducationList educations={educations} />
             <SkillList skills={skills} />
           </div>
           <div className="lg:col-span-1 space-y-6">

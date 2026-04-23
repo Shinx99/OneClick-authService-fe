@@ -4,17 +4,28 @@ import EditSidebar from "@/components/features/edit-profile/EditSidebar";
 import PersonalInfoForm from "@/components/features/edit-profile/PersonalInfoForm";
 import SectionHeader from "@/components/features/edit-profile/SectionHeader";
 import SkillChipList from "@/components/features/edit-profile/SkillChipList";
-import { FaPlus } from "react-icons/fa";
+import SkillAutocompleteInput from "@/components/features/edit-profile/SkillAutocompleteInput";
+import EducationFormModal from "@/components/features/edit-profile/EducationFormModal";
+import ExperienceFormModal from "@/components/features/edit-profile/ExperienceFormModal";
+import candidateService from "@/services/candidate.service";
+import educationService from "@/services/education.service";
+import { FaPlus, FaGraduationCap, FaEdit, FaTrash  } from "react-icons/fa";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import VNeIDVerification from "@/components/features/edit-profile/VNeIDVerification";
 import { useCandidateProfile } from "@/hooks/useCandidateProfile";
+import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
 
 const EditProfilePage = () => {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const router = useRouter();
   const { updateProfile, isUpdating, profile, isLoading: profileLoading } = useCandidateProfile();
+  const [allSkills, setAllSkills] = useState([]);
+  const [educations, setEducations] = useState([]);
+  const [isEducationModalOpen, setIsEducationModalOpen] = useState(false);
+  const [editingEducation, setEditingEducation] = useState(null);
+  const [isSubmittingEducation, setIsSubmittingEducation] = useState(false);
 
   // Ref để lấy dữ liệu từ PersonalInfoForm
   const personalFormRef = useRef();
@@ -24,24 +35,10 @@ const EditProfilePage = () => {
   const [isAddingSkill, setIsAddingSkill] = useState(false);
   const [newSkillInput, setNewSkillInput] = useState("");
 
-  // Mock data cho Kinh nghiệm và Học vấn (sẽ thay thế bằng API sau)
-  const [experiences] = useState([
-    {
-      id: 1,
-      role: "Senior Developer",
-      company: "WebCreatives",
-      type: "Toàn thời gian",
-    },
-  ]);
-
-  const [education] = useState([
-    {
-      id: 1,
-      school: "FPT Polytechnic",
-      major: "Software Development",
-      time: "2023 - 2025",
-    },
-  ]);
+  const [experiences, setExperiences] = useState([]);
+  const [isExperienceModalOpen, setIsExperienceModalOpen] = useState(false);
+  const [editingExperience, setEditingExperience] = useState(null);
+  const [isSubmittingExperience, setIsSubmittingExperience] = useState(false);
 
   // Khi profile được fetch, đồng bộ skills từ API vào state
   useEffect(() => {
@@ -55,6 +52,39 @@ const EditProfilePage = () => {
       router.replace("/login");
     }
   }, [authLoading, isAuthenticated, router]);
+
+  useEffect(() => {
+    const loadAllSkills = async () => {
+      try {
+        const skills = await candidateService.getAllSkills();
+        setAllSkills(skills);
+      } catch (error) {
+        console.error("Lỗi tải danh sách kỹ năng:", error);
+      }
+    };
+    loadAllSkills();
+  }, []);;
+
+  useEffect(() => {
+    const fetchEducations = async () => {
+      try {
+        const data = await educationService.getAll();
+        setEducations(data || []);
+      } catch (error) {
+        console.error("Lỗi tải học vấn:", error);
+        toast.error("Không thể tải dữ liệu học vấn");
+      }
+    };
+    if (isAuthenticated) {
+      fetchEducations();
+    }
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (profile?.experiences) {
+      setExperiences(profile.experiences);
+    }
+  }, [profile]);
 
   // Handlers cho skills
   const handleAddSkill = () => {
@@ -75,10 +105,92 @@ const EditProfilePage = () => {
     setIsAddingSkill(false);
   };
 
+  // Handlers cho education
+  // Mở modal thêm mới
+  const handleAddEducation = () => {
+    setEditingEducation(null);
+    setIsEducationModalOpen(true);
+  };
+
+  // Mở modal chỉnh sửa
+  const handleEditEducation = (edu) => {
+    setEditingEducation(edu);
+    setIsEducationModalOpen(true);
+  };
+
+  // Xóa học vấn
+  const handleDeleteEducation = async (educationId) => {
+    if (!confirm("Bạn có chắc muốn xóa thông tin học vấn này?")) return;
+    try {
+      await educationService.delete(educationId);
+      setEducations(prev => prev.filter(e => e.educationId !== educationId));
+      toast.success("Đã xóa học vấn");
+    } catch (error) {
+      toast.error("Xóa thất bại");
+    }
+  };
+
+  // Submit form (thêm hoặc cập nhật)
+  const handleEducationSubmit = async (formData) => {
+    setIsSubmittingEducation(true);
+    try {
+      let saved;
+      if (editingEducation) {
+        saved = await educationService.update(editingEducation.educationId, formData);
+        setEducations(prev => prev.map(e => e.educationId === saved.educationId ? saved : e));
+        toast.success("Cập nhật học vấn thành công");
+      } else {
+        saved = await educationService.create(formData);
+        setEducations(prev => [saved, ...prev]);
+        toast.success("Thêm học vấn thành công");
+      }
+      setIsEducationModalOpen(false);
+    } catch (error) {
+      toast.error(editingEducation ? "Cập nhật thất bại" : "Thêm mới thất bại");
+    } finally {
+      setIsSubmittingEducation(false);
+    }
+  };
+
+  // Handlers cho Kinh nghiệm làm việc
+  const handleAddExperience = () => {
+    setEditingExperience(null);
+    setIsExperienceModalOpen(true);
+  };
+
+  const handleEditExperience = (exp) => {
+    setEditingExperience(exp);
+    setIsExperienceModalOpen(true);
+  };
+
+  const handleDeleteExperience = (expId) => {
+    setExperiences(prev => prev.filter(e => e.experienceId !== expId));
+  };
+
+  const handleExperienceSubmit = (formData) => {
+    if (editingExperience) {
+      setExperiences(prev =>
+        prev.map(e => e.experienceId === editingExperience.experienceId
+          ? { ...e, ...formData }
+          : e)
+      );
+    } else {
+      const newExp = {
+        experienceId: uuidv4(),
+        ...formData,
+        companyId: null, // đảm bảo null
+      };
+      setExperiences(prev => [newExp, ...prev]);
+    }
+    setIsExperienceModalOpen(false);
+  };
+
   // Submit toàn bộ: personal info + skills
   const handleSubmitAll = async () => {
     // Lấy dữ liệu từ PersonalInfoForm thông qua ref
     const personalData = personalFormRef.current?.getPersonalData();
+    const educationsPayload = educations.map(({ educationId, ...rest }) => rest);
+    const experiencesPayload = experiences.map(({ experienceId, ...rest }) => rest);
     if (!personalData) {
       toast.error("Không thể lấy dữ liệu cá nhân");
       return;
@@ -87,11 +199,14 @@ const EditProfilePage = () => {
     const payload = {
       ...personalData,
       skills: skills,
+      educations: educationsPayload,
+      experiences: experiencesPayload,
     };
 
     const result = await updateProfile(payload);
     if (result.success) {
       toast.success("Cập nhật hồ sơ thành công!");
+      router.push("/profile");
     }
   };
 
@@ -133,29 +248,76 @@ const EditProfilePage = () => {
               id="exp"
               className="scroll-mt-24 bg-card-bg p-8 rounded-3xl shadow-sm border border-card-border"
             >
-              <SectionHeader title="Kinh nghiệm làm việc" onAdd={() => {}} />
+              <SectionHeader
+                title="Kinh nghiệm làm việc"
+                onAdd={handleAddExperience}
+              />
               <div className="space-y-4">
-                {experiences.map((exp) => (
-                  <div
-                    key={exp.id}
-                    className="p-5 bg-background rounded-2xl flex items-center justify-between group"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-card-bg rounded-xl flex items-center justify-center text-[#00c853] shadow-sm">
-                        <FaPlus />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-text-main">{exp.role}</h4>
-                        <p className="text-xs text-gray-400">
-                          {exp.company} • {exp.type}
+                {experiences.length > 0 ? (
+                  experiences.map((exp) => (
+                    <div
+                      key={exp.experienceId}
+                      className="p-5 bg-background rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+                    >
+                      <div className="flex-1">
+                        <h4 className="font-bold text-text-main text-lg">
+                          {exp.headline}
+                        </h4>
+                        <p className="text-[#00c853] font-medium text-sm mt-1">
+                          {exp.companyName || exp.customCompanyName}
                         </p>
+                        <p className="text-gray-400 text-xs mt-2">
+                          {exp.startDate && (
+                            <>
+                              {new Date(exp.startDate).toLocaleDateString("vi-VN", {
+                                month: "numeric",
+                                year: "numeric",
+                              })}
+                            </>
+                          )}
+                          {exp.startDate && (exp.endDate || exp.isCurrent) && " — "}
+                          {exp.isCurrent
+                            ? "Hiện tại"
+                            : exp.endDate
+                            ? new Date(exp.endDate).toLocaleDateString("vi-VN", {
+                                month: "numeric",
+                                year: "numeric",
+                              })
+                            : ""}
+                          {exp.employmentType && ` • ${exp.employmentType}`}
+                          {exp.employmentLocation && ` • ${exp.employmentLocation}`}
+                        </p>
+                        {exp.description && (
+                          <p className="text-sm text-text-muted mt-2">
+                            {exp.description}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 self-end sm:self-center">
+                        <button
+                          onClick={() => handleEditExperience(exp)}
+                          className="p-2 text-gray-400 hover:text-[#00c853] transition-colors rounded-full hover:bg-green-50"
+                          title="Chỉnh sửa"
+                        >
+                          <FaEdit size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteExperience(exp.experienceId)}
+                          className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
+                          title="Xóa"
+                        >
+                          <FaTrash size={16} />
+                        </button>
                       </div>
                     </div>
-                    <button className="text-[#00c853] text-sm font-bold opacity-0 group-hover:opacity-100 transition-all hover:underline">
-                      Chỉnh sửa
-                    </button>
+                  ))
+                ) : (
+                  <div className="p-10 bg-background rounded-2xl border border-dashed border-card-border text-center">
+                    <p className="text-sm text-gray-400 italic">
+                      Chưa có kinh nghiệm làm việc. Nhấn "Thêm mới" để bổ sung.
+                    </p>
                   </div>
-                ))}
+                )}
               </div>
             </section>
 
@@ -164,31 +326,64 @@ const EditProfilePage = () => {
               id="edu"
               className="scroll-mt-24 bg-card-bg p-8 rounded-3xl shadow-sm border border-card-border"
             >
-              <SectionHeader title="Học vấn" onAdd={() => {}} />
-              {education.length > 0 ? (
-                education.map((edu) => (
-                  <div
-                    key={edu.id}
-                    className="p-5 bg-background rounded-2xl flex items-center gap-4 mb-3"
-                  >
-                    <div className="w-10 h-10 bg-[#00c853]/10 text-[#00c853] rounded-lg flex items-center justify-center font-bold">
-                      F
+              <SectionHeader
+                title="Học vấn"
+                onAdd={handleAddEducation}
+              />
+
+              <div className="space-y-4">
+                {educations.length > 0 ? (
+                  educations.map((edu) => (
+                    <div
+                      key={edu.educationId}
+                      className="p-5 bg-background rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 bg-[#00c853]/10 text-[#00c853] rounded-xl flex items-center justify-center flex-shrink-0">
+                          <FaGraduationCap size={24} />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-text-main text-lg">
+                            {edu.schoolName}
+                          </h4>
+                          <p className="text-sm text-text-muted">
+                            {edu.degree && `${edu.degree} • `}{edu.fieldOfStudy}
+                          </p>
+                          <p className="text-xs text-gray-400 mt-1">
+                            {edu.startDate && `${edu.startDate} — `}
+                            {edu.isCurrent ? "Đang theo học" : edu.endDate || "Chưa có năm tốt nghiệp"}
+                          </p>
+                          {edu.description && (
+                            <p className="text-sm text-text-muted mt-2 line-clamp-2">{edu.description}</p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 self-end sm:self-center">
+                        <button
+                          onClick={() => handleEditEducation(edu)}
+                          className="p-2 text-gray-400 hover:text-[#00c853] transition-colors rounded-full hover:bg-green-50"
+                          title="Chỉnh sửa"
+                        >
+                          <FaEdit size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteEducation(edu.educationId)}
+                          className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
+                          title="Xóa"
+                        >
+                          <FaTrash size={16} />
+                        </button>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-bold text-text-main text-sm">
-                        {edu.school}
-                      </h4>
-                      <p className="text-xs text-gray-400">{edu.major}</p>
-                    </div>
+                  ))
+                ) : (
+                  <div className="p-10 bg-background rounded-2xl border border-dashed border-card-border text-center">
+                    <p className="text-sm text-gray-400 italic">
+                      Chưa có thông tin học vấn. Nhấn "Thêm mới" để bổ sung.
+                    </p>
                   </div>
-                ))
-              ) : (
-                <div className="p-10 bg-background rounded-2xl border border-dashed border-card-border text-center">
-                  <p className="text-sm text-gray-400 italic uppercase tracking-tighter">
-                    Chưa có thông tin học vấn
-                  </p>
-                </div>
-              )}
+                )}
+              </div>
             </section>
 
             {/* Skills Section */}
@@ -203,38 +398,16 @@ const EditProfilePage = () => {
               <SkillChipList skills={skills} onRemove={handleRemoveSkill} />
 
               {isAddingSkill && (
-                <div className="mt-4 flex items-center gap-3">
-                  <input
-                    type="text"
-                    value={newSkillInput}
-                    onChange={(e) => setNewSkillInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        handleAddSkill();
-                      }
-                      if (e.key === "Escape") {
-                        handleCancelAdd();
-                      }
+                <div className="mt-4">
+                  <SkillAutocompleteInput
+                    allSkills={allSkills}
+                    existingSkills={skills}
+                    onAdd={(skillName) => {
+                      setSkills(prev => [...prev, skillName]);
+                      setIsAddingSkill(false);
                     }}
-                    placeholder="Nhập tên kỹ năng (VD: React, Node.js...)"
-                    className="flex-1 p-3.5 rounded-2xl border border-card-border bg-background focus:ring-2 focus:ring-[#00c853] outline-none font-medium"
-                    autoFocus
+                    onCancel={handleCancelAdd}
                   />
-                  <button
-                    type="button"
-                    onClick={handleAddSkill}
-                    className="px-5 py-3.5 bg-[#00c853] text-white font-black rounded-xl hover:bg-[#00a846] transition-all shadow-md active:scale-95"
-                  >
-                    Thêm
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleCancelAdd}
-                    className="px-5 py-3.5 bg-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-300 transition-all"
-                  >
-                    Hủy
-                  </button>
                 </div>
               )}
             </section>
@@ -252,6 +425,22 @@ const EditProfilePage = () => {
           </main>
         </div>
       </div>
+      {/* Modal Học vấn */}
+      <EducationFormModal
+        isOpen={isEducationModalOpen}
+        onClose={() => setIsEducationModalOpen(false)}
+        onSubmit={handleEducationSubmit}
+        initialData={editingEducation}
+        isSubmitting={isSubmittingEducation}
+      />
+      {/* Modal Kinh nghiệm */}
+      <ExperienceFormModal
+        isOpen={isExperienceModalOpen}
+        onClose={() => setIsExperienceModalOpen(false)}
+        onSubmit={handleExperienceSubmit}
+        initialData={editingExperience}
+        isSubmitting={isSubmittingExperience}
+      />
     </div>
   );
 };

@@ -38,6 +38,11 @@ const candidateService = {
         await apiClient.delete("/recruitment/candidate/profile/background/delete")
     },
 
+    async getAllSkills() {
+        const { data } = await apiClient.get("/recruitment/skills/all");
+        return data.data;
+    }
+
 };
 
 export default candidateService;
