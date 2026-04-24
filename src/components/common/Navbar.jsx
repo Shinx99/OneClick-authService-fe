@@ -100,8 +100,9 @@ const Header = () => {
       <div className="h-20 w-full bg-background transition-colors"></div>
 
       <header
-        className={`fixed top-0 left-0 right-0 w-full bg-card-bg border-b border-card-border z-50 shadow-sm transition-all duration-300 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-full"
-          }`}
+        className={`fixed top-0 left-0 right-0 w-full bg-card-bg border-b border-card-border z-50 shadow-sm transition-all duration-300 ease-in-out ${
+          isVisible ? "translate-y-0" : "-translate-y-full"
+        }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
@@ -221,11 +222,12 @@ const Header = () => {
                               <div className="flex flex-col pl-12 pr-4 pb-3 space-y-2.5 bg-background/30">
                                 <Link
                                   href="/jobs/saved"
-                                  className="text-sm text-text-muted hover:text-[#00c853]"
+                                  className="flex items-center gap-2 hover:text-[#00c853]"
                                   onClick={() => setDropdownOpen(false)}
                                 >
                                   Việc làm đã lưu
                                 </Link>
+
                                 <Link
                                   href="/applications"
                                   className="text-sm text-text-muted hover:text-[#00c853]"

@@ -29,6 +29,7 @@ import { toast } from "react-hot-toast";
 import ApplyModal from "./ApplyModal";
 import AIMatchButton from "./AIMatchButton";
 import { useAuth } from "@/context/AuthContext";
+import { useSavedJob } from "@/hooks/useSavedJob";
 
 // Fallback avatar
 const FALLBACK_LOGO =
@@ -99,7 +100,7 @@ const formatVND = (value) => {
   }).format(value);
 };
 
-const formatSalaryRange = (min, max) => {
+const FormatSalary = (min, max) => {
   // Nếu cả 2 đều null hoặc 0 -> Thỏa thuận
   if (!min && !max) return "Thỏa thuận";
 
@@ -144,6 +145,8 @@ const JobContent = ({ data }) => {
   const router = useRouter();
   const { isAuthenticated, user } = useAuth();
   const [showApplyModal, setShowApplyModal] = useState(false);
+
+  const { isSaved, isLoading, toggleSaveJob } = useSavedJob(data?.jobId);
 
   // DEBUG: Log thông tin user và role
   React.useEffect(() => {
@@ -228,7 +231,7 @@ const JobContent = ({ data }) => {
     {
       icon: <HiOutlineCurrencyDollar size={18} />,
       label: "Mức lương",
-      value: formatSalaryRange(data.salaryMin, data.salaryMax),
+      value: FormatSalary(data.salaryMin, data.salaryMax),
       color: "text-emerald-500",
       bg: "bg-emerald-500/10",
     },
@@ -404,8 +407,17 @@ const JobContent = ({ data }) => {
                 <HiPaperAirplane className="text-lg -rotate-45" />
                 {deadlinePassed ? "Đã hết hạn ứng tuyển" : "Ứng tuyển ngay"}
               </button>
-              <button className="sm:w-auto px-6 py-3.5 bg-background border-2 border-card-border text-text-main hover:border-[#00c853] rounded-2xl font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2">
-                <FiBookmark size={18} /> Lưu việc làm
+
+              <button
+                onClick={toggleSaveJob}
+                disabled={isLoading}
+                className={`sm:w-auto px-6 py-3.5 border-2 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer ${
+                  isSaved
+                    ? "bg-red-50 border-red-500 text-red-500 dark:bg-red-500/10" // Màu khi đã lưu
+                    : "bg-background border-card-border text-text-main hover:border-[#00c853]" // Màu khi chưa lưu
+                }`}
+              >
+                {isSaved ? "Đã lưu việc làm" : "Lưu việc làm"}
               </button>
             </div>
           </div>
