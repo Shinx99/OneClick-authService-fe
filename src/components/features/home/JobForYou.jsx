@@ -10,6 +10,8 @@ import {
   FiHeart,
 } from "react-icons/fi";
 import { useJobs } from "@/hooks/useJobs";
+import SaveJobButton from "@/components/features/jobs/SaveJobButton";
+import FormatSalary from "@/utils/FortmatSalary";
 
 const JobForYou = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -17,14 +19,6 @@ const JobForYou = () => {
     page: currentPage,
     size: 12, // Xin đúng 12 job từ Backend
   });
-
-  // 1. Hàm format Lương
-  const formatSalary = (min, max) => {
-    if (min == null && max == null) return "Thỏa thuận";
-    const fmt = (v) => (v >= 1000 ? `${(v / 1000).toFixed(0)}K` : `$${v}`);
-    if (min != null && max != null) return `${fmt(min)}-${fmt(max)}`;
-    return min != null ? `>${fmt(min)}` : `<${fmt(max)}`;
-  };
 
   // 2. Hàm format thời gian
   const formatTimeAgo = (dateString) => {
@@ -191,7 +185,7 @@ const JobForYou = () => {
                         <div className="flex items-center gap-1 text-[12px] text-[#00c853] font-medium">
                           <FiDollarSign size={13} />
                           <span>
-                            {formatSalary(job.salaryMin, job.salaryMax)}
+                            {FormatSalary(job.salaryMin, job.salaryMax)}
                           </span>
                         </div>
                         <div className="flex items-center gap-1 text-[12px] text-text-muted font-normal">
@@ -201,12 +195,7 @@ const JobForYou = () => {
                           </span>
                         </div>
                       </div>
-                      <button
-                        onClick={(e) => e.preventDefault()}
-                        className="text-text-muted hover:text-red-500 transition-all active:scale-90"
-                      >
-                        <FiHeart size={16} />
-                      </button>
+                      <SaveJobButton jobId={job.jobId} />
                     </div>
 
                     {/* Badge trạng thái nhỏ */}

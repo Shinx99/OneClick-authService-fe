@@ -10,16 +10,11 @@ import {
   FiHeart,
 } from "react-icons/fi";
 import { useJobs } from "@/hooks/useJobs";
+import SaveJobButton from "@/components/features/jobs/SaveJobButton";
+import FormatSalary from "@/utils/FortmatSalary";
 
 const JobList = ({ filters = {} }) => {
   const { jobs, pagination, isLoading, error } = useJobs(filters);
-
-  const formatSalary = (min, max) => {
-    if (min == null && max == null) return "Thỏa thuận";
-    const fmt = (v) => (v >= 1000 ? `${(v / 1000).toFixed(0)}K` : `$${v}`);
-    if (min != null && max != null) return `${fmt(min)} - ${fmt(max)}`;
-    return min != null ? `>${fmt(min)}` : `<${fmt(max)}`;
-  };
 
   return (
     <div className="space-y-8 animate-in fade-in duration-700">
@@ -127,7 +122,7 @@ const JobList = ({ filters = {} }) => {
                     </p>
                     <div className="flex items-center gap-1 text-[16px] font-medium text-[#00c853]">
                       <FiDollarSign size={16} />
-                      <span>{formatSalary(job.salaryMin, job.salaryMax)}</span>
+                      <span>{FormatSalary(job.salaryMin, job.salaryMax)}</span>
                     </div>
                   </div>
 
@@ -141,9 +136,7 @@ const JobList = ({ filters = {} }) => {
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <button className="p-3 rounded-2xl border-2 border-card-border text-text-muted hover:text-red-500 hover:border-red-500/20 hover:bg-red-500/5 transition-all active:scale-90">
-                      <FiHeart size={18} />
-                    </button>
+                    <SaveJobButton jobId={job.jobId} />
                     <button className="hidden sm:flex items-center gap-2 bg-[#00c853] text-white px-5 py-2.5 rounded-2xl text-[14px] font-medium hover:bg-[#00b04a] transition-all shadow-lg shadow-green-500/20 active:scale-95">
                       Ứng tuyển
                     </button>
