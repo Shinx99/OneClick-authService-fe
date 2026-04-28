@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactCompiler: true,
+  reactStrictMode: false,
   images: {
     remotePatterns: [
       {

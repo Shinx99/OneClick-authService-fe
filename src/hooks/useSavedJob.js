@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
 import { savedJobService } from '@/services/savedJob.service';
-import { useAuth } from '@/context/AuthContext'; // 1. Lấy trạng thái đăng nhập
-import { toast } from 'react-hot-toast'; // 2. Lấy thư viện thông báo
+import { useAuth } from '@/context/AuthContext';
+import { toast } from 'react-hot-toast'; 
 
 export const useSavedJob = (jobId) => {
   const [isSaved, setIsSaved] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Mặc định là false cho nhẹ
+  const [isLoading, setIsLoading] = useState(false);
   
   const { isAuthenticated } = useAuth(); 
 
 
-  useEffect(() => {
-    // NẾU CHƯA ĐĂNG NHẬP -> Dừng lại luôn, không gửi bất kỳ API nào hết!
+  useEffect(() => {  
     if (!jobId || !isAuthenticated) {
         setIsSaved(false);
         return;
@@ -36,7 +35,6 @@ export const useSavedJob = (jobId) => {
     fetchSavedStatus();
   }, [jobId, isAuthenticated]);
 
-  // 2. KHI NGƯỜI DÙNG BẤM NÚT LƯU
   const toggleSaveJob = async () => {
     if (!isAuthenticated) {
       toast.error("Vui lòng đăng nhập để lưu việc làm!", { duration: 3000, position: "top-right" });

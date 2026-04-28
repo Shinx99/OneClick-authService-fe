@@ -12,6 +12,7 @@ import {
 import { useJobs } from "@/hooks/useJobs";
 import SaveJobButton from "@/components/features/jobs/SaveJobButton";
 import FormatSalary from "@/utils/FortmatSalary";
+import { FormatTime } from "@/utils/FormatTime";
 
 const JobForYou = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -19,29 +20,6 @@ const JobForYou = () => {
     page: currentPage,
     size: 12, // Xin đúng 12 job từ Backend
   });
-
-  // 2. Hàm format thời gian
-  const formatTimeAgo = (dateString) => {
-    if (!dateString) return "Mới cập nhật";
-
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInSeconds = Math.floor((now - date) / 1000);
-
-    if (diffInSeconds < 60) return "Vừa xong";
-
-    const diffInMinutes = Math.floor(diffInSeconds / 60);
-    if (diffInMinutes < 60) return `${diffInMinutes} phút trước`;
-
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    if (diffInHours < 24) return `${diffInHours} giờ trước`;
-
-    const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays < 30) return `${diffInDays} ngày trước`;
-
-    const diffInMonths = Math.floor(diffInDays / 30);
-    return `${diffInMonths} tháng trước`;
-  };
 
   // 3. Hàm xử lý trạng thái
   const getStatusConfig = (status) => {
@@ -144,6 +122,7 @@ const JobForYou = () => {
               {jobs.map((job) => (
                 <Link
                   href={`/jobs/${job.jobId}`}
+                  prefetch={false}
                   key={job.jobId}
                   className="group bg-card-bg rounded-2xl p-4 border-2 border-card-border hover:border-[#00c853] transition-all duration-300 hover:shadow-lg flex flex-col justify-between h-[160px]"
                 >
@@ -201,7 +180,7 @@ const JobForYou = () => {
                     {/* Badge trạng thái nhỏ */}
                     <div className="flex items-center justify-between pt-2 border-t border-card-border/50">
                       <span className="text-[10px] text-text-muted font-normal uppercase tracking-tighter opacity-50">
-                        {formatTimeAgo(job.createdAt)}
+                        {FormatTime(job.createdAt)}
                       </span>
                       <span
                         className={`text-[9px] font-medium px-2 py-0.5 rounded-md border uppercase ${getStatusConfig(job.status).styles}`}
