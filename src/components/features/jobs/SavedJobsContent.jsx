@@ -15,7 +15,7 @@ import { toast } from "react-hot-toast";
 import { savedJobService } from "@/services/savedJob.service";
 import { useAuth } from "@/context/AuthContext";
 import FormatSalary from "@/utils/FortmatSalary";
-import { FormatTimeAgo } from "@/utils/FormatTime";
+import { FormatTime } from "@/utils/FormatTime";
 
 const SavedJobsContent = () => {
   const { isAuthenticated } = useAuth();
@@ -204,7 +204,7 @@ const SavedJobsContent = () => {
                     </div>
                     <div className="flex items-center gap-1.5 text-[12px] text-text-muted ml-auto sm:ml-0">
                       <FiClock size={12} />
-                      {FormatTimeAgo(job.savedAt)}
+                      {FormatTime(job.savedAt)}
                     </div>
                   </div>
                 </div>

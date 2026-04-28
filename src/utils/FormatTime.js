@@ -1,19 +1,18 @@
-export const FormatTimeAgo = (dateString) => {
+export const FormatTime = (dateString) => {
   if (!dateString) return "Mới cập nhật";
 
-  let normalizedDate = dateString.replace(" ", "T");
-  normalizedDate = normalizedDate.replace(" +", "+").replace(" -", "-");
-  
-  // Mẹo thêm: Thêm dấu ":" vào múi giờ (VD: +0700 thành +07:00) để chuẩn ISO 100%
-  normalizedDate = normalizedDate.replace(/([+-]\d{2})(\d{2})$/, '$1:$2');
+  // Trên Windows (Chrome, Edge), bạn cứ ném thẳng chuỗi vào new Date()
+  const date = new Date(dateString);
 
-  const date = new Date(normalizedDate);
+  // Vẫn nên giữ chốt chặn này đề phòng API lỗi, trả về chuỗi rác ("abc") thay vì ngày tháng
+  if (isNaN(date.getTime())) {
+    return "Mới cập nhật"; 
+  }
+
   const now = new Date();
-
   const diffInSeconds = Math.floor((now - date) / 1000);
 
   // Xử lý các trường hợp hiển thị
-  if (diffInSeconds < 0) return "Mới cập nhật"; 
   if (diffInSeconds < 60) return "Vừa xong";
 
   const diffInMinutes = Math.floor(diffInSeconds / 60);

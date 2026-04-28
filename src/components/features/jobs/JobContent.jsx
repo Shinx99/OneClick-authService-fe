@@ -158,7 +158,7 @@ const JobContent = ({ data }) => {
     console.log("user?.user?.role:", user?.user?.role); // Nếu role nested
     console.log("typeof user?.role:", typeof user?.role);
     console.log("====================================");
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, data?.jobId]);
 
   const statusInfo =
     STATUS_CONFIG[data.status?.toLowerCase()] || STATUS_CONFIG.active;
