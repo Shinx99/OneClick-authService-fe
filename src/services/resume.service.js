@@ -223,7 +223,37 @@ export const resumeService = {
   updateResume: async (payload) => {
     const { data } = await apiClient.put("/recruitment/candidate/profile/resume/update", payload);
     //return data.data;
-  }
+  },
+
+  /**
+   * Recruiter xem CV của candidate (có kiểm tra quyền)
+   * GET /api/profile/cv/stream/{candidateId}/{fileName}
+   */
+  previewCandidateResume: async (candidateId, fileName) => {
+    if (!fileName || !candidateId) {
+      throw new Error('Invalid file name or candidate ID');
+    }
+
+    try {
+      const response = await apiClient.get(`/profile/cv/stream/${candidateId}/${encodeURIComponent(fileName)}`, {
+        responseType: 'blob'
+      });
+
+      if (response.data.type === 'application/json') {
+        const text = await response.data.text();
+        const error = JSON.parse(text);
+        throw new Error(error.message || 'Preview failed');
+      }
+
+      return {
+        blob: response.data,
+        contentType: response.headers['content-type'] || 'application/pdf'
+      };
+    } catch (error) {
+      console.error("Preview candidate resume error:", error);
+      throw error;
+    }
+  },
 };
 
 // Helper functions

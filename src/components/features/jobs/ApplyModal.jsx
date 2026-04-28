@@ -34,7 +34,7 @@ const ApplyModal = ({ job, onClose, onSuccess }) => {
         // Chọn CV mặc định nếu có
         const defaultCv = resumesList?.find(cv => cv.isDefault);
         if (defaultCv) {
-          setSelectedId(defaultCv.id);s
+          setSelectedId(defaultCv.id);
         } else if (resumesList?.length > 0) {
           setSelectedId(resumesList[0].id);
         }

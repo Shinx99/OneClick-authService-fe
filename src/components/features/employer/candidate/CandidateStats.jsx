@@ -8,21 +8,28 @@ import {
   FaUserTimes,
   FaArrowUp,
   FaArrowDown,
+  FaEye,
 } from "react-icons/fa";
 
 const CandidateStats = ({ candidates }) => {
-  // --- TÍNH TOÁN DỮ LIỆU THỰC TẾ ---
-  const total = candidates.length;
-  const appliedCount = candidates.filter((c) => c.status === "APPLIED").length;
-  const interviewingCount = candidates.filter(
-    (c) => c.status === "INTERVIEW",
-  ).length;
-  const hiredCount = candidates.filter((c) => c.status === "HIRED").length;
-  const rejectedCount = candidates.filter(
-    (c) => c.status === "REJECTED",
-  ).length;
+  // --- TÍNH TOÁN DỮ LIỆU THỰC TẾ - CHUẨN STATUS TỪ API ---
+  const total = candidates?.length || 0;
+  
+  // Status từ API: pending (đang xử lý), reviewed (đã xem), interview (phỏng vấn), accepted (được nhận), rejected (từ chối)
+  const pendingCount = candidates.filter((c) => c.status === "pending").length;
+  const reviewedCount = candidates.filter((c) => c.status === "reviewed").length;
+  const interviewingCount = candidates.filter((c) => c.status === "interview").length;
+  const hiredCount = candidates.filter((c) => c.status === "accepted").length;
+  const rejectedCount = candidates.filter((c) => c.status === "rejected").length;
 
-  // --- MOCK DATA: CHỈ BÁO XU HƯỚNG ---
+  // Tổng CV mới = pending + reviewed
+  const newCvCount = pendingCount + reviewedCount;
+  
+  // Tỷ lệ chuyển đổi (hired / total * 100)
+  const conversionRate = total > 0 ? Math.round((hiredCount / total) * 100) : 0;
+  // Tỷ lệ loại bỏ (rejected / total * 100)
+  const rejectionRate = total > 0 ? Math.round((rejectedCount / total) * 100) : 0;
+
   const stats = [
     {
       label: "Tổng CV",
@@ -32,11 +39,18 @@ const CandidateStats = ({ candidates }) => {
       trend: { value: 12, isPositive: true, text: "so với tháng trước" },
     },
     {
-      label: "CV Mới",
-      value: appliedCount,
+      label: "Đang xử lý",
+      value: pendingCount,
       icon: FaRegEye,
-      bg: "bg-purple-50 text-purple-600 dark:bg-purple-500/10 dark:text-purple-400",
+      bg: "bg-yellow-50 text-yellow-600 dark:bg-yellow-500/10 dark:text-yellow-400",
       trend: { value: 5, isPositive: true, text: "so với tuần trước" },
+    },
+    {
+      label: "Đã xem",
+      value: reviewedCount,
+      icon: FaEye,
+      bg: "bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400",
+      trend: { value: 3, isPositive: true, text: "so với tuần trước" },
     },
     {
       label: "Phỏng vấn",
@@ -51,7 +65,7 @@ const CandidateStats = ({ candidates }) => {
       icon: FaRegHandshake,
       bg: "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400",
       trend: {
-        value: total > 0 ? Math.round((hiredCount / total) * 100) : 0,
+        value: conversionRate,
         isPositive: true,
         text: "tỷ lệ chuyển đổi",
       },
@@ -62,7 +76,7 @@ const CandidateStats = ({ candidates }) => {
       icon: FaUserTimes,
       bg: "bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400",
       trend: {
-        value: total > 0 ? Math.round((rejectedCount / total) * 100) : 0,
+        value: rejectionRate,
         isPositive: false,
         text: "tỷ lệ loại bỏ",
       },
@@ -70,8 +84,7 @@ const CandidateStats = ({ candidates }) => {
   ];
 
   return (
-    // FIX UI: Lưới chia 5 cột chuẩn xác
-    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
       {stats.map((stat, idx) => {
         const Icon = stat.icon;
         const TrendIcon = stat.trend.isPositive ? FaArrowUp : FaArrowDown;
