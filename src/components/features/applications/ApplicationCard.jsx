@@ -14,7 +14,7 @@ import {
 import { HiOutlineStatusOnline } from "react-icons/hi";
 
 const STATUS_CONFIG = {
-  pending: { text: "Đang xem xét", color: "text-yellow-600", bg: "bg-yellow-50", icon: FiLoader, progress: 25 },
+  pending: { text: "Đang xử lý", color: "text-yellow-600", bg: "bg-yellow-50", icon: FiLoader, progress: 25 },
   reviewed: { text: "Đã xem", color: "text-blue-600", bg: "bg-blue-50", icon: FiEye, progress: 50 },
   interview: { text: "Phỏng vấn", color: "text-purple-600", bg: "bg-purple-50", icon: HiOutlineStatusOnline, progress: 75 },
   accepted: { text: "Được nhận", color: "text-green-600", bg: "bg-green-50", icon: FiCheckCircle, progress: 100 },
