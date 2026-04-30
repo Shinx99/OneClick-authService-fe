@@ -31,7 +31,11 @@ const JobsPage = () => {
     <div className="bg-background min-h-screen transition-colors duration-500">
       {/* Banner search — z-30 để dropdown gợi ý nổi lên trên phần danh sách bên dưới */}
       <div className="relative z-30">
-        <Background onSearch={handleSearch} />
+        <Background
+          showSearch={true}
+          onSearch={handleSearch}
+          title="Tìm kiếm công việc mơ ước"
+        />
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-12 md:py-16">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
