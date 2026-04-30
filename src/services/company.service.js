@@ -81,4 +81,51 @@ export const companyService = {
     });
     return response.data; // { success, message, data: CompanyDTO }
   },
+
+  // -------------------------------------------------------
+  // JOIN COMPANY REQUEST APIs
+  // -------------------------------------------------------
+
+  /**
+   * Employer gửi yêu cầu gia nhập công ty
+   * POST /api/recruitment/company/{companyId}/join-request
+   */
+  sendJoinRequest: async (companyId, message) => {
+    const response = await api.post(
+      `recruitment/company/${companyId}/join-request`,
+      message ? { message } : {},
+    );
+    return response.data; // { success, message, data: JoinRequestDTO }
+  },
+
+  /**
+   * Owner xem danh sách yêu cầu đang chờ
+   * GET /api/recruitment/company/join-requests?page=0&size=10
+   */
+  getJoinRequests: async (params) => {
+    const response = await api.get('recruitment/company/join-requests', { params });
+    return response.data;
+  },
+
+  /**
+   * Owner duyệt yêu cầu
+   * PUT /api/recruitment/company/join-request/{requestId}/approve
+   */
+  approveJoinRequest: async (requestId) => {
+    const response = await api.put(
+      `recruitment/company/join-request/${requestId}/approve`,
+    );
+    return response.data;
+  },
+
+  /**
+   * Owner từ chối yêu cầu
+   * PUT /api/recruitment/company/join-request/{requestId}/reject
+   */
+  rejectJoinRequest: async (requestId) => {
+    const response = await api.put(
+      `recruitment/company/join-request/${requestId}/reject`,
+    );
+    return response.data;
+  },
 };
