@@ -28,6 +28,8 @@ OneClick-authService-fe
 │   │   ├── health-logo.png
 │   │   ├── login-bg.jpg
 │   │   ├── one-click-logo.png
+│   │   ├── pexels-2.jpg
+│   │   ├── pexels.jpg
 │   │   └── thienNhien.jpg
 │   ├── next.svg
 │   ├── vercel.svg
@@ -67,10 +69,6 @@ OneClick-authService-fe
 │   │   │   ├── forget-password
 │   │   │   │   └── page.jsx
 │   │   │   ├── layout.jsx
-│   │   │   ├── otp-verify
-│   │   │   │   └── page.js
-│   │   │   ├── register-employer
-│   │   │   │   └── page.jsx
 │   │   │   ├── reset-password
 │   │   │   │   └── page.jsx
 │   │   │   └── verify-email
@@ -86,6 +84,9 @@ OneClick-authService-fe
 │   │   │   │   ├── job-posting
 │   │   │   │   │   ├── create
 │   │   │   │   │   │   └── page.jsx
+│   │   │   │   │   ├── edit
+│   │   │   │   │   │   └── [jobId]
+│   │   │   │   │   │       └── page.jsx
 │   │   │   │   │   └── page.jsx
 │   │   │   │   ├── resume-search
 │   │   │   │   │   └── page.jsx
@@ -99,18 +100,12 @@ OneClick-authService-fe
 │   │   │   │       └── page.jsx
 │   │   │   └── layout.jsx
 │   │   ├── (employer-landingPage)
-│   │   │   ├── employer-register
-│   │   │   │   ├── company
-│   │   │   │   │   └── page.jsx
-│   │   │   │   ├── page.jsx
-│   │   │   │   ├── pending
-│   │   │   │   │   └── page.jsx
-│   │   │   │   └── verify
-│   │   │   │       └── page.jsx
 │   │   │   ├── help-center
 │   │   │   │   └── page.jsx
 │   │   │   └── layout.jsx
 │   │   ├── (main)
+│   │   │   ├── applications
+│   │   │   │   └── page.jsx
 │   │   │   ├── companies
 │   │   │   │   ├── [slug]
 │   │   │   │   │   └── page.jsx
@@ -122,9 +117,11 @@ OneClick-authService-fe
 │   │   │   │   ├── (list)
 │   │   │   │   │   ├── layout.jsx
 │   │   │   │   │   └── page.jsx
-│   │   │   │   └── [id]
-│   │   │   │       ├── ai-report
-│   │   │   │       │   └── page.jsx
+│   │   │   │   ├── [id]
+│   │   │   │   │   ├── ai-report
+│   │   │   │   │   │   └── page.jsx
+│   │   │   │   │   └── page.jsx
+│   │   │   │   └── saved
 │   │   │   │       └── page.jsx
 │   │   │   ├── layout.jsx
 │   │   │   ├── page.jsx
@@ -177,9 +174,11 @@ OneClick-authService-fe
 │   │   │   │       ├── UserFilter.jsx
 │   │   │   │       ├── UserListTable.jsx
 │   │   │   │       └── UserSearch.jsx
+│   │   │   ├── applications
+│   │   │   │   ├── ApplicationCard.jsx
+│   │   │   │   └── ApplicationsList.jsx
 │   │   │   ├── auth
 │   │   │   │   ├── ChangePasswordForm.jsx
-│   │   │   │   ├── EmployerRegisterForm.jsx
 │   │   │   │   ├── ForgetPasswordForm.jsx
 │   │   │   │   ├── LoginForm.jsx
 │   │   │   │   ├── RegisterForm.jsx
@@ -205,20 +204,24 @@ OneClick-authService-fe
 │   │   │   │       ├── CompanyJobs.jsx
 │   │   │   │       └── CompanyOverview.jsx
 │   │   │   ├── cv
+│   │   │   │   ├── CVManagement.jsx
 │   │   │   │   └── CVManagementContent.jsx
 │   │   │   ├── edit-profile
 │   │   │   │   ├── EditSidebar.jsx
+│   │   │   │   ├── EducationFormModal.jsx
+│   │   │   │   ├── ExperienceFormModal.jsx
 │   │   │   │   ├── PersonalInfoForm.jsx
 │   │   │   │   ├── SectionHeader.jsx
+│   │   │   │   ├── SkillAutocompleteInput.jsx
+│   │   │   │   ├── SkillChipList.jsx
+│   │   │   │   ├── TagInput.jsx
 │   │   │   │   └── VNeIDVerification.jsx
 │   │   │   ├── employer
 │   │   │   │   ├── auth
-│   │   │   │   │   ├── EmployerCompanyForm.jsx
-│   │   │   │   │   ├── EmployerPendingView.jsx
-│   │   │   │   │   ├── EmployerRegister.jsx
-│   │   │   │   │   ├── EmployerVerifyForm.jsx
 │   │   │   │   │   └── RestrictedWrapper.jsx
 │   │   │   │   ├── candidate
+│   │   │   │   │   ├── CandidateBoard.jsx
+│   │   │   │   │   ├── CandidateManager.jsx
 │   │   │   │   │   ├── CandidateStats.jsx
 │   │   │   │   │   └── CandidateTable.jsx
 │   │   │   │   ├── company-profile
@@ -246,6 +249,13 @@ OneClick-authService-fe
 │   │   │   │   ├── setting
 │   │   │   │   │   ├── PersonalInfoManager.jsx
 │   │   │   │   │   └── SocialProfileManager.jsx
+│   │   │   │   ├── setup
+│   │   │   │   │   ├── CreateCompanyScreen.jsx
+│   │   │   │   │   ├── JoinCompanyScreen.jsx
+│   │   │   │   │   ├── PendingApprovalScreen.jsx
+│   │   │   │   │   ├── SelectFlowScreen.jsx
+│   │   │   │   │   ├── SetupSidebar.jsx
+│   │   │   │   │   └── useCreateCompany.js
 │   │   │   │   └── team
 │   │   │   │       └── TeamManager.jsx
 │   │   │   ├── home
@@ -262,6 +272,8 @@ OneClick-authService-fe
 │   │   │   │   ├── JobContent.jsx
 │   │   │   │   ├── JobFilter.jsx
 │   │   │   │   ├── JobList.jsx
+│   │   │   │   ├── SaveJobButton.jsx
+│   │   │   │   ├── SavedJobsContent.jsx
 │   │   │   │   └── SimilarJobs.jsx
 │   │   │   └── profile
 │   │   │       ├── AboutPage.jsx
@@ -280,12 +292,16 @@ OneClick-authService-fe
 │   │       ├── Input.jsx
 │   │       ├── SearchBar.jsx
 │   │       └── ThemeToggle.jsx
+│   ├── constants
+│   │   └── vn-provinces.json
 │   ├── context
 │   │   └── AuthContext.jsx
 │   ├── hooks
 │   │   ├── useCandidateProfile.js
 │   │   ├── useJobDetail.js
-│   │   └── useJobs.js
+│   │   ├── useJobs.js
+│   │   ├── useResume.js
+│   │   └── useSavedJob.js
 │   ├── lib
 │   │   ├── apiClient
 │   │   │   └── api.config.js
@@ -294,14 +310,24 @@ OneClick-authService-fe
 │   │   └── validators
 │   │       ├── auth.jsx
 │   │       └── candidate.jsx
-│   └── services
-│       ├── admindashboard.service.js
-│       ├── application.service.js
-│       ├── auth.service.js
-│       ├── candidate.service.js
-│       ├── chat.service.js
-│       ├── company.service.js
-│       ├── job.service.js
-│       └── resume.service.js
+│   ├── services
+│   │   ├── admindashboard.service.js
+│   │   ├── ai-match.service.js
+│   │   ├── application.service.js
+│   │   ├── auth.service.js
+│   │   ├── candidate.service.js
+│   │   ├── chat.service.js
+│   │   ├── company.service.js
+│   │   ├── education.service.js
+│   │   ├── experience.service.js
+│   │   ├── job.service.js
+│   │   ├── recruiter.service.js
+│   │   ├── resume.service.js
+│   │   └── savedJob.service.js
+│   └── utils
+│       ├── FormatLocation.js
+│       ├── FormatTime.js
+│       ├── FortmatSalary.js
+│       └── Provinces.js
 ├── tailwind.config.mjs
 └── tree.txt

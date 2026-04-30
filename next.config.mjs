@@ -34,6 +34,10 @@ const nextConfig = {
         hostname: "upload.wikimedia.org",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "**", // Cho phép mọi domain (không khuyến khích production)
+      },
     ],
   },
 };
