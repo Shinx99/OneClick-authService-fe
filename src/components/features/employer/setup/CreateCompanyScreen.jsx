@@ -22,7 +22,7 @@ const FieldLabel = ({ children, tone = "muted" }) => (
   <label
     className={`block text-[11px] font-medium uppercase tracking-widest mb-2 ${
       tone === "indigo"
-        ? "text-indigo-700 dark:text-indigo-400"
+        ? "text-emerald-700 dark:text-emerald-400"
         : "text-text-muted"
     }`}
   >
@@ -38,7 +38,7 @@ const IconInput = ({ icon, ...props }) => (
     <input
       type="text"
       {...props}
-      className="w-full pl-11 pr-4 py-3.5 bg-background border-2 border-card-border rounded-xl text-[14px] font-medium text-text-main focus:border-indigo-500 outline-none transition-colors"
+      className="w-full pl-11 pr-4 py-3.5 bg-background border-2 border-card-border rounded-xl text-[14px] font-medium text-text-main focus:border-emerald-500 outline-none transition-colors"
     />
   </div>
 );
@@ -50,7 +50,7 @@ const IconSelect = ({ icon, children, ...props }) => (
     </span>
     <select
       {...props}
-      className="w-full pl-11 pr-4 py-3.5 bg-background border-2 border-card-border rounded-xl text-[14px] font-medium text-text-main focus:border-indigo-500 outline-none appearance-none cursor-pointer"
+      className="w-full pl-11 pr-4 py-3.5 bg-background border-2 border-card-border rounded-xl text-[14px] font-medium text-text-main focus:border-emerald-500 outline-none appearance-none cursor-pointer"
     >
       {children}
     </select>
@@ -72,12 +72,12 @@ const FileUpload = ({
   const borders =
     accent === "green"
       ? "hover:border-[#00c853] hover:bg-green-50/50"
-      : "hover:border-indigo-500 hover:bg-indigo-50/50";
+      : "hover:border-emerald-500 hover:bg-emerald-50/50";
   const filled =
     accent === "green"
       ? "border-[#00c853] bg-green-50/50 dark:bg-green-500/10"
-      : "border-indigo-500 bg-indigo-50/50 dark:bg-indigo-500/10";
-  const iconColor = accent === "green" ? "text-rose-500" : "text-indigo-500";
+      : "border-emerald-500 bg-emerald-50/50 dark:bg-emerald-500/10";
+  const iconColor = accent === "green" ? "text-rose-500" : "text-emerald-500";
 
   if (file) {
     return (
@@ -156,7 +156,7 @@ export default function CreateCompanyScreen({ onCancel, onSuccess }) {
           </p>
 
           {/* Nhóm pháp lý */}
-          <div className="bg-indigo-50/30 dark:bg-indigo-500/5 border-2 border-indigo-100 dark:border-indigo-500/20 rounded-[20px] p-6 mb-6 space-y-5">
+          <div className="bg-emerald-50/30 dark:bg-emerald-500/5 border-2 border-emerald-100 dark:border-emerald-500/20 rounded-[20px] p-6 mb-6 space-y-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="md:col-span-2">
                 <FieldLabel tone="indigo">Tên công ty đầy đủ *</FieldLabel>
@@ -249,7 +249,7 @@ export default function CreateCompanyScreen({ onCancel, onSuccess }) {
                 placeholder="Số nhà, Phường/Xã, Quận/Huyện..."
                 value={formData.address}
                 onChange={(e) => setField("address", e.target.value)}
-                className="w-full px-4 py-3.5 bg-background border-2 border-card-border rounded-xl text-[14px] font-medium text-text-main focus:border-indigo-500 outline-none transition-colors"
+                className="w-full px-4 py-3.5 bg-background border-2 border-card-border rounded-xl text-[14px] font-medium text-text-main focus:border-emerald-500 outline-none transition-colors"
               />
             </div>
             <div className="md:col-span-2">
@@ -261,7 +261,7 @@ export default function CreateCompanyScreen({ onCancel, onSuccess }) {
                   placeholder="Giới thiệu ngắn gọn về công ty, sứ mệnh và văn hóa..."
                   value={formData.overview}
                   onChange={(e) => setField("overview", e.target.value)}
-                  className="w-full pl-11 pr-4 py-3.5 bg-background border-2 border-card-border rounded-xl text-[14px] font-medium text-text-main focus:border-indigo-500 outline-none transition-colors resize-none"
+                  className="w-full pl-11 pr-4 py-3.5 bg-background border-2 border-card-border rounded-xl text-[14px] font-medium text-text-main focus:border-emerald-500 outline-none transition-colors resize-none"
                 />
               </div>
             </div>
@@ -314,7 +314,7 @@ export default function CreateCompanyScreen({ onCancel, onSuccess }) {
         <button
           disabled={isLoading}
           onClick={handleSubmit}
-          className="px-8 py-3.5 bg-indigo-600 text-white text-[13px] uppercase tracking-widest font-medium rounded-xl hover:bg-indigo-700 transition-all active:scale-95 shadow-lg shadow-indigo-500/20 disabled:opacity-50 flex items-center gap-2"
+          className="px-8 py-3.5 bg-emerald-600 text-white text-[13px] uppercase tracking-widest font-medium rounded-xl hover:bg-emerald-700 transition-all active:scale-95 shadow-lg shadow-emerald-500/20 disabled:opacity-50 flex items-center gap-2"
         >
           {isLoading ? "Đang xử lý..." : "Gửi hồ sơ duyệt"}
         </button>

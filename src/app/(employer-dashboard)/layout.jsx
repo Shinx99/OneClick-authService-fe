@@ -4,11 +4,12 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useAuth } from "@/context/AuthContext";
+import { SetupPopupProvider } from "@/context/SetupPopupContext";
 import Sidebar from "@/components/common/employer-dashboard/Sidebar";
 import TopNav from "@/components/common/employer-dashboard/TopNav";
 import FloatingChatButton from "@/components/ui/FloatingChatButton";
 
-export default function EmployerDashboardLayout({ children }) {
+function EmployerDashboardContent({ children }) {
   const { isRecruiter, isLoading } = useAuth();
   const router = useRouter();
 
@@ -47,5 +48,13 @@ export default function EmployerDashboardLayout({ children }) {
         </main>
       </div>
     </div>
+  );
+}
+
+export default function EmployerDashboardLayout({ children }) {
+  return (
+    <SetupPopupProvider>
+      <EmployerDashboardContent>{children}</EmployerDashboardContent>
+    </SetupPopupProvider>
   );
 }

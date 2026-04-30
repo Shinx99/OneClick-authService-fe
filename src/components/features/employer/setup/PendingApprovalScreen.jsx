@@ -4,11 +4,15 @@ import { useRouter } from "next/navigation";
 import { FaCheckCircle, FaClock, FaArrowRight } from "react-icons/fa";
 
 /**
- * Màn hiển thị sau khi user xác thực / tạo công ty thành công.
+ * Màn hiển thị sau khi user xác thực / tạo công ty / gửi join request thành công.
  * Báo "đang chờ admin duyệt" và cho CTA về dashboard.
+ *
+ * @param {string}  companyName - Tên công ty
+ * @param {string}  flowType    - 'create' | 'join'
  */
-export default function PendingApprovalScreen({ companyName }) {
+export default function PendingApprovalScreen({ companyName, flowType = "create" }) {
   const router = useRouter();
+  const isJoin = flowType === "join";
 
   return (
     <div className="p-8 md:p-12 animate-in fade-in zoom-in-95 duration-500 flex flex-col items-center justify-center h-full text-center">
@@ -26,7 +30,9 @@ export default function PendingApprovalScreen({ companyName }) {
       </div>
 
       <h2 className="text-2xl md:text-3xl font-semibold text-text-main mb-3">
-        Xác thực công ty thành công!
+        {isJoin
+          ? "Yêu cầu gia nhập đã được gửi!"
+          : "Xác thực công ty thành công!"}
       </h2>
 
       {companyName && (
@@ -36,10 +42,19 @@ export default function PendingApprovalScreen({ companyName }) {
       )}
 
       <p className="text-[14px] text-text-muted leading-relaxed max-w-md mb-8">
-        Hồ sơ công ty của bạn đã được gửi tới Admin OneClick. Chúng tôi sẽ xem
-        xét và phản hồi trong vòng{" "}
-        <strong className="text-text-main">24 giờ làm việc</strong>. Bạn sẽ nhận
-        được thông báo ngay khi công ty được duyệt.
+        {isJoin ? (
+          <>
+            Yêu cầu gia nhập của bạn đã được gửi tới Owner của công ty. Bạn sẽ
+            nhận được thông báo ngay khi yêu cầu được phê duyệt.
+          </>
+        ) : (
+          <>
+            Hồ sơ công ty của bạn đã được gửi tới Admin OneClick. Chúng tôi sẽ
+            xem xét và phản hồi trong vòng{" "}
+            <strong className="text-text-main">24 giờ làm việc</strong>. Bạn sẽ
+            nhận được thông báo ngay khi công ty được duyệt.
+          </>
+        )}
       </p>
 
       {/* Timeline */}
@@ -50,7 +65,7 @@ export default function PendingApprovalScreen({ companyName }) {
           </div>
           <div className="flex-1 text-left">
             <p className="text-[13px] font-semibold text-text-main">
-              Gửi hồ sơ công ty
+              {isJoin ? "Gửi yêu cầu gia nhập" : "Gửi hồ sơ công ty"}
             </p>
             <p className="text-[11px] text-text-muted">Hoàn tất</p>
           </div>
@@ -61,7 +76,7 @@ export default function PendingApprovalScreen({ companyName }) {
           </div>
           <div className="flex-1 text-left">
             <p className="text-[13px] font-semibold text-text-main">
-              Admin OneClick duyệt
+              {isJoin ? "Owner công ty phê duyệt" : "Admin OneClick duyệt"}
             </p>
             <p className="text-[11px] text-text-muted">Đang xử lý...</p>
           </div>
@@ -83,7 +98,7 @@ export default function PendingApprovalScreen({ companyName }) {
 
       <button
         onClick={() => router.push("/employer/dashboard")}
-        className="px-10 py-4 bg-indigo-600 text-white text-[13px] uppercase tracking-widest font-medium rounded-xl hover:bg-indigo-700 transition-all active:scale-95 shadow-lg shadow-indigo-500/20 flex items-center gap-2"
+        className="px-10 py-4 bg-emerald-600 text-white text-[13px] uppercase tracking-widest font-medium rounded-xl hover:bg-emerald-700 transition-all active:scale-95 shadow-lg shadow-emerald-500/20 flex items-center gap-2"
       >
         Về Dashboard <FaArrowRight size={12} />
       </button>
