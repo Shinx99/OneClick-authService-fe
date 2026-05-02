@@ -1,10 +1,8 @@
-import { apiClient, getAccessToken } from "@/lib/apiClient/api.config";
+import { apiClient } from "@/lib/apiClient/api.config";
 
 export const applicationService = {
-  /**
-   * 1. Ứng tuyển công việc
-   * POST /api/jobs/apply
-   */
+
+  // 1. Ứng tuyển công việc
   applyJob: async (data) => {
     try {
       const response = await apiClient.post('/jobs/apply', {
@@ -12,13 +10,8 @@ export const applicationService = {
         resumeId: data.resumeId,
         note: data.note || ''
       });
-      
       const apiResponse = response.data;
-      
-      if (!apiResponse?.success) {
-        throw new Error(apiResponse?.message || 'Apply job failed');
-      }
-      
+      if (!apiResponse?.success) throw new Error(apiResponse?.message || 'Apply job failed');
       return apiResponse;
     } catch (error) {
       console.error("Apply job error:", error);
@@ -26,19 +19,12 @@ export const applicationService = {
     }
   },
 
-  /**
-   * 2. Lấy danh sách công việc đã ứng tuyển của candidate hiện tại
-   * GET /api/applications/my-applications
-   */
+  // 2. Lấy danh sách công việc đã ứng tuyển
   getMyApplications: async (params = { page: 0, size: 10 }) => {
     try {
       const response = await apiClient.get('/applications/my-applications', { params });
       const apiResponse = response.data;
-      
-      if (!apiResponse?.success) {
-        throw new Error(apiResponse?.message || 'Failed to fetch applications');
-      }
-      
+      if (!apiResponse?.success) throw new Error(apiResponse?.message || 'Failed to fetch applications');
       return apiResponse.data;
     } catch (error) {
       console.error("Get applications error:", error);
@@ -46,35 +32,23 @@ export const applicationService = {
     }
   },
 
-  /**
-   * 3. Kiểm tra đã ứng tuyển công việc chưa
-   * GET /api/jobs/{jobId}/check-applied
-   */
+  // 3. Kiểm tra đã ứng tuyển chưa
   checkApplied: async (jobId) => {
     try {
       const response = await apiClient.get(`/jobs/${jobId}/check-applied`);
-      const apiResponse = response.data;
-      
-      return apiResponse?.data || false;
+      return response.data?.data || false;
     } catch (error) {
       console.error("Check applied error:", error);
       return false;
     }
   },
 
-  /**
-   * 4. Hủy ứng tuyển
-   * DELETE /api/applications/{jobId}
-   */
+  // 4. Hủy ứng tuyển
   cancelApplication: async (jobId) => {
     try {
       const response = await apiClient.delete(`/applications/${jobId}`);
       const apiResponse = response.data;
-      
-      if (!apiResponse?.success) {
-        throw new Error(apiResponse?.message || 'Cancel application failed');
-      }
-      
+      if (!apiResponse?.success) throw new Error(apiResponse?.message || 'Cancel application failed');
       return apiResponse;
     } catch (error) {
       console.error("Cancel application error:", error);
@@ -84,19 +58,12 @@ export const applicationService = {
 
   // ========== RECRUITER APIs ==========
 
-  /**
-   * 5. Lấy danh sách jobs của employer hiện tại
-   * GET /api/employer/jobs
-   */
+  // 5. Lấy danh sách jobs của employer
   getMyJobs: async (params = { page: 0, size: 100 }) => {
     try {
       const response = await apiClient.get('/employer/jobs', { params });
       const apiResponse = response.data;
-      
-      if (!apiResponse?.success) {
-        throw new Error(apiResponse?.message || 'Failed to fetch employer jobs');
-      }
-      
+      if (!apiResponse?.success) throw new Error(apiResponse?.message || 'Failed to fetch employer jobs');
       return apiResponse.data || [];
     } catch (error) {
       console.error("Get my jobs error:", error);
@@ -104,10 +71,7 @@ export const applicationService = {
     }
   },
 
-  /**
-   * 6. Lấy danh sách ứng viên của 1 job (cho employer) - Có phân trang và lọc
-   * GET /api/employer/jobs/{jobId}/applications?page=0&size=20&status=pending&keyword=&sortBy=appliedAt&sortDir=DESC
-   */
+  // 6. Lấy danh sách ứng viên của 1 job
   getJobApplications: async (jobId, filters = {}) => {
     try {
       const params = {
@@ -118,14 +82,9 @@ export const applicationService = {
         sortBy: filters.sortBy || 'appliedAt',
         sortDir: filters.sortDir || 'DESC'
       };
-      
       const response = await apiClient.get(`/employer/jobs/${jobId}/applications`, { params });
       const apiResponse = response.data;
-      
-      if (!apiResponse?.success) {
-        throw new Error(apiResponse?.message || 'Failed to fetch job applications');
-      }
-      
+      if (!apiResponse?.success) throw new Error(apiResponse?.message || 'Failed to fetch job applications');
       return apiResponse.data;
     } catch (error) {
       console.error("Get job applications error:", error);
@@ -133,19 +92,12 @@ export const applicationService = {
     }
   },
 
-  /**
-   * 7. Lấy thống kê số lượng ứng viên theo trạng thái
-   * GET /api/employer/jobs/{jobId}/applications/stats
-   */
+  // 7. Lấy thống kê ứng viên theo trạng thái
   getApplicationStats: async (jobId) => {
     try {
       const response = await apiClient.get(`/employer/jobs/${jobId}/applications/stats`);
       const apiResponse = response.data;
-      
-      if (!apiResponse?.success) {
-        throw new Error(apiResponse?.message || 'Failed to fetch application stats');
-      }
-      
+      if (!apiResponse?.success) throw new Error(apiResponse?.message || 'Failed to fetch application stats');
       return apiResponse.data;
     } catch (error) {
       console.error("Get application stats error:", error);
@@ -153,19 +105,12 @@ export const applicationService = {
     }
   },
 
-  /**
-   * 8. Lấy chi tiết đơn ứng tuyển
-   * GET /api/employer/applications/{applicationId}
-   */
+  // 8. Lấy chi tiết đơn ứng tuyển
   getApplicationDetail: async (applicationId) => {
     try {
       const response = await apiClient.get(`/employer/applications/${applicationId}`);
       const apiResponse = response.data;
-      
-      if (!apiResponse?.success) {
-        throw new Error(apiResponse?.message || 'Failed to fetch application detail');
-      }
-      
+      if (!apiResponse?.success) throw new Error(apiResponse?.message || 'Failed to fetch application detail');
       return apiResponse.data;
     } catch (error) {
       console.error("Get application detail error:", error);
@@ -173,11 +118,7 @@ export const applicationService = {
     }
   },
 
-  /**
-   * 9. Cập nhật trạng thái đơn ứng tuyển (cho employer)
-   * PATCH /api/employer/applications/{applicationId}/status
-   * Body: { status, note, interviewSchedule? }
-   */
+  // 9. Cập nhật trạng thái đơn ứng tuyển
   updateApplicationStatus: async (applicationId, data) => {
     try {
       const response = await apiClient.patch(`/employer/applications/${applicationId}/status`, {
@@ -185,13 +126,8 @@ export const applicationService = {
         note: data.note || '',
         interviewSchedule: data.interviewSchedule || null
       });
-      
       const apiResponse = response.data;
-      
-      if (!apiResponse?.success) {
-        throw new Error(apiResponse?.message || 'Update status failed');
-      }
-      
+      if (!apiResponse?.success) throw new Error(apiResponse?.message || 'Update status failed');
       return apiResponse;
     } catch (error) {
       console.error("Update application status error:", error);
@@ -199,19 +135,12 @@ export const applicationService = {
     }
   },
 
-  /**
-   * 10. Lấy lịch sử thay đổi trạng thái của đơn ứng tuyển
-   * GET /api/employer/applications/{applicationId}/history
-   */
+  // 10. Lấy lịch sử thay đổi trạng thái
   getApplicationHistory: async (applicationId) => {
     try {
       const response = await apiClient.get(`/employer/applications/${applicationId}/history`);
       const apiResponse = response.data;
-      
-      if (!apiResponse?.success) {
-        throw new Error(apiResponse?.message || 'Failed to fetch application history');
-      }
-      
+      if (!apiResponse?.success) throw new Error(apiResponse?.message || 'Failed to fetch application history');
       return apiResponse.data;
     } catch (error) {
       console.error("Get application history error:", error);
@@ -219,11 +148,7 @@ export const applicationService = {
     }
   },
 
-  /**
-   * 11. Lên lịch phỏng vấn
-   * POST /api/employer/applications/{applicationId}/schedule-interview
-   * Body: { scheduledTime, durationMinutes, meetingLink, meetingPassword, location, interviewType, interviewerName, interviewerEmail, notes }
-   */
+  // 11. Lên lịch phỏng vấn
   scheduleInterview: async (applicationId, data) => {
     try {
       const response = await apiClient.post(`/employer/applications/${applicationId}/schedule-interview`, {
@@ -237,13 +162,8 @@ export const applicationService = {
         interviewerEmail: data.interviewerEmail,
         notes: data.notes
       });
-      
       const apiResponse = response.data;
-      
-      if (!apiResponse?.success) {
-        throw new Error(apiResponse?.message || 'Schedule interview failed');
-      }
-      
+      if (!apiResponse?.success) throw new Error(apiResponse?.message || 'Schedule interview failed');
       return apiResponse.data;
     } catch (error) {
       console.error("Schedule interview error:", error);
@@ -251,28 +171,19 @@ export const applicationService = {
     }
   },
 
-  /**
-   * 12. Hủy lịch phỏng vấn
-   * DELETE /api/employer/schedule-interview/{scheduleId}?reason={reason}
-   */
+  // 12. Hủy lịch phỏng vấn
   cancelInterview: async (scheduleId, reason = '') => {
     try {
-      let url = `/employer/schedule-interview/${scheduleId}`;
-      if (reason) {
-        url += `?reason=${encodeURIComponent(reason)}`;
-      }
-      
+      const url = reason
+        ? `/employer/schedule-interview/${scheduleId}?reason=${encodeURIComponent(reason)}`
+        : `/employer/schedule-interview/${scheduleId}`;
       const response = await apiClient.delete(url);
       const apiResponse = response.data;
-      
-      if (!apiResponse?.success) {
-        throw new Error(apiResponse?.message || 'Cancel interview failed');
-      }
-      
+      if (!apiResponse?.success) throw new Error(apiResponse?.message || 'Cancel interview failed');
       return apiResponse;
     } catch (error) {
       console.error("Cancel interview error:", error);
       throw error;
     }
-  }
+  },
 };

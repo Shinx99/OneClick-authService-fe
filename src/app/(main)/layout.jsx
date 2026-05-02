@@ -7,11 +7,13 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useCandidateProfile } from "@/hooks/useCandidateProfile";
+import { useEmployer } from "@/hooks/useEmployer";
 
 export default function MainLayout({ children }) {
   const { isAuthenticated, isCandidate, isAdmin, isRecruiter, user } = useAuth();
   const router = useRouter();
   const { updateProfile } = useCandidateProfile();
+
 
   React.useEffect(() => {
     if (isAuthenticated && isCandidate && user) {

@@ -6,11 +6,9 @@ import { useSetupPopup } from "@/context/SetupPopupContext";
 import {
   MdOutlineSearch,
   MdAdd,
-  MdOutlineNotifications,
   MdKeyboardArrowDown,
 } from "react-icons/md";
 import { FaLock, FaLockOpen } from "react-icons/fa";
-import { MdOutlineSearch, MdAdd, MdKeyboardArrowDown } from "react-icons/md";
 import NotificationDropdown from "./NotificationDropdown";
 
 const TopNav = () => {
@@ -21,40 +19,28 @@ const TopNav = () => {
   const displayEmail = user?.email || "Chưa có email";
   const avatarLetter = displayName?.charAt(0)?.toUpperCase() || "U";
 
-  // Đã bỏ comment lỗi cú pháp ở đây, return trực tiếp header
   return (
-    // THÊM gap-6 lg:gap-10 ở đây để tách biệt 3 khu vực (Trái, Giữa, Phải)
     <header className="h-20 bg-white/70 dark:bg-[#0f172a]/70 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-6 lg:gap-10 px-6 lg:px-10 sticky top-0 z-40 transition-colors">
-      {/* Left: Dev Toggle - Tắt/Bật popup xác thực */}
+
+      {/* Left: Dev Toggle */}
       <div className="hidden lg:flex flex-1 items-center">
         <button
           onClick={toggleDevOverride}
-          className={`flex items-center gap-2 px-3.5 py-2 border rounded-xl text-[12px] font-bold transition-all active:scale-95 uppercase tracking-wider ${
-            isDevUnlocked
+          className={`flex items-center gap-2 px-3.5 py-2 border rounded-xl text-[12px] font-bold transition-all active:scale-95 uppercase tracking-wider ${isDevUnlocked
               ? "bg-emerald-50 dark:bg-emerald-500/10 border-emerald-300 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shadow-sm shadow-emerald-500/10"
               : "bg-slate-100/80 dark:bg-slate-800/50 border-slate-200/80 dark:border-slate-700 text-slate-500 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 hover:border-emerald-300"
-          }`}
+            }`}
           title={isDevUnlocked ? "Bật lại popup xác thực" : "Tắt popup xác thực (Dev)"}
         >
           {isDevUnlocked ? (
-            <>
-              <FaLockOpen className="w-3.5 h-3.5" />
-              Đã mở khoá
-            </>
+            <><FaLockOpen className="w-3.5 h-3.5" /> Đã mở khoá</>
           ) : (
-            <>
-              <FaLock className="w-3.5 h-3.5" />
-              Mở khoá
-            </>
+            <><FaLock className="w-3.5 h-3.5" /> Mở khoá</>
           )}
         </button>
       </div>
 
-    <header className="h-20 bg-white/70 dark:bg-[#0f172a]/70 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-6 lg:gap-10 px-6 lg:px-10 sticky top-0 z-[100] transition-colors">
-      {/* Left: Spacer */}
-      <div className="hidden lg:block flex-1"></div>
-
-      {/* Center: Modern Search Bar */}
+      {/* Center: Search Bar */}
       <div className="flex-1 flex justify-start lg:justify-center w-full min-w-0">
         <div className="relative w-full max-w-lg group">
           <MdOutlineSearch className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
@@ -73,7 +59,6 @@ const TopNav = () => {
 
       {/* Right: Actions & Profile */}
       <div className="flex shrink-0 items-center justify-end gap-3 sm:gap-5">
-        {/* Glow Button: Đăng tin mới */}
         <Link
           href="/employer/job-posting/create"
           className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-[13px] font-bold rounded-xl transition-all shadow-[0_0_15px_rgba(16,185,129,0.25)] hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] active:scale-95 whitespace-nowrap"
@@ -82,13 +67,10 @@ const TopNav = () => {
           Đăng tin mới
         </Link>
 
-        {/* ================= COMPONENT THÔNG BÁO QUẢN LÝ Ở ĐÂY ================= */}
         <NotificationDropdown />
 
-        {/* Divider */}
         <div className="w-[1px] h-8 bg-slate-200 dark:bg-slate-700 mx-1 hidden sm:block"></div>
 
-        {/* User Profile Area */}
         <div className="flex items-center gap-3 pl-2 cursor-pointer group rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 p-1.5 pr-3 transition-all">
           <div className="text-right hidden sm:block">
             <p className="text-[13px] font-bold text-slate-700 dark:text-slate-200 group-hover:text-emerald-600 transition-colors truncate max-w-[140px]">
@@ -98,7 +80,6 @@ const TopNav = () => {
               {displayEmail}
             </p>
           </div>
-
           <div className="flex items-center gap-1.5">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white text-[14px] font-bold shadow-md ring-2 ring-white dark:ring-[#0f172a] uppercase">
               {avatarLetter}
@@ -107,6 +88,7 @@ const TopNav = () => {
           </div>
         </div>
       </div>
+
     </header>
   );
 };

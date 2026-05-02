@@ -31,31 +31,8 @@ const SearchBar = ({ className, onSearch }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [industries, setIndustries] = useState([]);
-  const [selectedIndustry, setSelectedIndustry] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState("");
-
-  const [showLocation, setShowLocation] = useState(false);
-  const [showIndustry, setShowIndustry] = useState(false);
-
   const dropdownRef = useRef(null);
-  const locationRef = useRef(null);
-  const industryRef = useRef(null);
   const debounceTimer = useRef(null);
-
-  useEffect(() => {
-    const fetchIndustries = async () => {
-      try {
-        const res = await companyService.getCompanyFilters();
-        if (res?.success && res.data?.industries) {
-          setIndustries(res.data.industries);
-        }
-      } catch (err) {
-        console.error("Lỗi lấy danh mục:", err);
-      }
-    };
-    fetchIndustries();
-  }, []);
 
   const fetchSuggestions = useCallback(async (keyword) => {
     if (!keyword || keyword.trim().length < 1) {
@@ -81,7 +58,7 @@ const SearchBar = ({ className, onSearch }) => {
         return titleClean.includes(searchKeyClean);
       });
 
-      setSuggestions(filteredJobs.slice(0, 5)); // Tăng lên 5 gợi ý nhìn cho đẹp dropdown
+      setSuggestions(filteredJobs.slice(0, 6)); // Tăng lên 5 gợi ý nhìn cho đẹp dropdown
       setShowDropdown(true);
     } catch (err) {
       console.error("Search suggestions error:", err);
@@ -107,11 +84,7 @@ const SearchBar = ({ className, onSearch }) => {
   const handleSearchClick = () => {
     setShowDropdown(false);
     if (onSearch) {
-      onSearch({
-        keyword: query,
-        industry: selectedIndustry,
-        location: selectedLocation,
-      });
+      onSearch(query.trim());
     }
   };
 
@@ -132,10 +105,6 @@ const SearchBar = ({ className, onSearch }) => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target))
         setShowDropdown(false);
-      if (locationRef.current && !locationRef.current.contains(e.target))
-        setShowLocation(false);
-      if (industryRef.current && !industryRef.current.contains(e.target))
-        setShowIndustry(false);
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -144,55 +113,6 @@ const SearchBar = ({ className, onSearch }) => {
   return (
     <div className={`relative ${className}`}>
       <div className="bg-white dark:bg-card-bg rounded-full p-2 flex flex-col md:flex-row items-center shadow-2xl shadow-black/15 dark:shadow-black/20 mx-auto border-0 transition-all w-full max-w-6xl">
-        {/* Ngành nghề */}
-        <div
-          ref={industryRef}
-          className="relative hidden md:flex items-center px-5 py-2 border-r border-gray-200 dark:border-card-border hover:bg-gray-50 dark:hover:bg-slate-800/50 rounded-l-full transition-colors cursor-pointer w-48 shrink-0"
-          onClick={() => {
-            setShowIndustry(!showIndustry);
-            setShowLocation(false);
-            setShowDropdown(false);
-          }}
-        >
-          <div className="p-2 rounded-full mr-2 text-[#00c853] bg-green-50 dark:bg-green-500/10">
-            <FaListUl size={12} />
-          </div>
-          <span className="text-[#00c853] font-bold text-sm truncate flex-1 select-none">
-            {selectedIndustry || "Tất cả ngành"}
-          </span>
-          <FaChevronDown
-            size={10}
-            className={`text-[#00c853] ml-2 transition-transform duration-200 ${showIndustry ? "rotate-180" : ""}`}
-          />
-
-          {showIndustry && (
-            <div className="absolute top-[calc(100%+12px)] left-0 w-64 bg-white dark:bg-card-bg rounded-2xl shadow-xl border border-gray-100 dark:border-card-border z-50 max-h-64 overflow-y-auto py-2">
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedIndustry("");
-                  setShowIndustry(false);
-                }}
-                className={`px-5 py-3 text-sm hover:bg-green-50 dark:hover:bg-slate-700/50 ${!selectedIndustry ? "text-[#00c853] font-bold" : "text-gray-700 dark:text-gray-300"}`}
-              >
-                Tất cả ngành
-              </div>
-              {industries.map((ind, i) => (
-                <div
-                  key={i}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedIndustry(ind);
-                    setShowIndustry(false);
-                  }}
-                  className={`px-5 py-3 text-sm hover:bg-green-50 dark:hover:bg-slate-700/50 truncate ${selectedIndustry === ind ? "text-[#00c853] font-bold" : "text-gray-700 dark:text-gray-300"}`}
-                >
-                  {ind}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
 
         {/* Ô nhập Keyword */}
         <div
@@ -207,8 +127,6 @@ const SearchBar = ({ className, onSearch }) => {
             onKeyDown={handleKeyDown}
             onFocus={() => {
               if (suggestions.length > 0) setShowDropdown(true);
-              setShowIndustry(false);
-              setShowLocation(false);
             }}
             placeholder="Vị trí tuyển dụng, tên công ty..."
             className="outline-none bg-transparent text-gray-800 dark:text-text-main w-full text-sm placeholder:text-gray-400 font-medium"
@@ -278,57 +196,6 @@ const SearchBar = ({ className, onSearch }) => {
                   </div>
                 )
               )}
-            </div>
-          )}
-        </div>
-
-        {/* Địa điểm */}
-        <div
-          ref={locationRef}
-          className="flex-1 flex items-center px-6 w-full py-4 md:py-0 relative group cursor-pointer"
-          onClick={() => {
-            setShowLocation(!showLocation);
-            setShowIndustry(false);
-            setShowDropdown(false);
-          }}
-        >
-          <FaMapMarkerAlt
-            className={`mr-3 shrink-0 ${selectedLocation ? "text-[#00c853]" : "text-gray-400 group-hover:text-[#00c853]"}`}
-          />
-          <span
-            className={`text-sm font-medium flex-1 select-none truncate ${selectedLocation ? "text-gray-800 dark:text-text-main" : "text-gray-400"}`}
-          >
-            {selectedLocation || "Địa điểm"}
-          </span>
-          <FaChevronDown
-            className={`ml-2 size-3 transition-transform duration-200 ${showLocation ? "rotate-180" : ""}`}
-          />
-
-          {showLocation && (
-            <div className="absolute top-[calc(100%+16px)] right-0 w-64 bg-white dark:bg-card-bg rounded-2xl shadow-xl border border-gray-100 dark:border-card-border z-50 max-h-64 overflow-y-auto py-2">
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedLocation("");
-                  setShowLocation(false);
-                }}
-                className={`px-5 py-3 text-sm hover:bg-green-50 dark:hover:bg-slate-700/50 ${!selectedLocation ? "text-[#00c853] font-bold" : "text-gray-700 dark:text-gray-300"}`}
-              >
-                Tất cả địa điểm
-              </div>
-              {VIETNAM_PROVINCES.map((prov, i) => (
-                <div
-                  key={i}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedLocation(prov);
-                    setShowLocation(false);
-                  }}
-                  className={`px-5 py-3 text-sm hover:bg-green-50 dark:hover:bg-slate-700/50 ${selectedLocation === prov ? "text-[#00c853] font-bold" : "text-gray-700 dark:text-gray-300"}`}
-                >
-                  {prov}
-                </div>
-              ))}
             </div>
           )}
         </div>
