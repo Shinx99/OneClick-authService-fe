@@ -2,7 +2,6 @@
 import React from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-<<<<<<< Updated upstream
 import { useSetupPopup } from "@/context/SetupPopupContext";
 import {
   MdOutlineSearch,
@@ -11,10 +10,8 @@ import {
   MdKeyboardArrowDown,
 } from "react-icons/md";
 import { FaLock, FaLockOpen } from "react-icons/fa";
-=======
 import { MdOutlineSearch, MdAdd, MdKeyboardArrowDown } from "react-icons/md";
 import NotificationDropdown from "./NotificationDropdown";
->>>>>>> Stashed changes
 
 const TopNav = () => {
   const { user } = useAuth();
@@ -26,7 +23,6 @@ const TopNav = () => {
 
   // Đã bỏ comment lỗi cú pháp ở đây, return trực tiếp header
   return (
-<<<<<<< Updated upstream
     // THÊM gap-6 lg:gap-10 ở đây để tách biệt 3 khu vực (Trái, Giữa, Phải)
     <header className="h-20 bg-white/70 dark:bg-[#0f172a]/70 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-6 lg:gap-10 px-6 lg:px-10 sticky top-0 z-40 transition-colors">
       {/* Left: Dev Toggle - Tắt/Bật popup xác thực */}
@@ -53,11 +49,10 @@ const TopNav = () => {
           )}
         </button>
       </div>
-=======
+
     <header className="h-20 bg-white/70 dark:bg-[#0f172a]/70 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-6 lg:gap-10 px-6 lg:px-10 sticky top-0 z-[100] transition-colors">
       {/* Left: Spacer */}
       <div className="hidden lg:block flex-1"></div>
->>>>>>> Stashed changes
 
       {/* Center: Modern Search Bar */}
       <div className="flex-1 flex justify-start lg:justify-center w-full min-w-0">
