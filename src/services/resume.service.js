@@ -199,6 +199,38 @@ export const resumeService = {
   },
 
 
+  //------------------------------------------------------------------------------------------------------------
+  // Vuong edit
+  //------------------------------------------------------------------------------------------------------------
+
+
+  //------------------------------------------------------------------------------------------------------------
+  // CV MARKET
+  //------------------------------------------------------------------------------------------------------------
+
+  // Fetch All
+  fetchAllResumes: async ({ keyword = '', page = 0, size = 9 } = {}) => {
+    const { data } = await apiClient.get("/recruitment/candidate/profile/resume/fetchAll", {
+      params: {
+        keyword: keyword || undefined,  // không gửi nếu rỗng -> BE se fetchAll
+        page,
+        size
+      }
+    });
+    return data.data;
+  },
+
+
+  // Fetch Resume By Id
+  fetchResumeByResumeId: async ({ resumeId }) => {
+    const { data } = await apiClient.get(`recruitment/candidate/profile/resume/fetchResumeById/${resumeId}`);
+    return data.data;
+  },
+
+  //------------------------------------------------------------------------------------------------------------
+  // CV MARKET
+  //------------------------------------------------------------------------------------------------------------
+
 
   fetchResume: async () => {
     const { data } = await apiClient.get("/recruitment/candidate/profile/resume/fetchData");
@@ -214,6 +246,7 @@ export const resumeService = {
     });
     return data.data;
   },
+
 
   deleteCover: async () => {
     await apiClient.delete("/recruitment/candidate/profile/resume/cover/delete");

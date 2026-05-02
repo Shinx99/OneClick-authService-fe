@@ -80,8 +80,9 @@ const Header = () => {
   const navLinks = [
     { name: "Việc làm", href: "/jobs" },
     { name: "Công ty", href: "/companies" },
-    { name: "Hồ sơ", href: "/profile" },
-    { name: "Thông báo", href: "/notifications" },
+    { name: "Tìm ứng viên", href: "/CVMarket" },
+    { name: "Trang cá nhân", href: "/profile" },
+    //{ name: "Thông báo", href: "/notifications" },
   ];
 
   const handleLogout = async () => {
@@ -100,9 +101,8 @@ const Header = () => {
       <div className="h-20 w-full bg-background transition-colors"></div>
 
       <header
-        className={`fixed top-0 left-0 right-0 w-full bg-card-bg border-b border-card-border z-50 shadow-sm transition-all duration-300 ease-in-out ${
-          isVisible ? "translate-y-0" : "-translate-y-full"
-        }`}
+        className={`fixed top-0 left-0 right-0 w-full bg-card-bg border-b border-card-border z-50 shadow-sm transition-all duration-300 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-full"
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
