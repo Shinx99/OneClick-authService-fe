@@ -41,6 +41,14 @@ export function useAdminChat() {
   const isRefreshingRef = useRef(false); // Thêm flag để tránh refresh loop
   const stableCallbacks = useRef({});
 
+  const activeConversationRef = useRef(activeConversation);
+
+  // Cập nhật ref khi activeConversation thay đổi
+  useEffect(() => {
+    activeConversationRef.current = activeConversation;
+  }, [activeConversation]);
+
+
   const parseMessages = useCallback((messages) => {
     if (!messages || !messages.length) return [];
     return messages.map((msg, idx) => ({
@@ -343,7 +351,7 @@ export function useAdminChat() {
     activeConvSubRef.current = sub;
   }, [activeConversation]);
 
-  const handleAdminQueueMessage = useCallback((frame) => {
+  const handleAdminQueueMessage = useCallback(async(frame) => {
     try {
       const payload = JSON.parse(frame.body);
       console.log("📨 [Admin] Queue message received:", payload);
@@ -354,13 +362,21 @@ export function useAdminChat() {
       // Xử lý CONVERSATION_CLOSED
     if (eventType === "CONVERSATION_CLOSED") {
       console.log("📨 [Admin] Conversation closed, refreshing lists");
-      refreshWaitingList();
-      refreshInProgressList();
-      refreshClosedList();
+      console.log("🔴 [Admin] CONVERSATION_CLOSED event received:", response?.conversationId);
+
+      await refreshWaitingList();
+      await refreshInProgressList();
+      await refreshClosedList();
       
       // Nếu conversation đang active, đóng nó
       if (activeConversation?.conversationId === response?.conversationId) {
         setActiveConversation(null);
+
+       // Unsubscribe khỏi topic cũ
+        if (activeConvSubRef.current) {
+          activeConvSubRef.current.unsubscribe();
+          activeConvSubRef.current = null;
+        }
       }
       
       playNotificationSound();
@@ -398,13 +414,13 @@ export function useAdminChat() {
           
           playNotificationSound();
         } else {
-          refreshInProgressList();
+          await refreshInProgressList();
           playNotificationSound();
         }
       }
       
       if (eventType === "HANDOFF_REQUESTED") {
-        refreshWaitingList();
+        await refreshWaitingList();
         playNotificationSound();
       }
     } catch (error) {
@@ -412,9 +428,8 @@ export function useAdminChat() {
     }
   }, [activeConversation, refreshInProgressList, refreshWaitingList, refreshClosedList, playNotificationSound]);
 
-  const handleBroadcastMessage = useCallback((frame) => {
+  const handleBroadcastMessage = useCallback(async(frame) => {
     try {
-      // Kiểm tra frame có body không
       if (!frame || !frame.body) {
         console.log("📨 [Admin] Empty broadcast message, skipping");
         return;
@@ -426,90 +441,121 @@ export function useAdminChat() {
       const eventType = payload.eventType;
       const response = payload.payload;
 
-      // Xử lý CONVERSATION_CLOSED
-    if (eventType === "CONVERSATION_CLOSED") {
-      console.log("📨 [Admin] Conversation closed via broadcast, refreshing lists");
-      refreshWaitingList();
-      refreshInProgressList();
-      refreshClosedList();
-      
-      if (activeConversation?.conversationId === response?.conversationId) {
-        setActiveConversation(null);
-      }
-      
-      playNotificationSound();
-      return;
-    }
-      
-      if (eventType === "USER_MESSAGE" && response?.messages?.length) {
-        const userMessage = response.messages[0];
-        const receivedConversationId = response.conversationId;
+      if (eventType === "CONVERSATION_CLOSED") {
+        // KHAI BÁO BIẾN NÀY
+        const closedConversationId = response?.conversationId;
         
-        console.log("📨 [Admin] User message via broadcast:", {
-          conversationId: receivedConversationId,
-          activeConversationId: activeConversation?.conversationId,
-          message: userMessage.content
-        });
+        console.log("🔴 [Admin] CONVERSATION_CLOSED for conversation:", closedConversationId);
         
-        // LUÔN cập nhật activeConversation nếu đúng conversationId
-        setActiveConversation(prev => {
-          // Nếu chưa có activeConversation hoặc không phải conversation này
-          if (!prev || prev.conversationId !== receivedConversationId) {
-            console.log("📨 [Admin] Not active conversation, skipping UI update");
-            return prev;
+        // Cập nhật trực tiếp state
+        setWaitingConversations(prev => 
+          prev.filter(conv => conv.conversationId !== closedConversationId)
+        );
+        
+        setInProgressConversations(prev => 
+          prev.filter(conv => conv.conversationId !== closedConversationId)
+        );
+        
+        setClosedConversations(prev => 
+          prev.filter(conv => conv.conversationId !== closedConversationId)
+        );
+
+        if (activeConversationRef.current?.conversationId === closedConversationId) {
+          console.log("🔴 [Admin] Closing active conversation - setting activeConversation to null");
+          
+          if (activeConvSubRef.current) {
+            activeConvSubRef.current.unsubscribe();
+            activeConvSubRef.current = null;
           }
           
-          // Kiểm tra duplicate message
-          const isDuplicate = prev.messages?.some(m => 
-            m.id === userMessage.id || 
-            (m.content === userMessage.content && 
-            new Date(m.createdAt).getTime() === new Date(userMessage.createdAt).getTime())
-          );
+          setActiveConversation(null);
+        }
           
-          if (isDuplicate) {
-            console.log("📨 [Admin] Duplicate message, skipping");
-            return prev;
-          }
-          
-          console.log("📨 [Admin] Adding new message to active conversation");
-          const newMessage = {
-            id: userMessage.id || `user-${Date.now()}`,
-            sender: "USER",
-            content: userMessage.content,
-            createdAt: userMessage.createdAt,
-            createdAtLabel: "Vừa xong",
-          };
-          
-          const updatedMessages = [...(prev.messages || []), newMessage];
-          
-          // Cập nhật cả inProgressConversations để đồng bộ danh sách
-          setInProgressConversations(prevList => 
-            prevList.map(conv => 
-              conv.conversationId === receivedConversationId
-                ? { 
-                    ...conv, 
-                    messages: updatedMessages, 
-                    lastMessagePreview: userMessage.content,
-                    lastMessageAt: new Date().toISOString()
-                  }
-                : conv
-            )
-          );
-          
-          return {
-            ...prev,
-            messages: updatedMessages,
-            lastMessagePreview: userMessage.content,
-            lastMessageAt: new Date().toISOString(),
-          };
-        });
+        //Refresh lại từ API để đồng bộ
+        refreshInProgressList().catch(console.error);
+        refreshWaitingList().catch(console.error);
+        refreshClosedList().catch(console.error);
         
         playNotificationSound();
+        return;
       }
+
+      if (eventType === "HANDOFF_REQUESTED") {
+        console.log("📨 [Admin] HANDOFF_REQUESTED via broadcast for conversation:", response?.conversationId);
+        await refreshWaitingList();
+        playNotificationSound();
+        return;
+      }
+        
+        if (eventType === "USER_MESSAGE" && response?.messages?.length) {
+          const userMessage = response.messages[0];
+          const receivedConversationId = response.conversationId;
+          
+          console.log("📨 [Admin] User message via broadcast:", {
+            conversationId: receivedConversationId,
+            activeConversationId: activeConversation?.conversationId,
+            message: userMessage.content
+          });
+          
+          // LUÔN cập nhật activeConversation nếu đúng conversationId
+          setActiveConversation(prev => {
+            // Nếu chưa có activeConversation hoặc không phải conversation này
+            if (!prev || prev.conversationId !== receivedConversationId) {
+              console.log("📨 [Admin] Not active conversation, skipping UI update");
+              return prev;
+            }
+            
+            // Kiểm tra duplicate message
+            const isDuplicate = prev.messages?.some(m => 
+              m.id === userMessage.id || 
+              (m.content === userMessage.content && 
+              new Date(m.createdAt).getTime() === new Date(userMessage.createdAt).getTime())
+            );
+            
+            if (isDuplicate) {
+              console.log("📨 [Admin] Duplicate message, skipping");
+              return prev;
+            }
+            
+            console.log("📨 [Admin] Adding new message to active conversation");
+            const newMessage = {
+              id: userMessage.id || `user-${Date.now()}`,
+              sender: "USER",
+              content: userMessage.content,
+              createdAt: userMessage.createdAt,
+              createdAtLabel: "Vừa xong",
+            };
+            
+            const updatedMessages = [...(prev.messages || []), newMessage];
+            
+            // Cập nhật cả inProgressConversations để đồng bộ danh sách
+            setInProgressConversations(prevList => 
+              prevList.map(conv => 
+                conv.conversationId === receivedConversationId
+                  ? { 
+                      ...conv, 
+                      messages: updatedMessages, 
+                      lastMessagePreview: userMessage.content,
+                      lastMessageAt: new Date().toISOString()
+                    }
+                  : conv
+              )
+            );
+            
+            return {
+              ...prev,
+              messages: updatedMessages,
+              lastMessagePreview: userMessage.content,
+              lastMessageAt: new Date().toISOString(),
+            };
+          });
+          
+          playNotificationSound();
+        }
     } catch (error) {
       console.error("Parse broadcast failed:", error);
     }
-  }, [activeConversation, refreshWaitingList, refreshInProgressList, refreshClosedList, playNotificationSound]);
+  }, [refreshWaitingList, refreshInProgressList, refreshClosedList, playNotificationSound]);
 
   useEffect(() => {
     if (activeConversation?.conversationId) {
@@ -610,7 +656,11 @@ export function useAdminChat() {
         activeConvSubRef.current = null;
       }
       
-      await loadAllConversations();
+      await refreshWaitingList();
+      await refreshInProgressList();
+      await refreshClosedList();
+    
+     // await loadAllConversations();
     } catch (error) {
       console.error("Close conversation failed:", error);
     }

@@ -2,6 +2,8 @@
 
 ```bash
 npm install @stomp/stompjs sockjs-client
+npm install remark-gfm
+npm install react-markdown
 ```
 
 

@@ -84,9 +84,20 @@ export function useChat() {
       
       if (result?.conversationId) {
         setConversationId(result.conversationId);
-        setMessages(parseMessages(result.messages || []));
+        
+        // Parse messages từ response (đã có welcome message từ backend)
+        const parsedMessages = parseMessages(result.messages || []);
+
+        // setMessages(parseMessages(result.messages || []));
+        setMessages(parsedMessages);
         setMode("ai");
         console.log("Created new conversation:", result.conversationId);
+
+        const welcomeMsg = parsedMessages.find(m => m.sender === "AI");
+        if (welcomeMsg) {
+          console.log("🤖 Welcome message:", welcomeMsg.content.substring(0, 100));
+        }
+        
         return result;
       }
     } catch (error) {
@@ -95,6 +106,43 @@ export function useChat() {
       setLoading(false);
     }
   }, [parseMessages]);
+
+
+  // QUAN TRỌNG: Khởi tạo conversation (tạo mới nếu chưa có)
+  const initializeConversation = useCallback(async () => {
+    setLoading(true);
+    try {
+      // Thử lấy conversation hiện tại
+      const response = await getMyConversation();
+      const history = response?.data?.data || response?.data || {};
+      
+      if (history?.conversationId) {
+        // Đã có conversation -> load messages
+        console.log("📂 Loading existing conversation:", history.conversationId);
+        setConversationId(history.conversationId);
+        setMessages(parseMessages(history.messages || []));
+        
+        if (history.status === "handoff") setMode("waiting");
+        else if (history.status === "in_progress") setMode("admin");
+        else setMode("ai");
+      } else {
+        // 🔥 CHƯA CÓ CONVERSATION -> TẠO MỚI (có welcome message)
+        console.log("🆕 No existing conversation, creating new one...");
+        await createNewConversation();
+      }
+    } catch (error) {
+      // Lỗi 400/404 thường là không có conversation -> tạo mới
+      if (error?.response?.status === 400 || error?.response?.status === 404) {
+        console.log("No conversation found, creating new one...");
+        await createNewConversation();
+      } else {
+        console.error("Load conversation failed:", error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [parseMessages, createNewConversation]);
+
 
   // Đóng conversation hiện tại
   const closeCurrentConversation = useCallback(async () => {
@@ -240,15 +288,27 @@ export function useChat() {
 
     return () => {
       // Cleanup nếu cần
+       if (client && client.connected) {
+        topics.forEach(topic => {
+          client.unsubscribe(topic.destination);
+        });
+      }
     };
   }, [conversationId, isAdminRoute, handleWebSocketMessage]);
 
   // Initial load
+  // useEffect(() => {
+  //   if (isAdminRoute || hasInitialized.current) return;
+  //   hasInitialized.current = true;
+  //   loadConversation();
+  // }, [isAdminRoute, loadConversation]);
+
+  // Initial load - THAY ĐỔI TỪ loadConversation THÀNH initializeConversation
   useEffect(() => {
     if (isAdminRoute || hasInitialized.current) return;
     hasInitialized.current = true;
-    loadConversation();
-  }, [isAdminRoute, loadConversation]);
+    initializeConversation(); // ĐỔI THÀNH initializeConversation
+  }, [isAdminRoute, initializeConversation]);
 
 
   // useChat.js - sendCurrentMessage
@@ -259,7 +319,13 @@ export function useChat() {
     const tempId = `temp-${Date.now()}-${messageIdCounter.current++}`;
     
     let currentConversationId = conversationId;
-    let isNewConversation = false;
+    let isNewConversation = false; 
+
+    // NẾU CHƯA CÓ CONVERSATION ID, KHÔNG THỂ GỬI (đã có initializeConversation từ đầu)
+    if (!currentConversationId) {
+      console.warn("No conversationId available, please wait for initialization");
+      return;
+    }
 
     if (currentConversationId && mode !== "ai") {
       console.log("📤 Sending admin message via WebSocket (no optimistic)");
@@ -354,10 +420,6 @@ export function useChat() {
           }),
         });
         
-        // Xóa temp message sau 1 giây (sẽ được thay bằng message thật từ WebSocket)
-        // setTimeout(() => {
-        //   setMessages(prev => prev.filter(m => m.id !== tempId));
-        // }, 1000);
       } else {
         // Fallback to HTTP
         console.log("📤 Sending via HTTP (WebSocket not connected)");

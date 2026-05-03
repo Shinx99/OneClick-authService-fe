@@ -32,7 +32,7 @@ export default function AdminChatWindow({
     }
   }, [isTyping]);
 
-  // ✅ Cải thiện scroll - chỉ scroll khi user không chủ động scroll lên
+  // Cải thiện scroll - chỉ scroll khi user không chủ động scroll lên
   const handleUserScroll = useCallback(() => {
     isUserScrolling.current = true;
     if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
@@ -49,7 +49,7 @@ export default function AdminChatWindow({
     }
   }, [handleUserScroll]);
 
-  // ✅ Scroll chỉ khi user không đang scroll
+  // Scroll chỉ khi user không đang scroll
   useEffect(() => {
     if (!isUserScrolling.current && messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "auto" });
@@ -71,6 +71,13 @@ export default function AdminChatWindow({
     }
   }, [conversationId, onSendTyping, isReadOnly]);
 
+  useEffect(() => {
+  // Nếu conversation bị đóng (null), không làm gì cả - component sẽ unmount từ cha
+    if (!conversation) {
+      console.log("AdminChatWindow: conversation is null, component will unmount");
+    }
+  }, [conversation]);
+
   // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
@@ -79,7 +86,7 @@ export default function AdminChatWindow({
     };
   }, [conversationId, onSendTyping]);
 
-  // ✅ Memoize messages rendering để tránh re-render không cần
+  // Memoize messages rendering để tránh re-render không cần
   const renderedMessages = useMemo(() => {
     if (!conversation?.messages || conversation.messages.length === 0) return null;
     
@@ -177,6 +184,8 @@ export default function AdminChatWindow({
     }
   };
 
+  
+
   return (
     <div className="flex h-full min-h-0 flex-col bg-white dark:bg-neutral-900">
       {/* Header */}
@@ -272,7 +281,7 @@ export default function AdminChatWindow({
             </div>
           )}
 
-          {/* ✅ Sử dụng renderedMessages đã được memoize */}
+          {/* Sử dụng renderedMessages đã được memoize */}
           {renderedMessages}
 
           {/* User typing indicator */}
