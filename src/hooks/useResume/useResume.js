@@ -26,7 +26,6 @@ export const useResume = () => {
     }, []);
 
 
-
     // useEffect method
     useEffect(() => {
         fetchResume();

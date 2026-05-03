@@ -9,7 +9,11 @@ export default function Home() {
     <div className=" transition-colors duration-300">
       {/* Banner search — z-30 để dropdown gợi ý không bị phần dưới đè lên */}
       <div className="relative z-30">
-        <Background />
+        <Background
+          showSearch={false}
+          title="Chào mừng bạn quay trở lại"
+          subtitle="Khám phá các tính năng mới nhất dành cho ứng viên"
+        />
       </div>
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-4 py-4">
         <JobForYou />

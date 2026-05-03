@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { useResume } from "@/hooks/useResume";
+import { useResume } from "@/hooks/useResume/useResume";
 import toast from "react-hot-toast";
 import {
     GraduationCap, Clock, DollarSign, FileText,

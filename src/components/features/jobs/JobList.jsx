@@ -13,7 +13,7 @@ import { useJobs } from "@/hooks/useJobs";
 import SaveJobButton from "@/components/features/jobs/SaveJobButton";
 import FormatSalary from "@/utils/FortmatSalary";
 
-const JobList = ({ filters = {} }) => {
+const JobList = ({ filters = {}, onPageChange }) => {
   const { jobs, pagination, isLoading, error } = useJobs(filters);
 
   return (
@@ -153,8 +153,8 @@ const JobList = ({ filters = {} }) => {
         <div className="flex justify-center items-center gap-6 mt-16 py-8 border-t-2 border-card-border">
           <button
             onClick={() =>
-              filters.onPageChange &&
-              filters.onPageChange(Math.max((pagination.page || 0) - 1, 0))
+              onPageChange &&
+              onPageChange(Math.max((pagination.page || 0) - 1, 0))
             }
             disabled={pagination.page === 0}
             className="w-12 h-12 flex items-center justify-center border-2 border-card-border rounded-2xl text-text-muted hover:text-[#00c853] hover:border-[#00c853] disabled:opacity-20 transition-all active:scale-90"
@@ -172,8 +172,8 @@ const JobList = ({ filters = {} }) => {
 
           <button
             onClick={() =>
-              filters.onPageChange &&
-              filters.onPageChange(
+              onPageChange &&
+              onPageChange(
                 Math.min((pagination.page || 0) + 1, pagination.totalPages - 1),
               )
             }
