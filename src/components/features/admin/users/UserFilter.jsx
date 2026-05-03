@@ -5,9 +5,9 @@ import { FaFilter, FaChevronDown } from "react-icons/fa";
 export default function UserFilter({ onFilterChange, currentStatus }) {
   const statuses = [
     { value: "all", label: "Tất cả trạng thái" },
-    { value: "ACTIVE", label: "Hoạt động" },
-    { value: "PENDING", label: "Đang chờ" },
-    { value: "BANNED", label: "Đã khóa" },
+    { value: "active", label: "Đang hoạt động" },
+    { value: "pending", label: "Đang chờ" },
+    { value: "inactive", label: "Đã khóa" },
   ];
 
   return (
