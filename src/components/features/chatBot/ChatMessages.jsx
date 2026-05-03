@@ -2,6 +2,8 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function ChatMessages({ 
   messages = [], 
@@ -9,7 +11,7 @@ export default function ChatMessages({
   loadingMore = false,
   hasMore = false,
   onLoadMore,
-  showHandoffBanner = false, // Thêm prop
+  showHandoffBanner = false,
 }) {
   const messagesEndRef = useRef(null);
   const containerRef = useRef(null);
@@ -31,13 +33,41 @@ export default function ChatMessages({
       const oldScrollHeight = e.target.scrollHeight;
       
       onLoadMore().finally(() => {
-        // Maintain scroll position after loading more
         const newScrollHeight = e.target.scrollHeight;
         e.target.scrollTop = newScrollHeight - oldScrollHeight;
         isScrollingToTop.current = false;
       });
     }
   }, [hasMore, loadingMore, onLoadMore]);
+
+  // Custom components for markdown styling
+  const MarkdownComponents = {
+    // Headers
+    h1: ({ node, ...props }) => <h1 className="text-lg font-bold my-2" {...props} />,
+    h2: ({ node, ...props }) => <h2 className="text-base font-bold my-1.5" {...props} />,
+    h3: ({ node, ...props }) => <h3 className="text-sm font-bold my-1" {...props} />,
+    // Paragraph
+    p: ({ node, ...props }) => <p className="my-1 leading-relaxed" {...props} />,
+    // Lists
+    ul: ({ node, ...props }) => <ul className="list-disc ml-4 my-1 space-y-0.5" {...props} />,
+    ol: ({ node, ...props }) => <ol className="list-decimal ml-4 my-1 space-y-0.5" {...props} />,
+    li: ({ node, ...props }) => <li className="my-0.5" {...props} />,
+    // Text formatting
+    strong: ({ node, ...props }) => <strong className="font-bold" {...props} />,
+    em: ({ node, ...props }) => <em className="italic" {...props} />,
+    // Code
+    code: ({ node, inline, ...props }) => 
+      inline ? (
+        <code className="bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded text-sm" {...props} />
+      ) : (
+        <code className="block bg-gray-100 dark:bg-gray-700 p-2 rounded my-1 text-sm overflow-x-auto" {...props} />
+      ),
+    pre: ({ node, ...props }) => <pre className="bg-gray-100 dark:bg-gray-700 p-2 rounded my-1 overflow-x-auto text-sm" {...props} />,
+    // Blockquote
+    blockquote: ({ node, ...props }) => <blockquote className="border-l-4 border-gray-300 dark:border-gray-600 pl-3 my-1 italic text-gray-600 dark:text-gray-400" {...props} />,
+    // Horizontal rule
+    hr: ({ node, ...props }) => <hr className="my-2 border-gray-200 dark:border-gray-700" {...props} />,
+  };
 
   if (loading) {
     return (
@@ -93,7 +123,20 @@ export default function ChatMessages({
                   : "bg-card-bg text-text-main border border-card-border rounded-bl-none shadow-black/5"
               }`}
             >
-              {message.content}
+              {isUser ? (
+                // User message - plain text
+                <div className="whitespace-pre-wrap break-words">{message.content}</div>
+              ) : (
+                // AI message - render markdown
+                <div className="markdown-content prose prose-sm max-w-none">
+                  <ReactMarkdown 
+                    remarkPlugins={[remarkGfm]}
+                    components={MarkdownComponents}
+                  >
+                    {message.content}
+                  </ReactMarkdown>
+                </div>
+              )}
               <div
                 className={`absolute bottom-[-18px] text-[9px] font-bold uppercase tracking-tighter opacity-30 whitespace-nowrap ${isUser ? "right-1" : "left-1"}`}
               >
@@ -107,11 +150,11 @@ export default function ChatMessages({
         );
       })}
 
-      {/* Thêm banner vào cuối danh sách tin nhắn (trước scroll anchor) */}
+      {/* Banner khi chờ admin */}
       {showHandoffBanner && (
         <div className="flex justify-center py-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
-          <div className="rounded-xl border border-gray-400 bg-gray-50 px-4 py-2.5 text-[11px] font-medium text-gray-600 flex items-center gap-2 shadow-sm">
-            <span className="inline-block h-2 w-2 rounded-full" />
+          <div className="rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-950/30 px-4 py-2.5 text-[11px] font-medium text-amber-700 dark:text-amber-400 flex items-center gap-2 shadow-sm">
+            <span className="inline-block h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
             ✨ Hệ thống đang kết nối bạn với đội ngũ hỗ trợ. Vui lòng chờ trong giây lát...
           </div>
         </div>

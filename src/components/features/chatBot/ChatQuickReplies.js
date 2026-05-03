@@ -1,6 +1,8 @@
 // components/features/chat/ChatQuickReplies.js
 "use client";
 
+import { useRef, useEffect } from "react"; 
+
 const QUICK_REPLIES = {
   candidate: [
     { id: "find-job", icon: "🔍", label: "Tìm việc làm", message: "Tôi muốn tìm việc làm phù hợp" },
@@ -19,16 +21,29 @@ const QUICK_REPLIES = {
   ],
 };
 
-export default function ChatQuickReplies({ userType, mode, onSelect, visible = true }) {
-  // Tính toán trực tiếp, không cần useEffect
-  const replies = mode === "ai" 
-    ? (QUICK_REPLIES[userType] || QUICK_REPLIES.candidate) 
-    : [];
+export default function ChatQuickReplies({ userType, mode, onSelect }) {
+  const containerRef = useRef(null);
 
-  if (!visible || replies.length === 0) return null;
+  useEffect(() => {
+    // Tự động ẩn component sau 10 giây
+    const timer = setTimeout(() => {
+      if (containerRef.current) {
+        containerRef.current.style.display = "none";
+      }
+    }, 10000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (mode !== "ai") return null;
+
+  const replies = QUICK_REPLIES[userType] || QUICK_REPLIES.candidate;
 
   return (
-    <div className="flex flex-wrap gap-2 p-3 border-b border-card-border bg-background/50">
+    <div
+      ref={containerRef}
+      className="flex flex-wrap gap-2 p-3 border-b border-card-border bg-background/50"
+    >
       {replies.map((reply) => (
         <button
           key={reply.id}

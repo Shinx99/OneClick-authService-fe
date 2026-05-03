@@ -38,13 +38,27 @@ export default function AdminChatPanel() {
     return () => clearInterval(checkConnection);
   }, []);
 
-  // ✅ Lấy conversation hiện tại để hiển thị - TRẢ VỀ TRỰC TIẾP, không tạo object mới
+  useEffect(() => {
+    console.log("🔍 [DEBUG] activeConversation:", activeConversation?.conversationId);
+    console.log("🔍 [DEBUG] selectedConversationId:", selectedConversationId);
+    
+    // Reset selection khi activeConversation bị đóng
+    if (!activeConversation && selectedConversationId) {
+      console.log("🚪 Active conversation became null, resetting selected conversation");
+      // Dùng setTimeout để tránh lỗi setState trong effect
+      setTimeout(() => {
+        setSelectedConversationId(null);
+      }, 0);
+    }
+  }, [activeConversation, selectedConversationId]);
+
+  // Lấy conversation hiện tại để hiển thị - TRẢ VỀ TRỰC TIẾP, không tạo object mới
   const currentDisplayConversation = useMemo(() => {
+    // Nếu không có conversation được chọn
     if (!selectedConversationId) return null;
     
-    // ✅ Ưu tiên dùng activeConversation - trả về trực tiếp
+    // Ưu tiên activeConversation
     if (activeConversation?.conversationId === selectedConversationId) {
-      console.log("🔄 Using activeConversation, messages count:", activeConversation.messages?.length);
       return activeConversation;
     }
     
@@ -58,7 +72,13 @@ export default function AdminChatPanel() {
       conversation = closedConversations.find(c => c.conversationId === selectedConversationId);
     }
     
-    return conversation || null;
+    // Nếu không tìm thấy trong danh sách nào, bỏ chọn
+    if (!conversation && selectedConversationId) {
+      setTimeout(() => setSelectedConversationId(null), 0);
+      return null;
+    }
+    
+    return conversation;
   }, [selectedConversationId, activeConversation, waitingConversations, inProgressConversations, closedConversations, activeTab]);
 
   // Khi chọn conversation từ danh sách
@@ -278,7 +298,7 @@ export default function AdminChatPanel() {
           </div>
         </div>
 
-        {/* Chat Window - ✅ Dùng key đơn giản */}
+        {/* Chat Window - Dùng key đơn giản */}
         {currentDisplayConversation ? (
           <div className="h-full min-h-0" key={currentDisplayConversation.conversationId}>
             <AdminChatWindow

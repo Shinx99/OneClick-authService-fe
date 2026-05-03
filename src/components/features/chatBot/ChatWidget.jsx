@@ -1,5 +1,3 @@
-
-
 // components/ChatWidget.js
 "use client";
 
@@ -13,7 +11,6 @@ import {
 } from "react-icons/fa";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
-// import ChatHandoffBanner from "./ChatHandoffBanner";
 import ChatQuickReplies from "./ChatQuickReplies";
 import { useAuth } from "@/context/AuthContext";
 import { useChat } from "./hooks/useChat";
@@ -23,6 +20,7 @@ export default function ChatWidget({ isMinimized, onMinimize, onClose }) {
   const isAdminRoute = pathname?.startsWith("/admin");
   const { user } = useAuth(); 
   const userType = user?.role || "candidate";
+
   const {
     messages,
     mode,
@@ -97,16 +95,39 @@ export default function ChatWidget({ isMinimized, onMinimize, onClose }) {
       </div>
 
       {/* BODY AREA */}
-      {!isMinimized && (
+      {!isMinimized && mode === "ai" && (
         <div className="flex flex-1 flex-col overflow-hidden bg-background">
-
+          {/* ChatQuickReplies tự quản lý việc ẩn sau 10s */}
           <ChatQuickReplies
             userType={userType}
             mode={mode}
             onSelect={handleQuickReply}
-            visible={messages.length < 5} // Chỉ hiển thị khi có ít tin nhắn
           />
 
+          <ChatMessages
+            messages={messages}
+            loading={loading}
+            loadingMore={loadingMore}
+            hasMore={hasMore}
+            onLoadMore={loadMoreMessages}
+            showHandoffBanner={showHandoffBanner}
+          />
+          <ChatInput
+            value={input}
+            onChange={setInput}
+            onSend={sendCurrentMessage}
+            canSend={canSend}
+            onRequestHandoff={requestAdminHandoff}
+            onCloseAndCreateNew={closeAndCreateNew}
+            mode={mode}
+            disabled={loading}
+          />
+        </div>
+      )}
+      
+      {/* Khi không phải mode AI, chỉ hiển thị messages và input */}
+      {!isMinimized && mode !== "ai" && (
+        <div className="flex flex-1 flex-col overflow-hidden bg-background">
           <ChatMessages
             messages={messages}
             loading={loading}
