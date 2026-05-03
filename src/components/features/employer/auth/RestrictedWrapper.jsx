@@ -1,21 +1,23 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { FiShield, FiArrowRight, FiLock, FiClock } from "react-icons/fi";
+import { FiShield, FiArrowRight, FiLock, FiClock, FiCheckCircle } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { useSetupPopup } from "@/context/SetupPopupContext";
+import { companyService } from "@/services/company.service";
 
 /**
- * Trạng thái công ty của recruiter (đọc từ localStorage tạm thời,
- * sau này thay bằng GET /api/recruitment/employer/profile).
+ * Trạng thái công ty của recruiter — fetch live từ BE mỗi lần mount.
  *
- * - "none"     : chưa tạo company  → popup "Yêu cầu xác thực"
- * - "pending"  : đã tạo, chờ admin → popup "Đang chờ admin duyệt"
- * - "verified" : admin đã duyệt    → mở khoá dashboard
+ * - "none"      : chưa tạo company   → popup "Yêu cầu xác thực"
+ * - "pending"   : đã tạo, chờ admin  → popup "Đang chờ admin duyệt"
+ * - "rejected"  : bị admin từ chối   → popup "Bị từ chối"
+ * - "active"    : admin đã duyệt     → popup "Đã duyệt" (auto đóng) → mở khoá
  */
 const RestrictedWrapper = ({ children }) => {
   const router = useRouter();
   const [companyState, setCompanyState] = useState(null); // null = đang check
+  const [showApprovedToast, setShowApprovedToast] = useState(false);
 
   // Dev override: khi isDevUnlocked = true → ẩn popup để dev test dashboard
   let devContext = null;
@@ -28,16 +30,53 @@ const RestrictedWrapper = ({ children }) => {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const hasCompany = localStorage.getItem("hasCompany") === "1";
-    const status = localStorage.getItem("companyStatus"); // "pending" | "verified" | ...
-    if (!hasCompany) setCompanyState("none");
-    else if (status === "verified") setCompanyState("verified");
-    else setCompanyState("pending"); // mặc định pending khi chưa biết status thật
+
+    const fetchCompanyStatus = async () => {
+      const hasCompany = localStorage.getItem("hasCompany") === "1";
+      const companyId = localStorage.getItem("companyId");
+
+      if (!hasCompany || !companyId) {
+        setCompanyState("none");
+        return;
+      }
+
+      // Fetch live status từ BE để biết admin đã duyệt chưa
+      try {
+        const res = await companyService.getCompanyById(companyId);
+        const liveStatus = (res?.data?.status || "").toLowerCase();
+        const prevStatus = localStorage.getItem("companyStatus");
+
+        // Sync localStorage với status mới nhất
+        if (liveStatus) {
+          localStorage.setItem("companyStatus", liveStatus);
+        }
+
+        // Detect transition pending → active để show toast chúc mừng
+        if (prevStatus === "pending" && liveStatus === "active") {
+          setShowApprovedToast(true);
+        }
+
+        if (liveStatus === "active") setCompanyState("active");
+        else if (liveStatus === "rejected") setCompanyState("rejected");
+        else setCompanyState("pending");
+      } catch (err) {
+        // Fallback về localStorage nếu fetch fail
+        const cached = (localStorage.getItem("companyStatus") || "pending").toLowerCase();
+        if (cached === "active") setCompanyState("active");
+        else if (cached === "rejected") setCompanyState("rejected");
+        else setCompanyState("pending");
+      }
+    };
+
+    fetchCompanyStatus();
   }, []);
 
-  // Khi dev override đang bật → bỏ qua locked
+  // Locked khi: chưa có company / đang pending / bị reject
   const locked =
-    !isDevUnlocked && (companyState === "none" || companyState === "pending");
+    !isDevUnlocked &&
+    (companyState === "none" ||
+      companyState === "pending" ||
+      companyState === "rejected");
 
   return (
     <div className="relative w-full min-h-[65vh] rounded-[2rem] ">
@@ -160,6 +199,76 @@ const RestrictedWrapper = ({ children }) => {
               className="w-full py-3 bg-background border-2 border-card-border text-text-muted hover:text-text-main rounded-xl font-medium transition-all text-[13px] uppercase tracking-widest"
             >
               Tôi đã hiểu
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ============ POPUP: BỊ TỪ CHỐI ============ */}
+      {companyState === "rejected" && !isDevUnlocked && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center animate-in fade-in duration-500">
+          <div className="absolute inset-0 bg-background/10 backdrop-blur-[2px] rounded-[2rem] z-40"></div>
+
+          <div className="relative z-50 bg-card-bg border-2 border-card-border rounded-[2.5rem] p-10 max-w-md w-full mx-4 shadow-2xl flex flex-col items-center text-center animate-in zoom-in-90 duration-500">
+            <div className="w-20 h-20 bg-rose-50 dark:bg-rose-500/10 border-2 border-rose-100 dark:border-rose-500/20 rounded-full flex items-center justify-center mb-6 shadow-inner">
+              <FiShield className="text-3xl text-rose-500" />
+            </div>
+
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[10px] font-bold uppercase tracking-widest mb-4">
+              <FiShield size={14} /> Đã bị từ chối
+            </div>
+
+            <h2 className="text-2xl font-medium text-text-main mb-3">
+              Hồ sơ công ty bị từ chối
+            </h2>
+            <p className="text-[14px] text-text-muted leading-relaxed font-normal mb-8">
+              Hồ sơ công ty của bạn không đạt yêu cầu xác thực. Vui lòng liên hệ
+              hỗ trợ hoặc tạo lại hồ sơ với thông tin chính xác hơn.
+            </p>
+
+            <button
+              onClick={() => router.push("/employer/setup")}
+              className="w-full py-4 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-medium transition-all shadow-lg shadow-rose-500/20 active:scale-95 flex items-center justify-center gap-2 text-[13px] uppercase tracking-widest"
+            >
+              Tạo lại hồ sơ <FiArrowRight size={16} />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ============ POPUP: VỪA ĐƯỢC DUYỆT (chúc mừng — auto đóng) ============ */}
+      {showApprovedToast && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center animate-in fade-in duration-500">
+          <div className="absolute inset-0 bg-background/10 backdrop-blur-[2px] rounded-[2rem] z-40"></div>
+
+          <div className="relative z-50 bg-card-bg border-2 border-emerald-200 dark:border-emerald-500/30 rounded-[2.5rem] p-10 max-w-md w-full mx-4 shadow-2xl flex flex-col items-center text-center animate-in zoom-in-90 duration-500">
+            <div className="relative mb-6">
+              <div className="absolute inset-0 bg-emerald-400/30 rounded-full animate-ping"></div>
+              <div className="relative w-24 h-24 bg-emerald-50 dark:bg-emerald-500/10 border-2 border-emerald-200 dark:border-emerald-500/30 rounded-full flex items-center justify-center shadow-inner">
+                <FiCheckCircle className="text-5xl text-emerald-500" />
+              </div>
+            </div>
+
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-4">
+              <FiCheckCircle size={14} /> Đã được duyệt
+            </div>
+
+            <h2 className="text-2xl font-medium text-text-main mb-3">
+              🎉 Chúc mừng bạn!
+            </h2>
+            <p className="text-[14px] text-text-muted leading-relaxed font-normal mb-2">
+              Công ty của bạn đã được Admin OneClick phê duyệt thành công!
+            </p>
+            <p className="text-[13px] text-text-muted font-medium mb-8">
+              Bạn có thể bắt đầu đăng tin tuyển dụng và tìm kiếm ứng viên ngay bây
+              giờ.
+            </p>
+
+            <button
+              onClick={() => setShowApprovedToast(false)}
+              className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-medium transition-all shadow-lg shadow-emerald-500/20 active:scale-95 flex items-center justify-center gap-2 text-[13px] uppercase tracking-widest"
+            >
+              Bắt đầu ngay <FiArrowRight size={16} />
             </button>
           </div>
         </div>
