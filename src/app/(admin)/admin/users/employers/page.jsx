@@ -1,70 +1,55 @@
-"use client"; // Chuyển sang client để xử lý lọc tại chỗ
-import React, { useState, useMemo } from "react";
+"use client";
+import React, { useState } from "react";
 import UserListTable from "@/components/features/admin/users/UserListTable";
 import UserFilter from "@/components/features/admin/users/UserFilter";
+import UserSearch from "@/components/features/admin/users/UserSearch";
+import Pagination from "@/components/features/admin/users/Pagination";
+import EmployerDetailModal from "@/components/features/admin/users/EmployerDetailModal";
+import { useAdminEmployers } from "@/hooks/useAdminEmployers";
+import toast from "react-hot-toast";
+import adminService from "@/services/admin.service";
 
 export default function EmployersPage() {
-  // 1. Dữ liệu gốc (Sau này fetch từ API)
-  const initialEmployers = [
-    {
-      id: "E001",
-      name: "FPT Software",
-      email: "hr@fpt.com",
-      status: "ACTIVE",
-      company: "FPT Group",
-    },
-    {
-      id: "E002",
-      name: "VNG Corp",
-      email: "recruitment@vng.com.vn",
-      status: "PENDING",
-      company: "VNG",
-    },
-    {
-      id: "E003",
-      name: "aaaa Corp",
-      email: "recruitment@vng.com.vn",
-      status: "BANNED",
-      company: "VNGff",
-    },
-  ];
+    const { employers, isLoading, page, totalPages, totalElements, status, keyword, changeStatus, changeKeyword, changePage, refetch } = useAdminEmployers();
+    const [selectedEmployerId, setSelectedEmployerId] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [filterStatus, setFilterStatus] = useState("all");
+    const handleView = (id) => { setSelectedEmployerId(id); setIsModalOpen(true); };
 
-  // 2. Logic lọc dữ liệu
-  const filteredData = useMemo(() => {
-    if (filterStatus === "all") return initialEmployers;
-    return initialEmployers.filter((user) => user.status === filterStatus);
-  }, [filterStatus]);
+    const handleToggleStatus = async (id, currentStatus) => {
+        const newStatus = currentStatus === "active" ? "inactive" : "active";
+        try {
+            await adminService.updateEmployerStatus(id, newStatus);
+            toast.success(`Đã ${newStatus === "active" ? "mở khóa" : "khóa"} tài khoản`);
+            refetch();
+        } catch (error) {
+            toast.error("Thao tác thất bại");
+        }
+    };
 
-  return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-black text-gray-800">
-            Quản lý Nhà tuyển dụng
-          </h1>
-          <p className="text-sm text-gray-400 font-medium">
-            Tổng cộng: {filteredData.length} doanh nghiệp
-          </p>
+    return (
+        <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-800">Quản lý Nhà tuyển dụng</h1>
+                    <p className="text-sm text-gray-400">Tổng cộng: {totalElements} nhà tuyển dụng</p>
+                </div>
+                <div className="flex gap-3">
+                    <UserSearch searchTerm={keyword} onSearchChange={changeKeyword} />
+                    <UserFilter currentStatus={status} onFilterChange={changeStatus} />
+                </div>
+            </div>
+            <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+                {isLoading ? (
+                    <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#00c853]"></div></div>
+                ) : (
+                    <>
+                        <UserListTable data={employers} type="employer" onView={handleView} onToggleStatus={handleToggleStatus} />
+                        <Pagination page={page} totalPages={totalPages} onPageChange={changePage} />
+                    </>
+                )}
+            </div>
+            <EmployerDetailModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} employerId={selectedEmployerId} />
         </div>
-
-        {/* BỘ LỌC TRẠNG THÁI */}
-        <UserFilter
-          currentStatus={filterStatus}
-          onFilterChange={setFilterStatus}
-        />
-      </div>
-
-      <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
-        {filteredData.length > 0 ? (
-          <UserListTable data={filteredData} type="employer" />
-        ) : (
-          <div className="py-20 text-center text-gray-400 font-medium italic">
-            Không tìm thấy kết quả phù hợp...
-          </div>
-        )}
-      </div>
-    </div>
-  );
+    );
 }
