@@ -1,23 +1,19 @@
-OneClick-authService-fe
-├── README.md
+﻿OneClick-authService-fe
+├── .claude
+│   └── plan-join-company.md
 ├── docs
 │   ├── deploy
 │   │   └── vercel
-│   └── system
-│       ├── github.md
-│       └── information_and_training.md
-├── eslint.config.mjs
-├── jsconfig.json
-├── next.config.mjs
-├── package-lock.json
-├── package.json
-├── postcss.config.mjs
+│   ├── system
+│   │   ├── github.md
+│   │   └── information_and_training.md
+│   └── SETUP-COMPANY-FEATURE.md
 ├── public
-│   ├── file.svg
-│   ├── globe.svg
 │   ├── images
 │   │   ├── avatar-placeholder.jpg
 │   │   ├── banner.png
+│   │   ├── character-3d.png
+│   │   ├── character-3d-0.png
 │   │   ├── ecofinance-logo.png
 │   │   ├── employer-ai.png
 │   │   ├── employer-hero.png
@@ -28,9 +24,11 @@ OneClick-authService-fe
 │   │   ├── health-logo.png
 │   │   ├── login-bg.jpg
 │   │   ├── one-click-logo.png
-│   │   ├── pexels-2.jpg
 │   │   ├── pexels.jpg
+│   │   ├── pexels-2.jpg
 │   │   └── thienNhien.jpg
+│   ├── file.svg
+│   ├── globe.svg
 │   ├── next.svg
 │   ├── vercel.svg
 │   └── window.svg
@@ -50,29 +48,29 @@ OneClick-authService-fe
 │   │   │       │   │   └── page.jsx
 │   │   │       │   └── jobs
 │   │   │       │       └── page.jsx
+│   │   │       ├── users
+│   │   │       │   ├── candidates
+│   │   │       │   │   └── page.jsx
+│   │   │       │   └── employers
+│   │   │       │       └── page.jsx
 │   │   │       ├── layout.jsx
-│   │   │       ├── page.jsx
-│   │   │       └── users
-│   │   │           ├── candidates
-│   │   │           │   └── page.jsx
-│   │   │           └── employers
-│   │   │               └── page.jsx
+│   │   │       └── page.jsx
 │   │   ├── (auth)
 │   │   │   ├── (login-register)
-│   │   │   │   ├── layout.jsx
 │   │   │   │   ├── login
 │   │   │   │   │   └── page.jsx
-│   │   │   │   └── register
-│   │   │   │       └── page.jsx
+│   │   │   │   ├── register
+│   │   │   │   │   └── page.jsx
+│   │   │   │   └── layout.jsx
 │   │   │   ├── change-password
 │   │   │   │   └── page.jsx
 │   │   │   ├── forget-password
 │   │   │   │   └── page.jsx
-│   │   │   ├── layout.jsx
 │   │   │   ├── reset-password
 │   │   │   │   └── page.jsx
-│   │   │   └── verify-email
-│   │   │       └── page.jsx
+│   │   │   ├── verify-email
+│   │   │   │   └── page.jsx
+│   │   │   └── layout.jsx
 │   │   ├── (employer-dashboard)
 │   │   │   ├── employer
 │   │   │   │   ├── candidate
@@ -86,7 +84,8 @@ OneClick-authService-fe
 │   │   │   │   │   │   └── page.jsx
 │   │   │   │   │   ├── edit
 │   │   │   │   │   │   └── [jobId]
-│   │   │   │   │   │       └── page.jsx
+│   │   │   │   │   └── page.jsx
+│   │   │   │   ├── notifications
 │   │   │   │   │   └── page.jsx
 │   │   │   │   ├── resume-search
 │   │   │   │   │   └── page.jsx
@@ -108,27 +107,27 @@ OneClick-authService-fe
 │   │   │   │   └── page.jsx
 │   │   │   ├── companies
 │   │   │   │   ├── [slug]
-│   │   │   │   │   └── page.jsx
 │   │   │   │   └── page.jsx
 │   │   │   ├── cv
 │   │   │   │   └── mine
 │   │   │   │       └── page.jsx
+│   │   │   ├── CVMarket
+│   │   │   │   ├── ResumePublicDetail
+│   │   │   │   │   └── [resumeId]
+│   │   │   │   └── page.jsx
 │   │   │   ├── jobs
 │   │   │   │   ├── (list)
 │   │   │   │   │   ├── layout.jsx
 │   │   │   │   │   └── page.jsx
 │   │   │   │   ├── [id]
-│   │   │   │   │   ├── ai-report
-│   │   │   │   │   │   └── page.jsx
-│   │   │   │   │   └── page.jsx
 │   │   │   │   └── saved
 │   │   │   │       └── page.jsx
+│   │   │   ├── profile
+│   │   │   │   ├── edit
+│   │   │   │   │   └── page.jsx
+│   │   │   │   └── page.jsx
 │   │   │   ├── layout.jsx
-│   │   │   ├── page.jsx
-│   │   │   └── profile
-│   │   │       ├── edit
-│   │   │       │   └── page.jsx
-│   │   │       └── page.jsx
+│   │   │   └── page.jsx
 │   │   ├── api
 │   │   │   └── auth
 │   │   │       └── route.js
@@ -138,25 +137,26 @@ OneClick-authService-fe
 │   │   └── not-found.jsx
 │   ├── components
 │   │   ├── common
-│   │   │   ├── Footer.jsx
-│   │   │   ├── Navbar.jsx
-│   │   │   ├── Not-found.jsx
 │   │   │   ├── employer-dashboard
+│   │   │   │   ├── NotificationDropdown.jsx
 │   │   │   │   ├── Sidebar.jsx
 │   │   │   │   └── TopNav.jsx
-│   │   │   └── employer-landingPage
-│   │   │       ├── EmployerFooter.jsx
-│   │   │       └── EmployerNavbar.jsx
+│   │   │   ├── employer-landingPage
+│   │   │   │   ├── EmployerFooter.jsx
+│   │   │   │   └── EmployerNavbar.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   ├── Navbar.jsx
+│   │   │   └── Not-found.jsx
 │   │   ├── features
 │   │   │   ├── admin
 │   │   │   │   ├── categories
 │   │   │   │   │   └── CategoryContent.jsx
 │   │   │   │   ├── chat
+│   │   │   │   │   ├── hooks
+│   │   │   │   │   │   └── useAdminChat.js
 │   │   │   │   │   ├── AdminChatPanel.jsx
 │   │   │   │   │   ├── AdminChatWindow.jsx
-│   │   │   │   │   ├── chat.md
-│   │   │   │   │   └── hooks
-│   │   │   │   │       └── useAdminChat.js
+│   │   │   │   │   └── chat.md
 │   │   │   │   ├── content
 │   │   │   │   │   ├── CompanyTable.jsx
 │   │   │   │   │   └── JobTable.jsx
@@ -171,6 +171,9 @@ OneClick-authService-fe
 │   │   │   │   │   ├── AdminHeader.jsx
 │   │   │   │   │   └── Sidebar.jsx
 │   │   │   │   └── users
+│   │   │   │       ├── CandidateDetailModal.jsx
+│   │   │   │       ├── EmployerDetailModal.jsx
+│   │   │   │       ├── Pagination.jsx
 │   │   │   │       ├── UserFilter.jsx
 │   │   │   │       ├── UserListTable.jsx
 │   │   │   │       └── UserSearch.jsx
@@ -185,27 +188,45 @@ OneClick-authService-fe
 │   │   │   │   ├── ResetPasswordForm.jsx
 │   │   │   │   └── RoleSelectionModal.jsx
 │   │   │   ├── chatBot
+│   │   │   │   ├── hooks
+│   │   │   │   │   └── useChat.js
+│   │   │   │   ├── chatBot.md
 │   │   │   │   ├── ChatHandoffBanner.jsx
 │   │   │   │   ├── ChatInput.jsx
 │   │   │   │   ├── ChatMessages.jsx
 │   │   │   │   ├── ChatQuickReplies.js
-│   │   │   │   ├── ChatWidget.jsx
-│   │   │   │   ├── chatBot.md
-│   │   │   │   └── hooks
-│   │   │   │       └── useChat.js
+│   │   │   │   └── ChatWidget.jsx
 │   │   │   ├── companies
+│   │   │   │   ├── detail
+│   │   │   │   │   ├── CompanyBanner.jsx
+│   │   │   │   │   ├── CompanyContact.jsx
+│   │   │   │   │   ├── CompanyJobs.jsx
+│   │   │   │   │   └── CompanyOverview.jsx
 │   │   │   │   ├── CompanyCard.jsx
 │   │   │   │   ├── CompanyContent.jsx
 │   │   │   │   ├── CompanyFilter.jsx
-│   │   │   │   ├── CompanyList.jsx
-│   │   │   │   └── detail
-│   │   │   │       ├── CompanyBanner.jsx
-│   │   │   │       ├── CompanyContact.jsx
-│   │   │   │       ├── CompanyJobs.jsx
-│   │   │   │       └── CompanyOverview.jsx
+│   │   │   │   └── CompanyList.jsx
 │   │   │   ├── cv
 │   │   │   │   ├── CVManagement.jsx
 │   │   │   │   └── CVManagementContent.jsx
+│   │   │   ├── cvMarket
+│   │   │   │   ├── background
+│   │   │   │   │   └── particalsBackground.jsx
+│   │   │   │   ├── cvMarketChild
+│   │   │   │   │   ├── AIMatchingPanel.jsx
+│   │   │   │   │   ├── JobSelectorPanel.jsx
+│   │   │   │   │   ├── ResumeDetailModal.jsx
+│   │   │   │   │   ├── ResumeMiniCard.jsx
+│   │   │   │   │   └── ResumePublicDetail.jsx
+│   │   │   │   ├── data
+│   │   │   │   │   └── cvMarketData.js
+│   │   │   │   ├── ui
+│   │   │   │   │   └── badge.jsx
+│   │   │   │   ├── cvMarket.jsx
+│   │   │   │   ├── hero.jsx
+│   │   │   │   ├── index.js
+│   │   │   │   ├── searchPromt.jsx
+│   │   │   │   └── stats.jsx
 │   │   │   ├── edit-profile
 │   │   │   │   ├── EditSidebar.jsx
 │   │   │   │   ├── EducationFormModal.jsx
@@ -242,6 +263,9 @@ OneClick-authService-fe
 │   │   │   │   │   ├── HeroArea.jsx
 │   │   │   │   │   ├── OutstandingFeatures.jsx
 │   │   │   │   │   └── PricingPlan.jsx
+│   │   │   │   ├── notifications
+│   │   │   │   │   ├── NotificationItem.jsx
+│   │   │   │   │   └── NotificationList.jsx
 │   │   │   │   ├── resume-search
 │   │   │   │   │   ├── CandidateCard.jsx
 │   │   │   │   │   ├── SearchFilters.jsx
@@ -263,7 +287,8 @@ OneClick-authService-fe
 │   │   │   │   ├── CallToAction.jsx
 │   │   │   │   ├── CompanyHot.jsx
 │   │   │   │   ├── Features.jsx
-│   │   │   │   └── JobForYou.jsx
+│   │   │   │   ├── JobForYou.jsx
+│   │   │   │   └── TopViewedJobs.jsx
 │   │   │   ├── jobs
 │   │   │   │   ├── AIAnalysisDashboard.jsx
 │   │   │   │   ├── AIConsultantChat.jsx
@@ -272,8 +297,8 @@ OneClick-authService-fe
 │   │   │   │   ├── JobContent.jsx
 │   │   │   │   ├── JobFilter.jsx
 │   │   │   │   ├── JobList.jsx
-│   │   │   │   ├── SaveJobButton.jsx
 │   │   │   │   ├── SavedJobsContent.jsx
+│   │   │   │   ├── SaveJobButton.jsx
 │   │   │   │   └── SimilarJobs.jsx
 │   │   │   └── profile
 │   │   │       ├── AboutPage.jsx
@@ -295,13 +320,21 @@ OneClick-authService-fe
 │   ├── constants
 │   │   └── vn-provinces.json
 │   ├── context
-│   │   └── AuthContext.jsx
+│   │   ├── AuthContext.jsx
+│   │   └── SetupPopupContext.jsx
 │   ├── hooks
+│   │   ├── useResume
+│   │   │   ├── useResume.js
+│   │   │   ├── useResumeByResumeId.js
+│   │   │   └── useResumes.js
+│   │   ├── useAdminCandidates.js
+│   │   ├── useAdminEmployers.js
 │   │   ├── useCandidateProfile.js
+│   │   ├── useEmployer.js
 │   │   ├── useJobDetail.js
 │   │   ├── useJobs.js
-│   │   ├── useResume.js
-│   │   └── useSavedJob.js
+│   │   ├── useSavedJob.js
+│   │   └── useTopViewedJobs.js
 │   ├── lib
 │   │   ├── apiClient
 │   │   │   └── api.config.js
@@ -311,6 +344,8 @@ OneClick-authService-fe
 │   │       ├── auth.jsx
 │   │       └── candidate.jsx
 │   ├── services
+│   │   ├── admin.service.js
+│   │   ├── adminCompany.service.js
 │   │   ├── admindashboard.service.js
 │   │   ├── ai-match.service.js
 │   │   ├── application.service.js
@@ -319,15 +354,26 @@ OneClick-authService-fe
 │   │   ├── chat.service.js
 │   │   ├── company.service.js
 │   │   ├── education.service.js
+│   │   ├── employer.service.js
 │   │   ├── experience.service.js
 │   │   ├── job.service.js
+│   │   ├── notification.service.js
 │   │   ├── recruiter.service.js
 │   │   ├── resume.service.js
 │   │   └── savedJob.service.js
 │   └── utils
+│       ├── cnUtils.js
 │       ├── FormatLocation.js
 │       ├── FormatTime.js
 │       ├── FortmatSalary.js
 │       └── Provinces.js
-├── tailwind.config.mjs
-└── tree.txt
+├── .env.local
+├── .gitignore
+├── eslint.config.mjs
+├── jsconfig.json
+├── next.config.mjs
+├── package.json
+├── package-lock.json
+├── postcss.config.mjs
+├── README.md
+└── tailwind.config.mjs
