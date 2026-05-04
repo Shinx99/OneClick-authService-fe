@@ -51,11 +51,16 @@ const SearchBar = ({ className, onSearch }) => {
       const rawJobs = data?.content || [];
       const searchKeyClean = removeAccents(keyword.trim());
 
-      // LỌC THÔNG MINH: So sánh cả có dấu và không dấu
+      // Tách chuỗi keyword thành mảng các từ khóa nhỏ
+      const searchTokens = searchKeyClean.split(/\s+/);
+
+      // LỌC THÔNG MINH: So sánh cả có dấu và không dấu, lọc theo từng từ khóa
       const filteredJobs = rawJobs.filter((job) => {
         if (!job.title) return false;
         const titleClean = removeAccents(job.title);
-        return titleClean.includes(searchKeyClean);
+
+        // Kiểm tra xem title có chứa TẤT CẢ các từ khóa được nhập vào không
+        return searchTokens.every((token) => titleClean.includes(token));
       });
 
       setSuggestions(filteredJobs.slice(0, 6)); // Tăng lên 5 gợi ý nhìn cho đẹp dropdown
@@ -113,7 +118,6 @@ const SearchBar = ({ className, onSearch }) => {
   return (
     <div className={`relative ${className}`}>
       <div className="bg-white dark:bg-card-bg rounded-full p-2 flex flex-col md:flex-row items-center shadow-2xl shadow-black/15 dark:shadow-black/20 mx-auto border-0 transition-all w-full max-w-6xl">
-
         {/* Ô nhập Keyword */}
         <div
           ref={dropdownRef}

@@ -1,28 +1,69 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import { useAuth, ROLES } from "@/context/AuthContext";
 
-const AuthLayout = ({ loginForm, registerForm, initialIsRegister = false }) => {
+const AuthLayout = ({ loginForm, registerForm }) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const [isRegister, setIsRegister] = useState(initialIsRegister);
+  const { isAuthenticated, isLoading, user } = useAuth();
+
+  // Tính toán trực tiếp trạng thái hiện tại từ URL
+  const isRegister = pathname === "/register";
 
   useEffect(() => {
-    setIsRegister(pathname === "/register");
-  }, [pathname]);
+    if (!isLoading && isAuthenticated && user) {
+      const roles = user.roles || [];
 
+      const isOnlyCandidate =
+        roles.includes(ROLES.CANDIDATE) &&
+        !roles.includes(ROLES.RECRUITER) &&
+        !roles.includes(ROLES.ADMIN);
+
+      if (isOnlyCandidate && isRegister) {
+        return;
+      }
+
+      if (roles.includes(ROLES.ADMIN)) {
+        router.replace("/admin");
+      } else if (roles.includes(ROLES.RECRUITER)) {
+        router.replace("/employer/dashboard");
+      } else {
+        router.replace("/");
+      }
+    }
+  }, [isLoading, isAuthenticated, user, router, isRegister]); // ✅ Đã đổi pathname thành isRegister ở đây
   const toggleMode = () => {
-    const newState = !isRegister;
-    setIsRegister(newState);
-    router.push(newState ? "/register" : "/login");
+    router.push(isRegister ? "/login" : "/register");
   };
+
+  // 1. Màn hình chờ khi đang kiểm tra Auth
+  if (isLoading) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center p-8 bg-gray-50 dark:bg-slate-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+      </div>
+    );
+  }
+
+  // 2. CHỐT CHẶN UI:
+  const isOnlyCandidate =
+    user?.roles?.includes(ROLES.CANDIDATE) &&
+    !user?.roles?.includes(ROLES.RECRUITER) &&
+    !user?.roles?.includes(ROLES.ADMIN);
+
+  // Ẩn UI nếu đã login, NGOẠI TRỪ trường hợp Candidate đang ở trang /register
+  const shouldBlockUI = isAuthenticated && !(isOnlyCandidate && isRegister);
+
+  if (shouldBlockUI) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-8">
       <div className="bg-gray-100 dark:bg-[#1e293b] relative w-full max-w-[1100px] min-h-[740px] rounded-[30px] shadow-2xl overflow-hidden">
-
         {/* --- KHU VỰC TRÁI: Chứa Form Đăng Nhập --- */}
         <div
           className={`absolute top-0 left-0 w-full md:w-1/2 h-full flex flex-col justify-center items-center p-8 transition-all duration-700 ease-in-out z-10
@@ -58,8 +99,6 @@ const AuthLayout = ({ loginForm, registerForm, initialIsRegister = false }) => {
           />
 
           <div className="absolute inset-0 z-20 flex flex-col justify-center items-center text-white text-center p-12">
-
-            {/* Nội dung mời Đăng nhập */}
             <div
               className={`transition-all duration-700 absolute flex flex-col items-center ${isRegister ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"}`}
             >
@@ -77,7 +116,6 @@ const AuthLayout = ({ loginForm, registerForm, initialIsRegister = false }) => {
               </button>
             </div>
 
-            {/* Nội dung mời Đăng ký */}
             <div
               className={`transition-all duration-700 absolute flex flex-col items-center ${isRegister ? "opacity-0 translate-y-10 pointer-events-none" : "opacity-100 translate-y-0"}`}
             >
@@ -94,10 +132,8 @@ const AuthLayout = ({ loginForm, registerForm, initialIsRegister = false }) => {
                 Tạo tài khoản
               </button>
             </div>
-
           </div>
         </div>
-
       </div>
     </div>
   );
