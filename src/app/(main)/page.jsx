@@ -3,6 +3,7 @@ import Features from "@/components/features/home/Features";
 import JobForYou from "@/components/features/home/JobForYou";
 import CallToAction from "@/components/features/home/CallToAction";
 import CompanyHot from "@/components/features/home/CompanyHot";
+import TopViewedJobs from "@/components/features/home/TopViewedJobs";
 
 export default function Home() {
   return (
@@ -19,6 +20,8 @@ export default function Home() {
         <JobForYou />
 
         <CallToAction />
+
+        <TopViewedJobs />
 
         <CompanyHot />
 

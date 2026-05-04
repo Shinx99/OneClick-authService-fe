@@ -20,6 +20,11 @@ export const jobService = {
     // Return the full paginated wrapper { content, page, size, totalElements, totalPages, last }
     return data.data;
   },
+  
+  getTopViewedJobs: async () => {
+    const { data } = await apiClient.get("/recruitment/job/top-6-viewed");
+    return data.data; 
+  },
 
   // -------------------------------------------------------
   // GET JOB DETAIL BY ID (PUBLIC)
