@@ -1,20 +1,27 @@
 "use client";
 
 import { use, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { ResumePublicDetail } from "@/components/features/cvMarket";
 import { JobSelectorPanel } from "@/components/features/cvMarket";
 import { AIMatchingPanel } from "@/components/features/cvMarket";
 import { useResumeByResumeId } from "@/hooks/useResume/useResumeByResumeId";
 import { applicationService } from "@/services/application.service";
 import { useAuth } from "@/context/AuthContext";
+import { aiMatchService } from "@/services/ai-match.service";
+import toast from "react-hot-toast";
 // import { aiService } from "@/services/ai.service";
 
 const ResumePublicPage = ({ params }) => {
     const { resumeId } = use(params);
+    const searchParams = useSearchParams();
+    const mode = searchParams.get('mode');
     const { resume, isLoading, error } = useResumeByResumeId(resumeId);
 
     // Authorization from context
     const { isRecruiter } = useAuth();
+
+    const showRecruiterUI = isRecruiter && mode === 'recruiter';
 
     // ── AI Matching state ──────────────────────────────────────
     const [selectedJob, setSelectedJob] = useState(null);
@@ -26,11 +33,29 @@ const ResumePublicPage = ({ params }) => {
         setMatchResult(null);
         setIsMatching(true);
 
-        const result = applicationService.getMyJobs();
+        try {
+            const response = await aiMatchService.matchWithResume(resumeId, job.id);
+            const data = response.data || response; // hoặc tùy cấu trúc API của bạn
 
-        await new Promise((r) => setTimeout(r, 1800));
-        setMatchResult(null);
-        setIsMatching(false);
+            // ✅ Ưu tiên matchScore (từ response mẫu), rồi đến các tên khác
+            const overallScore = Math.round(
+                Number(data.matchScore ?? data.match_score ?? data.similarity ?? data.overallScore ?? data.score ?? 0)
+            );
+
+            setMatchResult({
+                overallScore,
+                summary: data.matchReason || data.summary || "Không có đánh giá chi tiết.",
+                matchedSkills: data.matchedSkills ?? data.matched_skills ?? [],
+                missingSkills: data.missingSkills ?? data.missing_skills ?? [],
+                improvementTips: data.improvementTips ?? data.improvement_tips ?? [], // ✅ Thêm dòng này
+            });
+        } catch (error) {
+            console.error("AI matching error:", error);
+            toast.error("Phân tích thất bại, vui lòng thử lại.");
+            setMatchResult(null);
+        } finally {
+            setIsMatching(false);
+        }
     };
 
     // ── Loading ────────────────────────────────────────────────
@@ -69,44 +94,24 @@ const ResumePublicPage = ({ params }) => {
     // ── Render ─────────────────────────────────────────────────
     return (
         <main className="min-h-screen bg-background py-10 px-4 space-y-6">
-            <div className="max-w-[1400px] mx-auto space-y-6">
-
-                {/* ── ROW 1: CV detail (trái) + Job selector (phải) ── */}
-
-                <div className="min-w-0">
-                    <ResumePublicDetail cv={resume} />
-                </div>
-
-
-                {isRecruiter && (
-                    <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_380px] gap-6 items-start">
-                        <div className="min-w-0">
-                            <ResumePublicDetail cv={resume} />
-                        </div>
-
-                        <div className="min-w-0 lg:sticky lg:top-6">
-                            <JobSelectorPanel
-                                selectedJob={selectedJob}
-                                onSelectJob={handleSelectJob}
-                            />
-                        </div>
-                    </div>
-                )}
-
-
-                {/* ── ROW 2: AI Matching full width ── */}
-                {isRecruiter && (
-                    <div className="w-full">
-                        <AIMatchingPanel
-                            selectedJob={selectedJob}
-                            matchResult={matchResult}
-                            isMatching={isMatching}
-                        />
-                    </div>
-                )}
-
+      <div className="max-w-[1400px] mx-auto space-y-6">
+        {showRecruiterUI ? (
+          // Giao diện dành cho recruiter (2 cột + AI)
+          <>
+            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_380px] gap-6 items-start">
+              <ResumePublicDetail cv={resume} />
+              <div className="lg:sticky lg:top-6">
+                <JobSelectorPanel selectedJob={selectedJob} onSelectJob={handleSelectJob} />
+              </div>
             </div>
-        </main>
+            <AIMatchingPanel selectedJob={selectedJob} matchResult={matchResult} isMatching={isMatching} />
+          </>
+        ) : (
+          // Giao diện public (chỉ CV)
+          <ResumePublicDetail cv={resume} />
+        )}
+      </div>
+    </main>
     );
 };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Sparkles, CheckCircle2, XCircle, Zap } from "lucide-react";
+import { Sparkles, CheckCircle2, XCircle, Zap, Lightbulb } from "lucide-react";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const MATCH_TIERS = [
@@ -48,7 +48,7 @@ const BigScoreRing = ({ score }) => {
 const SkillTag = ({ label, variant }) => {
     const styles = {
         green: "border border-[#00c853]/40 text-[#00a040] bg-white",
-        orange: "border border-orange-300   text-orange-500 bg-white",
+        orange: "border border-orange-300 text-orange-500 bg-white",
     };
     return (
         <span className={`text-xs px-3 py-1.5 rounded-full font-medium ${styles[variant]}`}>
@@ -60,7 +60,6 @@ const SkillTag = ({ label, variant }) => {
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
 const MatchSkeleton = () => (
     <div className="space-y-3 animate-pulse">
-        {/* Card 1 skeleton */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
             <div className="flex gap-5 items-start">
                 <div className="w-[130px] h-[130px] rounded-full bg-gray-100 flex-shrink-0" />
@@ -73,7 +72,6 @@ const MatchSkeleton = () => (
                 </div>
             </div>
         </div>
-        {/* Card 2 & 3 skeleton */}
         {[...Array(2)].map((_, i) => (
             <div key={i} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-3">
                 <div className="flex items-center gap-2">
@@ -120,31 +118,29 @@ const AIMatchingPanel = ({ selectedJob, matchResult, isMatching }) => {
     // ── No result ──
     if (!matchResult) return null;
 
-    const { overallScore, summary, matchedSkills = [], missingSkills = [] } = matchResult;
+    // 🔧 Mapping dữ liệu từ backend (theo cấu trúc của AIAnalysisDashboard)
+    const overallScore = Math.round(matchResult.matchScore ?? matchResult.overallScore ?? 0);
+    const summary = matchResult.matchReason ?? matchResult.summary ?? "Đang tổng hợp phân tích chi tiết...";
+    const matchedSkills = matchResult.matchedSkills ?? [];
+    const missingSkills = matchResult.missingSkills ?? [];
+    const improvementTips = matchResult.improvementTips ?? [];
+
     const tier = getTier(overallScore);
 
     return (
         <div className="space-y-3">
-
             {/* ── Card 1: Score ring + Summary ── */}
             <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
                 <div className="flex gap-5 items-start">
-
-                    {/* Ring */}
                     <BigScoreRing score={overallScore} />
-
-                    {/* Right */}
                     <div className="flex-1 min-w-0 pt-1">
-                        {/* Tier badge */}
                         <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full border mb-3 ${tier.bg} ${tier.border} ${tier.text}`}>
                             <Sparkles size={11} />
                             {tier.label}
                         </span>
-
                         <h3 className="text-base font-black text-gray-800 mb-2">
                             Kết quả phân tích CV
                         </h3>
-
                         <p className="text-sm text-gray-500 leading-relaxed">
                             {summary}
                         </p>
@@ -192,6 +188,12 @@ const AIMatchingPanel = ({ selectedJob, matchResult, isMatching }) => {
                 </div>
             )}
 
+            {/* Hiển thị khi không có dữ liệu chi tiết */}
+            {matchedSkills.length === 0 && missingSkills.length === 0 && improvementTips.length === 0 && (
+                <div className="bg-gray-50 rounded-2xl p-8 text-center border border-gray-200">
+                    <p className="text-gray-500">Đang tổng hợp phân tích chi tiết...</p>
+                </div>
+            )}
         </div>
     );
 };

@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import Badge from "@/components/features/cvMarket/ui/badge";
 import { cn } from "@/utils/cnUtils";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 const formatDate = (iso) => {
     if (!iso) return null;
@@ -40,6 +42,10 @@ const Tag = ({ children, color = "default" }) => {
 };
 
 const ResumeDetailModal = ({ cv, onClose }) => {
+
+    const router = useRouter();
+    const { isRecruiter } = useAuth();
+
     useEffect(() => {
         const handler = (e) => { if (e.key === "Escape") onClose(); };
         window.addEventListener("keydown", handler);
@@ -58,6 +64,17 @@ const ResumeDetailModal = ({ cv, onClose }) => {
         careerGoal, resumeUploadUrl,
         createdAt, updatedAt, parsedData,
     } = cv;
+
+    const handleViewFullProfile = () => {
+        if (isRecruiter) {
+            // Chuyển hướng trong tab hiện tại đến route dành cho recruiter
+            router.push(`/CVMarket/ResumePublicDetail/${cv.resumeId}?mode=recruiter`);
+            onClose(); // Đóng modal ngay lập tức (tuỳ chọn)
+        } else {
+            // Giữ hành vi cũ: mở tab mới với route public
+            window.open(`/CVMarket/ResumePublicDetail/${cv.resumeId}`, '_blank');
+        }
+    };
 
     // Parse parsedData an toàn
     const parsed = typeof parsedData === "string"
@@ -273,16 +290,13 @@ const ResumeDetailModal = ({ cv, onClose }) => {
 
                     {/* ── Xem trang chi tiết ── */}
                     <div className="flex justify-end pt-4 border-t border-white/10 mt-2 mb-4">
-                        <a
-                            href={`/CVMarket/ResumePublicDetail/${cv.resumeId}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
+                        <button
+                            onClick={handleViewFullProfile}
                             className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-500 hover:bg-green-600 text-white text-sm font-bold rounded-xl transition-all active:scale-95 shadow-lg shadow-green-500/20"
                         >
                             <ExternalLink size={14} />
                             Xem hồ sơ đầy đủ
-                        </a>
+                        </button>
                     </div>
 
                     {/* Timestamps */}
