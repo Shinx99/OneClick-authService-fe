@@ -34,6 +34,26 @@ export const companyService = {
     return response.data;
   },
 
+  // -------------------------------------------------------
+  // GET MY COMPANY (ROLE_recruiter)
+  // GET /api/recruitment/company/my-company
+  // Trả về company của recruiter đang login
+  // -------------------------------------------------------
+  getMyCompany: async () => {
+    const response = await api.get('recruitment/company/my-company');
+    return response.data;
+  },
+
+  // -------------------------------------------------------
+  // UPDATE MY COMPANY (ROLE_recruiter)
+  // PUT /api/recruitment/company/my-company
+  // Body: UpdateCompanyRequestDto
+  // -------------------------------------------------------
+  updateMyCompany: async (payload) => {
+    const response = await api.put('recruitment/company/my-company', payload);
+    return response.data;
+  },
+
   getCompanyFilters: async () => {
     try {
       const response = await api.get('recruitment/company/filters');
