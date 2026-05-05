@@ -17,7 +17,7 @@ export default function SettingPage() {
           </p>
         </div>
 
-        {/* 🚨 CHÚ Ý DÒNG NÀY: Phải gọi thẻ PersonalInfoManager */}
+        {/* CHÚ Ý DÒNG NÀY: Phải gọi thẻ PersonalInfoManager */}
         <PersonalInfoManager />
       </div>
     </RestrictedWrapper>

@@ -16,15 +16,15 @@ const TopNav = () => {
 
   return (
     <header className="h-20 bg-white/70 dark:bg-[#0f172a]/70 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-6 lg:gap-10 px-6 lg:px-10 sticky top-0 z-40 transition-colors">
+
       {/* Left: Dev Toggle */}
       <div className="hidden lg:flex flex-1 items-center">
-        <button
+        {/* <button
           onClick={toggleDevOverride}
-          className={`flex items-center gap-2 px-3.5 py-2 border rounded-xl text-[12px] font-bold transition-all active:scale-95 uppercase tracking-wider ${
-            isDevUnlocked
-              ? "bg-emerald-50 dark:bg-emerald-500/10 border-emerald-300 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shadow-sm shadow-emerald-500/10"
-              : "bg-slate-100/80 dark:bg-slate-800/50 border-slate-200/80 dark:border-slate-700 text-slate-500 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 hover:border-emerald-300"
-          }`}
+          className={`flex items-center gap-2 px-3.5 py-2 border rounded-xl text-[12px] font-bold transition-all active:scale-95 uppercase tracking-wider ${isDevUnlocked
+            ? "bg-emerald-50 dark:bg-emerald-500/10 border-emerald-300 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shadow-sm shadow-emerald-500/10"
+            : "bg-slate-100/80 dark:bg-slate-800/50 border-slate-200/80 dark:border-slate-700 text-slate-500 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 hover:border-emerald-300"
+            }`}
           title={
             isDevUnlocked
               ? "Bật lại popup xác thực"
@@ -40,13 +40,13 @@ const TopNav = () => {
               <FaLock className="w-3.5 h-3.5" /> Mở khoá
             </>
           )}
-        </button>
+        </button> */}
       </div>
 
       {/* Center: Search Bar */}
       <div className="flex-1 flex justify-start lg:justify-center w-full min-w-0">
         <div className="relative w-full max-w-lg group">
-          <MdOutlineSearch className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+          {/* <MdOutlineSearch className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
           <input
             type="text"
             placeholder="Tìm kiếm ứng viên, tin tuyển dụng..."
@@ -56,7 +56,7 @@ const TopNav = () => {
             <kbd className="px-2 py-1 bg-white dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600 text-[11px] font-sans font-bold text-slate-400 shadow-sm">
               ⌘K
             </kbd>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -70,7 +70,7 @@ const TopNav = () => {
           Đăng tin mới
         </Link>
 
-        <NotificationDropdown />
+        {/* <NotificationDropdown /> */}
 
         <div className="w-[1px] h-8 bg-slate-200 dark:bg-slate-700 mx-1 hidden sm:block"></div>
 
