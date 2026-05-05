@@ -12,9 +12,7 @@ export default function ResumeSearchPage() {
       <div className="space-y-6">
         <div>
           <SearchPrompt onSearch={(kw) => setKeyword(kw)} />
-          <div className="mt-6">
-            <CVMarket keyword={keyword} />
-          </div>
+          <CVMarket keyword={keyword} />
         </div>
       </div>
     </RestrictedWrapper>
