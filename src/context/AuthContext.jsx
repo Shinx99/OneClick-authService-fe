@@ -116,7 +116,7 @@ export const AuthProvider = ({ children }) => {
         else if (roles.includes(ROLES.RECRUITER)) {
           // Chờ onboarding xong rồi mới redirect để dashboard có ngữ cảnh đúng.
           await runRecruiterOnboarding(parsedUser);
-          router.push("/employer/dashboard");
+          router.push("/employer/job-posting");
         }
         else if (roles.includes(ROLES.CANDIDATE)) {
           router.push("/");
@@ -265,7 +265,7 @@ export const AuthProvider = ({ children }) => {
           if (roles.includes(ROLES.ADMIN)) router.push("/admin");
           else if (roles.includes(ROLES.RECRUITER)) {
             await runRecruiterOnboarding(parsedUser);
-            router.push("/employer/dashboard");
+            router.push("/employer/job-posting");
           }
           else if (roles.includes(ROLES.CANDIDATE)) router.push("/");
           else router.push("/");

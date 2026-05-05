@@ -2,6 +2,7 @@
 import api from '../lib/apiClient/api.config';
 
 export const companyService = {
+
   // Lấy Top 6 công ty hàng đầu
   getTop6Companies: async () => {
     try {
@@ -18,8 +19,8 @@ export const companyService = {
     return response.data;
   },
 
-    getCompanyById: async (companyId) => {
-    const response = await api.get(`/recruitment/company/${companyId}`);
+  getMyCompany: async () => {
+    const response = await api.get("/recruitment/company/my");
     return response.data;
   },
 
@@ -106,6 +107,11 @@ export const companyService = {
   // JOIN COMPANY REQUEST APIs
   // -------------------------------------------------------
 
+  getMyJoinRequest: async () => {
+    const response = await api.get("/recruitment/company/my-join-request");
+    return response.data;
+  },
+
   /**
    * Employer gửi yêu cầu gia nhập công ty
    * POST /api/recruitment/company/{companyId}/join-request
@@ -148,4 +154,5 @@ export const companyService = {
     );
     return response.data;
   },
+
 };

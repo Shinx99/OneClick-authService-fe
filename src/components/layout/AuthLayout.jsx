@@ -29,12 +29,13 @@ const AuthLayout = ({ loginForm, registerForm }) => {
       if (roles.includes(ROLES.ADMIN)) {
         router.replace("/admin");
       } else if (roles.includes(ROLES.RECRUITER)) {
-        router.replace("/employer/dashboard");
+        // router.replace("/employer/dashboard");
+        router.replace("/employer/job-posting");
       } else {
         router.replace("/");
       }
     }
-  }, [isLoading, isAuthenticated, user, router, isRegister]); // ✅ Đã đổi pathname thành isRegister ở đây
+  }, [isLoading, isAuthenticated, user, router, isRegister]); // Đã đổi pathname thành isRegister ở đây
   const toggleMode = () => {
     router.push(isRegister ? "/login" : "/register");
   };

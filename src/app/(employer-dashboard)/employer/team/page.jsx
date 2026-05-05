@@ -2,8 +2,11 @@
 import React from "react";
 import RestrictedWrapper from "@/components/features/employer/auth/RestrictedWrapper";
 import TeamManager from "@/components/features/employer/team/TeamManager";
+import { useEmployer } from "@/hooks/useEmployer";
 
 export default function TeamManagementPage() {
+  const { profile, isLoading } = useEmployer();
+
   return (
     <RestrictedWrapper>
       <div className="space-y-6 animate-in fade-in duration-500 max-w-6xl mx-auto">
@@ -20,7 +23,16 @@ export default function TeamManagementPage() {
         </div>
 
         {/* Khối giao diện chính */}
-        <TeamManager />
+        {isLoading || !profile ? (
+          <div className="flex items-center justify-center py-12">
+            <span className="text-[14px] text-text-muted">Đang tải...</span>
+          </div>
+        ) : (
+          <TeamManager
+            currentEmployerId={profile.employerId}
+            currentEmployerLevel={profile.level}
+          />
+        )}
       </div>
     </RestrictedWrapper>
   );

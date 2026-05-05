@@ -30,23 +30,27 @@ export default function MainLayout({ children }) {
 
   // Đồng bộ profile candidate
   React.useEffect(() => {
-  if (isAuthenticated && isCandidate && user && !hasUpdated.current) {
-    hasUpdated.current = true;
-    updateProfile({
-      candidateId: user.id,
-      email: user.email,
-      phone: user.phone,
-      status: user.status,
-    }).catch(console.error);
-  }
-}, [isAuthenticated, isCandidate, user, updateProfile]);
+    if (isAuthenticated && isCandidate && user && !hasUpdated.current) {
+      hasUpdated.current = true;
+      updateProfile({
+        candidateId: user.id,
+        email: user.email,
+        phone: user.phone,
+        status: user.status,
+      }).catch(console.error);
+    }
+  }, [isAuthenticated, isCandidate, user, updateProfile]);
 
   // Xử lý redirect (chỉ redirect nếu route không được phép)
   React.useEffect(() => {
     if (!isAuthenticated) return;
 
     if (isRecruiter && !isAllowedRoute(allowedRoutesForRecruiter)) {
-      router.push("/employer/dashboard");
+
+      // router.push("/employer/dashboard");
+
+      router.push("/employer/job-posting");
+
       toast.success("Đang chuyển hướng về trang chủ nhà tuyển dụng");
       // router.refresh();
     } else if (isAdmin && !isAllowedRoute(allowedRoutesForAdmin)) {
