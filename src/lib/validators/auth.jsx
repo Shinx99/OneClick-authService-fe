@@ -1,24 +1,76 @@
 import { z } from "zod";
 
 // ==========================================
-// 1. CONSTANTS & COMMON RULES (Tái sử dụng & Dễ bảo trì)
+// 1. CONSTANTS, HELPERS & COMMON RULES (Tái sử dụng & Dễ bảo trì)
 // ==========================================
 
 // Regex SĐT VN: 10 số, đầu 03, 05, 07, 08, 09
 const vnPhoneRegex = /^(0[3|5|7|8|9])+([0-9]{8})$/;
 
-// Chuẩn mật khẩu mạnh dùng chung
+// --- Các hàm Helper mô phỏng chính xác logic từ PasswordUtil.java (Backend) ---
+
+const COMMON_PASSWORDS = [
+  "password",
+  "12345678",
+  "123456789",
+  "qwerty",
+  "abc123",
+  "password123",
+  "admin",
+  "letmein",
+  "welcome",
+  "monkey",
+];
+
+// Hàm kiểm tra ký tự liên tiếp (VD: 123, abc, 321, cba)
+const hasSequentialCharacters = (password) => {
+  const lower = password.toLowerCase();
+  for (let i = 0; i < lower.length - 2; i++) {
+    const c1 = lower.charCodeAt(i);
+    const c2 = lower.charCodeAt(i + 1);
+    const c3 = lower.charCodeAt(i + 2);
+
+    // Kiểm tra chuỗi tăng dần hoặc giảm dần
+    if ((c2 === c1 + 1 && c3 === c2 + 1) || (c2 === c1 - 1 && c3 === c2 - 1)) {
+      return true;
+    }
+  }
+  return false;
+};
+
+// Hàm kiểm tra lặp ký tự (VD: aaa, 111)
+const hasRepeatedCharacters = (password) => {
+  for (let i = 0; i < password.length - 2; i++) {
+    if (password[i] === password[i + 1] && password[i] === password[i + 2]) {
+      return true;
+    }
+  }
+  return false;
+};
+
+// --- Chuẩn mật khẩu mạnh dùng chung (Đồng bộ 100% với Backend) ---
 const strongPassword = z
   .string()
   .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
-  .max(50, "Mật khẩu tối đa 50 ký tự") // Chuẩn bảo mật: Giới hạn độ dài tối đa
-  .regex(/[A-Z]/, { message: "Mật khẩu phải chứa ít nhất 1 chữ cái viết hoa" })
+  .max(128, "Mật khẩu không được vượt quá 128 ký tự") // Cập nhật theo max length của BE
   .regex(/[a-z]/, {
     message: "Mật khẩu phải chứa ít nhất 1 chữ cái viết thường",
   })
+  .regex(/[A-Z]/, { message: "Mật khẩu phải chứa ít nhất 1 chữ cái viết hoa" })
   .regex(/[0-9]/, { message: "Mật khẩu phải chứa ít nhất 1 chữ số" })
-  .regex(/[^A-Za-z0-9]/, {
+  // Cập nhật lại regex ký tự đặc biệt cho khớp chuẩn với chuỗi Pattern của BE
+  .regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]/, {
     message: "Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt",
+  })
+  .refine((val) => !COMMON_PASSWORDS.includes(val.toLowerCase()), {
+    message: "Mật khẩu quá phổ biến và dễ đoán",
+  })
+  .refine((val) => !hasSequentialCharacters(val), {
+    message:
+      "Mật khẩu không được chứa chuỗi ký tự liên tiếp (VD: '123', 'abc')",
+  })
+  .refine((val) => !hasRepeatedCharacters(val), {
+    message: "Mật khẩu không được chứa quá nhiều ký tự lặp lại (VD: 'aaa')",
   });
 
 // ==========================================
@@ -38,7 +90,7 @@ export const LoginSchema = z.object({
     .string()
     .min(1, { message: "Vui lòng nhập mật khẩu" })
     .min(6, { message: "Mật khẩu phải có ít nhất 6 ký tự" })
-    .max(50, { message: "Mật khẩu không hợp lệ" }),
+    .max(128, { message: "Mật khẩu không hợp lệ" }), // Cập nhật max
 
   remember: z.boolean().optional(),
 });
@@ -168,7 +220,7 @@ export const EmployerCompanySchema = z.object({
 // --- Form Đổi mật khẩu ---
 export const ChangePasswordSchema = z
   .object({
-    oldPassword: z.string().min(1, "Vui lòng nhập mật khẩu hiện tại").max(50),
+    oldPassword: z.string().min(1, "Vui lòng nhập mật khẩu hiện tại").max(128),
     newPassword: strongPassword,
     confirmPassword: z.string().min(1, "Vui lòng xác nhận mật khẩu mới"),
   })
