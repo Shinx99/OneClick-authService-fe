@@ -262,7 +262,7 @@ const SocialProfileManager = () => {
         </div>
 
         {/* CỘT PHẢI: POSTS FEED */}
-        <div className="lg:col-span-2 space-y-6">
+        {/* <div className="lg:col-span-2 space-y-6">
           <div className="bg-card-bg rounded-[2rem] border-2 border-card-border p-5 shadow-sm">
             <div className="flex gap-4">
               <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 font-bold flex items-center justify-center shrink-0 overflow-hidden">
@@ -339,7 +339,7 @@ const SocialProfileManager = () => {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
 
       {/* MODAL TÙY CHỈNH HỒ SƠ ĐẦY ĐỦ */}

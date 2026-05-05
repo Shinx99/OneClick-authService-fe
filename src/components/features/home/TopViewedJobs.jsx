@@ -5,6 +5,8 @@ import Link from "next/link";
 import { FiMapPin, FiDollarSign, FiEye, FiTrendingUp } from "react-icons/fi";
 import { useTopViewedJobs } from "@/hooks/useTopViewedJobs";
 import FormatSalary from "@/utils/FortmatSalary";
+import getStatusConfig from "@/utils/StatusJob";
+import SaveJobButton from "@/components/features/jobs/SaveJobButton";
 
 const TopViewedJobs = () => {
   const { jobs, isLoading, error } = useTopViewedJobs();
@@ -124,6 +126,9 @@ const TopViewedJobs = () => {
                       <span className="truncate max-w-[90px]">
                         {job.province}
                       </span>
+                      <div className=" items-right  text-[12px] text-text-muted font-normal absolute right-3">
+                        <SaveJobButton jobId={job.jobId} />
+                      </div>
                     </div>
                   </div>
 
@@ -135,6 +140,11 @@ const TopViewedJobs = () => {
                         {job.viewCount?.toLocaleString() || 0}
                       </span>
                       <span className="opacity-60">lượt xem</span>
+                      <span
+                        className={`text-[9px] font-medium px-2 py-0.5 rounded-md border uppercase ${getStatusConfig(job.status).styles} right-2  absolute opacity-90`}
+                      >
+                        {getStatusConfig(job.status).label}
+                      </span>
                     </div>
                   </div>
                 </div>
