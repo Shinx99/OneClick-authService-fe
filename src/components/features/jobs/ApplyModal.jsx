@@ -19,19 +19,40 @@ const ApplyModal = ({ job, onClose, onSuccess }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
   const [note, setNote] = useState("");
+  const [hasApplied, setHasApplied] = useState(false); // ← THÊM STATE
+  const [checkingApplied, setCheckingApplied] = useState(true); // ← THÊM STATE
+
+  // Kiểm tra đã ứng tuyển chưa khi modal mở
+  useEffect(() => {
+    const checkApplied = async () => {
+      if (!job?.id) {
+        setCheckingApplied(false);
+        return;
+      }
+      try {
+        const applied = await applicationService.checkApplied(job.id);
+        setHasApplied(applied);
+      } catch (err) {
+        console.error("Check applied error:", err);
+        setHasApplied(false);
+      } finally {
+        setCheckingApplied(false);
+      }
+    };
+    
+    checkApplied();
+  }, [job?.id]);
 
   useEffect(() => {
     const loadResumes = async () => {
       setIsLoading(true);
       try {
-        // Gọi đúng hàm getResumes từ resumeService
         const resumesList = await resumeService.getResumes();
         console.log("Loaded resumes:", resumesList);
 
         const activeResumes = resumesList?.filter(cv => cv.status === 'active') || [];
         
         setResumes(activeResumes || []);
-        // Chọn CV mặc định nếu có
         const defaultCv = resumesList?.find(cv => cv.isDefault);
         if (defaultCv) {
           setSelectedId(defaultCv.id);
@@ -54,14 +75,12 @@ const ApplyModal = ({ job, onClose, onSuccess }) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Kiểm tra định dạng file
     const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
     if (!validTypes.includes(file.type)) {
       toast.error('Chỉ chấp nhận file PDF');
       return;
     }
 
-    // Kiểm tra dung lượng (tối đa 5MB)
     if (file.size > 5 * 1024 * 1024) {
       toast.error('File không được vượt quá 5MB');
       return;
@@ -72,7 +91,6 @@ const ApplyModal = ({ job, onClose, onSuccess }) => {
       const result = await resumeService.uploadResume(file);
       if (result?.success) {
         toast.success('Tải lên CV thành công!');
-        // Reload danh sách CV
         const updatedResumes = await resumeService.getResumes();
         setResumes(updatedResumes || []);
         if (updatedResumes?.length > 0) {
@@ -89,14 +107,20 @@ const ApplyModal = ({ job, onClose, onSuccess }) => {
     }
   };
 
-   // Xử lý nộp đơn
+  // Xử lý nộp đơn - THÊM KIỂM TRA đã ứng tuyển
   const handleConfirm = async () => {
+    // Kiểm tra đã ứng tuyển chưa
+    if (hasApplied) {
+      toast.error("Bạn đã ứng tuyển vào công việc này rồi!");
+      onClose();
+      return;
+    }
+    
     if (!selectedId) {
       toast.error("Vui lòng chọn 1 hồ sơ");
       return;
     }
     
-    // Log để kiểm tra
     console.log('🔍 Submitting application:', {
       jobId: job?.id,
       resumeId: selectedId,
@@ -111,30 +135,64 @@ const ApplyModal = ({ job, onClose, onSuccess }) => {
     
     setIsSubmitting(true);
     try {
-      // Gọi API ứng tuyển - tạo applicationService.applyJob
-      // truyền object
       await applicationService.applyJob({
         jobId: job.id,
         resumeId: selectedId,
         note: note || ''
       });
-          toast.success("Ứng tuyển thành công! Nhà tuyển dụng sẽ liên hệ với bạn sớm.");
+      toast.success("Ứng tuyển thành công! Nhà tuyển dụng sẽ liên hệ với bạn sớm.");
       
-      // Gọi callback success nếu có
       if (onSuccess) {
         onSuccess();
       }
-      
-      // Đóng modal
       onClose();
     } catch (err) {
       console.error("Apply error:", err);
-      toast.error(err.response?.data?.message || err.message || "Lỗi khi gửi đơn ứng tuyển");
+      // Xử lý lỗi 400 - đã ứng tuyển
+      if (err.response?.status === 400) {
+        toast.error("Bạn đã ứng tuyển vào công việc này rồi!");
+      } else {
+        toast.error(err.response?.data?.message || err.message || "Lỗi khi gửi đơn ứng tuyển");
+      }
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  // Hiển thị loading khi đang kiểm tra
+  if (checkingApplied) {
+    return (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md">
+        <div className="bg-card-bg w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl text-center">
+          <FaSpinner className="animate-spin mx-auto text-green-500 text-3xl mb-4" />
+          <p className="text-text-muted">Đang kiểm tra...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Hiển thị thông báo đã ứng tuyển
+  if (hasApplied) {
+    return (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md">
+        <div className="bg-card-bg w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl text-center">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <FaCheckCircle className="text-green-500 text-3xl" />
+          </div>
+          <h3 className="text-xl font-bold text-text-main mb-2">Đã ứng tuyển</h3>
+          <p className="text-text-muted mb-6">
+            Bạn đã ứng tuyển vào công việc này rồi!
+          </p>
+          <button
+            onClick={onClose}
+            className="w-full py-3 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-all"
+          >
+            Đóng
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md animate-in fade-in duration-300">
@@ -151,7 +209,7 @@ const ApplyModal = ({ job, onClose, onSuccess }) => {
           <h3 className="text-xl font-bold text-text-main tracking-tight">
             Ứng tuyển ngay
           </h3>
-          <p className="text-sm text-text-muted mt-1 italic">{job.company}</p>
+          <p className="text-sm text-text-muted mt-1 italic">{job?.company}</p>
         </div>
 
         <div className="space-y-4 mb-8">
@@ -218,7 +276,7 @@ const ApplyModal = ({ job, onClose, onSuccess }) => {
           )}
         </div>
 
-          {/* Thêm phần ghi chú */}
+        {/* Phần ghi chú */}
         <div className="mt-4">
           <label className="text-[10px] font-black uppercase text-text-muted tracking-[0.2em] px-2">
             Thư giới thiệu
@@ -232,7 +290,7 @@ const ApplyModal = ({ job, onClose, onSuccess }) => {
           />
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 mt-6">
           <button
             onClick={onClose}
             className="flex-1 py-4 text-xs font-black uppercase tracking-widest text-text-muted hover:text-text-main transition-all"
@@ -241,7 +299,7 @@ const ApplyModal = ({ job, onClose, onSuccess }) => {
           </button>
           <Button
             onClick={handleConfirm}
-            disabled={isSubmitting || resumes.length === 0|| isLoading}
+            disabled={isSubmitting || resumes.length === 0 || isLoading}
             className="flex-1 !rounded-[1.25rem] h-[54px] bg-[#10B94F] hover:bg-green-600 shadow-lg shadow-green-600/20 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? (

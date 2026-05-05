@@ -20,6 +20,27 @@ export const jobService = {
     // Return the full paginated wrapper { content, page, size, totalElements, totalPages, last }
     return data.data;
   },
+
+  // -------------------------------------------------------
+  // GET EMPLOYER JOBS FOR MANAGEMENT (ROLE_recruiter)
+  // API mới - chỉ dùng cho recruiter quản lý jobs của mình
+  // -------------------------------------------------------
+  getEmployerJobsForManagement: async (params = {}) => {
+    const cleanParams = {};
+    
+    if (params.page !== undefined) cleanParams.page = Number(params.page);
+    if (params.size !== undefined) cleanParams.size = Number(params.size);
+    if (params.sortBy) cleanParams.sortBy = params.sortBy;
+    if (params.sortDir) cleanParams.sortDir = params.sortDir;
+    if (params.keyword) cleanParams.keyword = params.keyword;
+    if (params.status) cleanParams.status = params.status;
+    
+    const { data } = await apiClient.get("/recruitment/job/employer/jobs", {
+      params: cleanParams,
+    });
+    
+    return data.data;
+  },
   
   getTopViewedJobs: async () => {
     const { data } = await apiClient.get("/recruitment/job/top-6-viewed");
@@ -59,9 +80,9 @@ export const jobService = {
   },
 
   // -------------------------------------------------------
-  // DELETE JOB — soft delete (ROLE_recruiter)
+  // Update status JOB — close (ROLE_recruiter)
   // -------------------------------------------------------
-  deleteJob: async (jobId) => {
+  updateJobStatus: async (jobId) => {
     const { data } = await apiClient.delete(`/recruitment/job/${jobId}`);
     return data;
   },
