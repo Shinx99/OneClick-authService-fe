@@ -2,6 +2,7 @@
 ├── .claude
 │   └── plan-join-company.md
 ├── docs
+│   ├── SETUP-COMPANY-FEATURE.md
 │   ├── deploy
 │   │   └── vercel
 │   ├── system
@@ -12,8 +13,6 @@
 │   ├── images
 │   │   ├── avatar-placeholder.jpg
 │   │   ├── banner.png
-│   │   ├── character-3d.png
-│   │   ├── character-3d-0.png
 │   │   ├── ecofinance-logo.png
 │   │   ├── employer-ai.png
 │   │   ├── employer-hero.png
@@ -87,6 +86,8 @@
 │   │   │   │   │   └── page.jsx
 │   │   │   │   ├── notifications
 │   │   │   │   │   └── page.jsx
+│   │   │   │   ├── notifications
+│   │   │   │   │   └── page.jsx
 │   │   │   │   ├── resume-search
 │   │   │   │   │   └── page.jsx
 │   │   │   │   ├── setting
@@ -103,6 +104,11 @@
 │   │   │   │   └── page.jsx
 │   │   │   └── layout.jsx
 │   │   ├── (main)
+│   │   │   ├── CVMarket
+│   │   │   │   ├── ResumePublicDetail
+│   │   │   │   │   └── [resumeId]
+│   │   │   │   │       └── page.jsx
+│   │   │   │   └── page.jsx
 │   │   │   ├── applications
 │   │   │   │   └── page.jsx
 │   │   │   ├── companies
@@ -209,24 +215,6 @@
 │   │   │   ├── cv
 │   │   │   │   ├── CVManagement.jsx
 │   │   │   │   └── CVManagementContent.jsx
-│   │   │   ├── cvMarket
-│   │   │   │   ├── background
-│   │   │   │   │   └── particalsBackground.jsx
-│   │   │   │   ├── cvMarketChild
-│   │   │   │   │   ├── AIMatchingPanel.jsx
-│   │   │   │   │   ├── JobSelectorPanel.jsx
-│   │   │   │   │   ├── ResumeDetailModal.jsx
-│   │   │   │   │   ├── ResumeMiniCard.jsx
-│   │   │   │   │   └── ResumePublicDetail.jsx
-│   │   │   │   ├── data
-│   │   │   │   │   └── cvMarketData.js
-│   │   │   │   ├── ui
-│   │   │   │   │   └── badge.jsx
-│   │   │   │   ├── cvMarket.jsx
-│   │   │   │   ├── hero.jsx
-│   │   │   │   ├── index.js
-│   │   │   │   ├── searchPromt.jsx
-│   │   │   │   └── stats.jsx
 │   │   │   ├── edit-profile
 │   │   │   │   ├── EditSidebar.jsx
 │   │   │   │   ├── EducationFormModal.jsx
@@ -323,18 +311,12 @@
 │   │   ├── AuthContext.jsx
 │   │   └── SetupPopupContext.jsx
 │   ├── hooks
-│   │   ├── useResume
-│   │   │   ├── useResume.js
-│   │   │   ├── useResumeByResumeId.js
-│   │   │   └── useResumes.js
-│   │   ├── useAdminCandidates.js
-│   │   ├── useAdminEmployers.js
 │   │   ├── useCandidateProfile.js
 │   │   ├── useEmployer.js
 │   │   ├── useJobDetail.js
 │   │   ├── useJobs.js
-│   │   ├── useSavedJob.js
-│   │   └── useTopViewedJobs.js
+│   │   ├── useResume.js
+│   │   └── useSavedJob.js
 │   ├── lib
 │   │   ├── apiClient
 │   │   │   └── api.config.js
@@ -367,13 +349,5 @@
 │       ├── FormatTime.js
 │       ├── FortmatSalary.js
 │       └── Provinces.js
-├── .env.local
-├── .gitignore
-├── eslint.config.mjs
-├── jsconfig.json
-├── next.config.mjs
-├── package.json
-├── package-lock.json
-├── postcss.config.mjs
-├── README.md
-└── tailwind.config.mjs
+├── tailwind.config.mjs
+└── tree.txt
