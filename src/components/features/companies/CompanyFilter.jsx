@@ -48,7 +48,6 @@ const CompanyFilter = ({
   const scaleRef = useRef(null);
   const locationRef = useRef(null);
 
-  // === GIỮ NGUYÊN LOGIC CŨ ===
   useEffect(() => {
     setSelectedKeyword(currentKeyword);
     setSelectedIndustry(currentIndustry);

@@ -12,7 +12,7 @@ import {
 import { useJobs } from "@/hooks/useJobs";
 import SaveJobButton from "@/components/features/jobs/SaveJobButton";
 import FormatSalary from "@/utils/FortmatSalary";
-
+import getStatusConfig from "@/utils/StatusJob";
 const JobList = ({ filters = {}, onPageChange }) => {
   const { jobs, pagination, isLoading, error } = useJobs(filters);
 
@@ -116,7 +116,7 @@ const JobList = ({ filters = {}, onPageChange }) => {
 
                 {/* 3. Meta Data & Action */}
                 <div className="flex items-center justify-between lg:justify-end gap-8 pt-4 lg:pt-0 border-t lg:border-t-0 lg:border-l-2 border-card-border lg:pl-8">
-                  <div className="min-w-[120px]">
+                  <div className="min-w-[40px]">
                     <p className="text-[11px] text-text-muted uppercase tracking-wider mb-1 opacity-70 italic font-normal">
                       Mức lương
                     </p>
@@ -126,13 +126,22 @@ const JobList = ({ filters = {}, onPageChange }) => {
                     </div>
                   </div>
 
-                  <div className="hidden xl:block min-w-[100px]">
+                  <div className="hidden xl:block min-w-[40px]">
                     <p className="text-[11px] text-text-muted uppercase tracking-wider mb-1 opacity-70 italic font-normal">
                       Hình thức
                     </p>
                     <span className="text-[12px] font-normal text-text-main">
                       {job.jobType}
                     </span>
+                  </div>
+                  <div className="min">
+                    <div className="flex items-center gap-1 text-[16px] font-medium text-[#00c853]">
+                      <span
+                        className={`text-[9px] font-medium px-2 py-0.5 rounded-md border uppercase ${getStatusConfig(job.status).styles}`}
+                      >
+                        {getStatusConfig(job.status).label}
+                      </span>
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-3">

@@ -30,6 +30,7 @@ import ApplyModal from "./ApplyModal";
 import AIMatchButton from "./AIMatchButton";
 import { useAuth } from "@/context/AuthContext";
 import { useSavedJob } from "@/hooks/useSavedJob";
+import SaveJobButton from "./SaveJobButton";
 
 // Fallback avatar
 const FALLBACK_LOGO =

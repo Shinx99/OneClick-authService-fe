@@ -81,7 +81,7 @@ const Header = () => {
     { name: "Việc làm", href: "/jobs" },
     { name: "Công ty", href: "/companies" },
     { name: "Tìm ứng viên", href: "/CVMarket" },
-    { name: "Trang cá nhân", href: "/profile" },
+    { name: "Hồ sơ cá nhân", href: "/profile" },
     //{ name: "Thông báo", href: "/notifications" },
   ];
 
@@ -101,10 +101,11 @@ const Header = () => {
       <div className="h-20 w-full bg-background transition-colors"></div>
 
       <header
-        className={`fixed top-0 left-0 right-0 w-full bg-card-bg border-b border-card-border z-50 shadow-sm transition-all duration-300 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-full"
-          }`}
+        className={`fixed top-0 left-0 right-0 w-full bg-card-bg border-b border-card-border z-50 shadow-sm transition-all duration-300 ease-in-out ${
+          isVisible ? "translate-y-0" : "-translate-y-full"
+        }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
           <div className="flex justify-between items-center h-20">
             {/* Logo [cite: 32] */}
             <Link
@@ -126,7 +127,7 @@ const Header = () => {
             </Link>
 
             {/* Nav [cite: 32] */}
-            <nav className="hidden md:flex items-center space-x-10">
+            <nav className="hidden md:flex items-center space-x-10 ">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
@@ -146,7 +147,7 @@ const Header = () => {
                 <>
                   <button
                     onClick={() => setIsRoleModalOpen(true)}
-                    className="px-6 py-2.5 bg-[#00c853] text-white font-bold rounded-full hover:bg-[#00b04a] shadow-md active:scale-95 transition-all text-sm"
+                    className="px-6 py-2.5 bg-[#00c853] text-white font-bold rounded-full hover:bg-[#00b04a] shadow-md active:scale-95 transition-all text-sm  cursor-pointer"
                   >
                     Nhà Tuyển Dụng
                   </button>
@@ -154,7 +155,7 @@ const Header = () => {
                   <div className="relative" ref={dropdownRef}>
                     <button
                       onClick={() => setDropdownOpen(!dropdownOpen)}
-                      className="flex items-center gap-2 px-6 py-2.5 bg-card-bg border border-card-border text-text-main font-semibold rounded-full hover:bg-background transition-all shadow-sm"
+                      className="flex items-center gap-2 px-6 py-2.5 bg-card-bg border border-card-border text-text-main font-semibold rounded-full hover:bg-background transition-all shadow-sm  cursor-pointer"
                     >
                       <FaUserCircle className="w-6 h-6 text-text-muted" />
                       <span className="hidden md:block">
@@ -203,7 +204,7 @@ const Header = () => {
                           <div className="border-b border-card-border">
                             <button
                               onClick={() => toggleSection("jobs")}
-                              className="w-full flex items-center justify-between px-4 py-3 hover:bg-background transition-colors"
+                              className="w-full flex items-center justify-between px-4 py-3 hover:bg-background transition-colors cursor-pointer"
                             >
                               <div className="flex items-center gap-3">
                                 <div className="relative text-text-muted">
@@ -222,7 +223,7 @@ const Header = () => {
                               <div className="flex flex-col pl-12 pr-4 pb-3 space-y-2.5 bg-background/30">
                                 <Link
                                   href="/jobs/saved"
-                                  className="flex items-center gap-2 hover:text-[#00c853]"
+                                  className="flex text-sm text-text-muted gap-2 hover:text-[#00c853]"
                                   onClick={() => setDropdownOpen(false)}
                                 >
                                   Việc làm đã lưu
@@ -243,7 +244,7 @@ const Header = () => {
                           <div className="border-b border-card-border">
                             <button
                               onClick={() => toggleSection("cv")}
-                              className="w-full flex items-center justify-between px-4 py-3 hover:bg-background transition-colors"
+                              className="w-full flex items-center justify-between px-4 py-3 hover:bg-background transition-colors cursor-pointer"
                             >
                               <div className="flex items-center gap-3">
                                 <div className="relative text-text-muted">
@@ -288,7 +289,7 @@ const Header = () => {
                           <div className="border-b border-card-border">
                             <button
                               onClick={() => toggleSection("security")}
-                              className="w-full flex items-center justify-between px-4 py-3 hover:bg-background transition-colors"
+                              className="w-full flex items-center justify-between px-4 py-3 hover:bg-background transition-colors cursor-pointer"
                             >
                               <div className="flex items-center gap-3">
                                 <div className="relative text-text-muted">
@@ -327,7 +328,7 @@ const Header = () => {
                           <div className="mt-2 pt-2 border-t border-card-border">
                             <button
                               onClick={handleLogout}
-                              className="w-full flex items-center gap-3 px-4 py-3 text-[15px] font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all"
+                              className="w-full flex items-center gap-3 px-4 py-3 text-[15px] font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all cursor-pointer"
                             >
                               <FaSignOutAlt className="text-xl" /> Đăng xuất
                             </button>
