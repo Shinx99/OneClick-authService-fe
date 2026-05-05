@@ -1,0 +1,23 @@
+export const INDUSTRIES = [
+  { value: "IT Services", label: "Công nghệ thông tin" },
+  { value: "Finance", label: "Tài chính - Ngân hàng" },
+  { value: "E-commerce", label: "Thương mại điện tử" },
+  { value: "AI/ML", label: "AI & Machine Learning" },
+  { value: "Education", label: "Giáo dục & Đào tạo" },
+  { value: "Healthcare", label: "Y tế & Sức khỏe" },
+  { value: "Manufacturing", label: "Sản xuất" },
+  { value: "Logistics", label: "Logistics & Chuỗi cung ứng" },
+  { value: "Real Estate", label: "Bất động sản" },
+  { value: "Retail", label: "Bán lẻ & Tiêu dùng" },
+  { value: "Tourism", label: "Du lịch & Khách sạn" },
+  { value: "Telecommunications", label: "Viễn thông" },
+  { value: "Construction", label: "Xây dựng & Kiến trúc" },
+  { value: "Agriculture", label: "Nông - Lâm - Ngư nghiệp" },
+  { value: "Media", label: "Truyền thông & Giải trí" },
+  { value: "Food & Beverage", label: "Dịch vụ ăn uống (F&B)" },
+  { value: "Energy", label: "Năng lượng & Môi trường" },
+  { value: "Automotive", label: "Công nghiệp ô tô" },
+  { value: "Fashion", label: "Thời trang & May mặc" },
+  { value: "Consulting", label: "Tư vấn doanh nghiệp" },
+  { value: "Pharmaceuticals", label: "Dược phẩm" }
+];

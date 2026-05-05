@@ -1,4 +1,4 @@
-const VIETNAM_PROVINCES = [
+export const VIETNAM_PROVINCES = [
   "Hà Nội",
   "TP. Hồ Chí Minh",
   "Đà Nẵng",
@@ -63,4 +63,3 @@ const VIETNAM_PROVINCES = [
   "Vĩnh Phúc",
   "Yên Bái",
 ];
-export { VIETNAM_PROVINCES };
