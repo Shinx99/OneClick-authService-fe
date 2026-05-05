@@ -176,7 +176,7 @@ const JobContent = ({ data }) => {
     if (!isAuthenticated) {
       toast.error("Vui lòng đăng nhập để ứng tuyển việc làm", {
         duration: 3000,
-        position: "top-center",
+        position: "right-top",
       });
 
       // Lưu lại URL hiện tại để sau khi login quay lại

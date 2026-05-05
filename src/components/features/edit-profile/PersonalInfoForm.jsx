@@ -1,14 +1,19 @@
 "use client";
 
-import React, { useEffect, useState, forwardRef, useImperativeHandle} from "react";
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 //import { useForm, Controller } from "react-hook-form";
 //import { zodResolver } from "@hookform/resolvers/zod";
 import { useCandidateProfile } from "@/hooks/useCandidateProfile";
 //import { CandidateProfileSchema } from "@/lib/validators/candidate";
 import toast from "react-hot-toast";
+import { VIETNAM_PROVINCES } from "@/utils/Provinces";
 
 const PersonalInfoForm = forwardRef((props, ref) => {
-
   const { profile, isLoading, isUpdating, updateProfile, refreshProfile } =
     useCandidateProfile();
 
@@ -41,7 +46,6 @@ const PersonalInfoForm = forwardRef((props, ref) => {
     }),
   }));
 
-
   useEffect(() => {
     if (profile) {
       setFormData({
@@ -60,14 +64,12 @@ const PersonalInfoForm = forwardRef((props, ref) => {
     }
   }, [profile]);
 
-
   const handleChange = (field) => (e) => {
     setFormData((prev) => ({
       ...prev,
       [field]: e.target.value,
     }));
   };
-
 
   const handleGenderChange = (value) => {
     setFormData((prev) => ({
@@ -79,7 +81,9 @@ const PersonalInfoForm = forwardRef((props, ref) => {
   if (isLoading) {
     return (
       <div className="bg-card-bg p-8 rounded-[2rem] shadow-sm border border-card-border text-center py-20">
-        <div className="text-gray-400 text-lg">Đang tải thông tin cá nhân...</div>
+        <div className="text-gray-400 text-lg">
+          Đang tải thông tin cá nhân...
+        </div>
       </div>
     );
   }
@@ -98,7 +102,9 @@ const PersonalInfoForm = forwardRef((props, ref) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Các input giữ nguyên như trước đây */}
         <div className="space-y-2 mt-3">
-          <label className="text-sm font-black text-text-muted ml-1">Họ và tên đệm</label>
+          <label className="text-sm font-black text-text-muted ml-1">
+            Họ và tên đệm
+          </label>
           <input
             type="text"
             value={formData.surname}
@@ -118,7 +124,9 @@ const PersonalInfoForm = forwardRef((props, ref) => {
         </div>
 
         <div className="space-y-2 mt-3">
-          <label className="text-sm font-black text-text-muted ml-1">Ngày sinh</label>
+          <label className="text-sm font-black text-text-muted ml-1">
+            Ngày sinh
+          </label>
           <input
             type="date"
             value={formData.birthday}
@@ -128,7 +136,9 @@ const PersonalInfoForm = forwardRef((props, ref) => {
         </div>
 
         <div className="space-y-2 mt-3">
-          <label className="text-sm font-black text-text-muted ml-1">Giới tính</label>
+          <label className="text-sm font-black text-text-muted ml-1">
+            Giới tính
+          </label>
           <div className="flex gap-3 mt-2">
             {[
               { label: "Nam", value: true },
@@ -154,18 +164,29 @@ const PersonalInfoForm = forwardRef((props, ref) => {
         </div>
 
         <div className="space-y-2 mt-3">
-          <label className="text-sm font-black text-text-muted ml-1">Tỉnh/Thành phố</label>
-          <input
-            type="text"
-            placeholder="VD: TP. Hồ Chí Minh"
+          <label className="text-sm font-black text-text-muted ml-1">
+            Tỉnh/Thành phố
+          </label>
+          <select
             value={formData.province}
             onChange={handleChange("province")}
             className="w-full mt-2 p-3.5 rounded-2xl border border-card-border bg-background focus:ring-2 focus:ring-[#00c853] outline-none font-medium text-text-main"
-          />
+          >
+            <option value="" disabled hidden>
+              Chọn Tỉnh/Thành phố
+            </option>
+            {VIETNAM_PROVINCES.map((province) => (
+              <option key={province} value={province}>
+                {province}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="space-y-2 mt-3">
-          <label className="text-sm font-black text-text-muted ml-1">Xã/Phường</label>
+          <label className="text-sm font-black text-text-muted ml-1">
+            Xã/Phường
+          </label>
           <input
             type="text"
             placeholder="VD: Phường 1"
@@ -176,7 +197,9 @@ const PersonalInfoForm = forwardRef((props, ref) => {
         </div>
 
         <div className="space-y-2 mt-3">
-          <label className="text-sm font-black text-text-muted ml-1">Email</label>
+          <label className="text-sm font-black text-text-muted ml-1">
+            Email
+          </label>
           <input
             type="email"
             readOnly
@@ -186,7 +209,9 @@ const PersonalInfoForm = forwardRef((props, ref) => {
         </div>
 
         <div className="space-y-2 mt-3">
-          <label className="text-sm font-black text-text-muted ml-1">Số điện thoại</label>
+          <label className="text-sm font-black text-text-muted ml-1">
+            Số điện thoại
+          </label>
           <input
             type="tel"
             readOnly

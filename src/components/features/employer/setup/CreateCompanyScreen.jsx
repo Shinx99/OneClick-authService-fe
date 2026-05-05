@@ -15,6 +15,7 @@ import {
 } from "react-icons/fa";
 import PROVINCES from "@/constants/vn-provinces.json";
 import { useCreateCompany } from "./useCreateCompany";
+import { INDUSTRIES } from "@/utils/Industries";
 
 // ============ Sub-components nội bộ ============
 
@@ -198,11 +199,14 @@ export default function CreateCompanyScreen({ onCancel, onSuccess }) {
                 icon={<FaIndustry />}
                 value={formData.industry}
                 onChange={(e) => setField("industry", e.target.value)}
+                placeholder="Chọn ngành nghề"
               >
-                <option value="IT Services">Công nghệ thông tin</option>
-                <option value="Finance">Tài chính - Ngân hàng</option>
-                <option value="E-commerce">Thương mại điện tử</option>
-                <option value="AI/ML">AI & Machine Learning</option>
+                {/* Dùng map để render danh sách tự động */}
+                {INDUSTRIES.map((item) => (
+                  <option key={item.value} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
               </IconSelect>
             </div>
             <div>

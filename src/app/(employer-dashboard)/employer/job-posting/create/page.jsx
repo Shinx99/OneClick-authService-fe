@@ -15,12 +15,12 @@ export default function JobPostingCreatePage() {
         {/* Header & Tab Buttons */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-2">
           <div>
-            <h2 className="text-2xl font-bold text-slate-800 dark:text-white">
+            {/* <h2 className="text-2xl font-bold text-slate-800 dark:text-white">
               Tạo tin tuyển dụng
             </h2>
             <p className="text-sm text-slate-500 mt-1">
               Điền thông tin chi tiết để thu hút ứng viên tiềm năng
-            </p>
+            </p> */}
           </div>
 
           <div className="flex items-center bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl p-1 shadow-sm w-fit">
