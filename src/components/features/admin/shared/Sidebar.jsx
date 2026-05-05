@@ -133,16 +133,16 @@ const Sidebar = () => {
                 label="Phê duyệt Công ty"
                 active={isActive("/admin/content/companies")}
               />
-              <SubMenuLink
+              {/* <SubMenuLink
                 href="/admin/content/jobs"
                 label="Duyệt Tin tuyển dụng"
                 active={isActive("/admin/content/jobs")}
-              />
+              /> */}
             </div>
           )}
         </div>
 
-        <MenuLink
+        {/* <MenuLink
           href="/admin/categories"
           icon={<FaTags />}
           label="Danh mục"
@@ -159,7 +159,7 @@ const Sidebar = () => {
           icon={<FaCog />}
           label="Cấu hình"
           active={isActive("/admin/settings")}
-        />
+        /> */}
       </nav>
 
       {/* 3. USER FOOTER & LOGOUT */}
