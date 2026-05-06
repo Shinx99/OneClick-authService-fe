@@ -41,7 +41,6 @@ export const useSavedJob = (jobId) => {
       return;
     }
 
-    // Nếu đã đăng nhập thì cho phép chạy 
     const previousState = isSaved;
     setIsSaved(!isSaved);
 

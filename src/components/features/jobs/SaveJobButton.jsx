@@ -9,8 +9,8 @@ const SaveJobButton = ({ jobId }) => {
   const { isSaved, isLoading, toggleSaveJob } = useSavedJob(jobId);
 
   const handleToggle = (e) => {
-    e.preventDefault(); // Chặn không cho thẻ <Link> bên ngoài kích hoạt
-    e.stopPropagation(); // Ngăn sự kiện lan truyền lên trên
+    e.preventDefault();
+    e.stopPropagation();
     toggleSaveJob();
   };
 
@@ -20,8 +20,8 @@ const SaveJobButton = ({ jobId }) => {
       disabled={isLoading}
       className={`transition-all active:scale-90 p-1.5 rounded-full cursor-pointer ${
         isSaved
-          ? "text-red-500 bg-red-50 dark:bg-red-500/10" // Màu khi đã lưu
-          : "text-text-muted hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10" // Màu khi chưa lưu
+          ? "text-red-500 bg-red-50 dark:bg-red-500/10"
+          : "text-text-muted hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10"
       }`}
       title={isSaved ? "Bỏ lưu việc làm" : "Lưu việc làm"}
     >
