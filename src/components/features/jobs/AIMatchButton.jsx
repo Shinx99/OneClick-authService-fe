@@ -28,18 +28,18 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [scanProgress, setScanProgress] = useState(0);
   const [scanMessage, setScanMessage] = useState("Đang phân tích CV...");
-  const { isRecruiter } = useAuth();
+  const { isAuthenticated, isCandidate, isRecruiter } = useAuth();
 
   // State cho danh sách CV (giống hệt ApplyModal)
   const [resumes, setResumes] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
-  
+
   // State cho preview (áp dụng từ DocumentSidebar)
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
-  
+
   // Kết quả match
   const [matchResult, setMatchResult] = useState(null);
 
@@ -53,7 +53,7 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
 
         const activeResumes = resumesList?.filter(cv => cv.status === 'active') || [];
         setResumes(activeResumes || []);
-        
+
         // Chọn CV mặc định nếu có
         const defaultCv = resumesList?.find(cv => cv.isDefault);
         if (defaultCv) {
@@ -68,7 +68,7 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
         setIsLoading(false);
       }
     };
-    
+
     if (isOpen) {
       loadResumes();
     }
@@ -80,15 +80,15 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
       toast.error("Không thể xem trước CV: thiếu tên file");
       return;
     }
-    
+
     try {
       setIsPreviewLoading(true);
       toast.loading("Đang tải CV...", { id: "preview" });
-      
+
       const { blob } = await resumeService.previewResume(fileName);
       const url = URL.createObjectURL(blob);
       setPreviewUrl(url);
-      
+
       toast.dismiss("preview");
       toast.success("Đã tải CV thành công!");
     } catch (error) {
@@ -144,24 +144,24 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
       toast.error("Vui lòng chọn CV để phân tích!");
       return;
     }
-    
+
     if (cvOption === "upload" && !uploadedFile) {
       toast.error("Vui lòng tải file CV lên!");
       return;
     }
-    
+
     setStep("scanning");
     setScanProgress(0);
     setScanMessage("Đang kết nối AI...");
-    
+
     try {
       let result;
-      
+
       // Simulate progress
       const progressInterval = setInterval(() => {
         setScanProgress((prev) => Math.min(prev + 10, 90));
       }, 200);
-      
+
       if (cvOption === "existing" && selectedId) {
         setScanMessage("Đang phân tích CV từ hệ thống...");
         result = await aiMatchService.matchWithResume(selectedId, jobId);
@@ -171,15 +171,15 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
       } else {
         throw new Error("No CV selected");
       }
-      
+
       clearInterval(progressInterval);
       setScanProgress(100);
       setMatchResult(result);
-      
+
       setTimeout(() => {
         setStep("result");
       }, 500);
-      
+
     } catch (error) {
       console.error("Match error:", error);
       toast.error(error.response?.data?.message || error.message || "Có lỗi xảy ra khi phân tích CV");
@@ -212,7 +212,9 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
     }
   };
 
-  if (isRecruiter) return null; 
+  // Guard
+  if (!isAuthenticated || !isCandidate) return null;
+  if (isRecruiter) return null;
 
   return (
     <>
@@ -473,8 +475,8 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
                 </div>
               </div> */}
 
-              {/* Skills Match */}
-              {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+            {/* Skills Match */}
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                 <div className="bg-white rounded-xl p-4">
                   <h3 className="text-sm font-black mb-3 flex items-center gap-2">
                     <FaCheckCircle className="text-green-500" />
@@ -503,8 +505,8 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
                 </div>
               </div> */}
 
-              {/* Improvement Tips */}
-              {/* {matchResult.improvementTips && matchResult.improvementTips.length > 0 && (
+            {/* Improvement Tips */}
+            {/* {matchResult.improvementTips && matchResult.improvementTips.length > 0 && (
                 <div className="mt-4 bg-blue-50 rounded-xl p-4">
                   <h3 className="text-sm font-black mb-2 text-blue-800">💡 Gợi ý cải thiện</h3>
                   <ul className="space-y-1">
@@ -519,17 +521,17 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               {/* Trái: Dashboard phân tích */}
               <div className="lg:col-span-8">
-                <AIAnalysisDashboard 
-                jobId={jobId}  
-                matchResult={matchResult}/>
+                <AIAnalysisDashboard
+                  jobId={jobId}
+                  matchResult={matchResult} />
               </div>
 
               {/* Phải: Chat AI tư vấn */}
               <div className="lg:col-span-4">
                 <div className="sticky top-24">
-                  <AIConsultantChat 
-                  jobId={jobId} 
-                  matchResult={matchResult}/>
+                  <AIConsultantChat
+                    jobId={jobId}
+                    matchResult={matchResult} />
                 </div>
               </div>
             </div>
@@ -559,7 +561,7 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
                 </button>
               </div>
             </div>
-            
+
             {/* Nội dung PDF */}
             <div className="w-full h-full bg-gray-100 dark:bg-gray-900">
               <iframe

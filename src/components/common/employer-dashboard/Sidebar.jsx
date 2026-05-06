@@ -57,11 +57,11 @@ const navItems = [
   //   href: "/employer/social-profile",
   //   icon: MdOutlinePublic,
   // },
-  {
-    name: "Cài đặt tài khoản",
-    href: "/employer/setting",
-    icon: MdOutlineSettings,
-  },
+  // {
+  //   name: "Cài đặt tài khoản",
+  //   href: "/employer/setting",
+  //   icon: MdOutlineSettings,
+  // },
 ];
 
 const Sidebar = () => {
@@ -121,18 +121,16 @@ const Sidebar = () => {
                       onClick={() =>
                         setOpenMenu(openMenu === item.name ? null : item.name)
                       }
-                      className={`w-full flex items-center rounded-xl gap-3 px-4 py-3 transition-colors ${
-                        isParentActive
+                      className={`w-full flex items-center rounded-xl gap-3 px-4 py-3 transition-colors ${isParentActive
                           ? "text-emerald-400"
                           : "text-slate-400 hover:bg-white/5 hover:text-white"
-                      }`}
+                        }`}
                     >
                       <Icon className="w-5 h-5 shrink-0" />
                       <span className="flex-1 text-left">{item.name}</span>
                       <MdChevronRight
-                        className={`transition-transform duration-200 ${
-                          openMenu === item.name ? "rotate-90" : ""
-                        }`}
+                        className={`transition-transform duration-200 ${openMenu === item.name ? "rotate-90" : ""
+                          }`}
                       />
                     </button>
 
@@ -145,11 +143,10 @@ const Sidebar = () => {
                             <li key={child.name}>
                               <Link
                                 href={child.href}
-                                className={`block px-4 py-2 rounded-lg text-sm transition-colors ${
-                                  isActive
+                                className={`block px-4 py-2 rounded-lg text-sm transition-colors ${isActive
                                     ? "bg-emerald-500/10 text-emerald-400 font-medium"
                                     : "text-slate-400 hover:bg-white/5 hover:text-white"
-                                }`}
+                                  }`}
                               >
                                 {child.name}
                               </Link>
@@ -170,11 +167,10 @@ const Sidebar = () => {
                 <li key={item.name}>
                   <Link
                     href={item.href}
-                    className={`flex items-center rounded-xl gap-3 px-4 py-3 transition-colors ${
-                      isActive
+                    className={`flex items-center rounded-xl gap-3 px-4 py-3 transition-colors ${isActive
                         ? "bg-emerald-500/10 text-emerald-400 font-medium"
                         : "text-slate-400 hover:bg-white/5 hover:text-white"
-                    }`}
+                      }`}
                   >
                     <Icon className="w-5 h-5 shrink-0" />
                     <span>{item.name}</span>
