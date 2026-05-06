@@ -174,7 +174,7 @@ const Sidebar = () => {
               Quản trị viên
             </p>
             <p className="text-[10px] text-gray-400 truncate font-medium">
-              admin@oneclick.vn
+              admin@example.com
             </p>
           </div>
         </div>
