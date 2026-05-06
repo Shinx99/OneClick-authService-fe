@@ -144,7 +144,7 @@ const isDeadlinePassed = (dateStr) => {
 
 const JobContent = ({ data }) => {
   const router = useRouter();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, isRecruiter } = useAuth();
   const [showApplyModal, setShowApplyModal] = useState(false);
 
   const { isSaved, isLoading, toggleSaveJob } = useSavedJob(data?.jobId);
@@ -394,33 +394,34 @@ const JobContent = ({ data }) => {
             </div>
 
             {/* Action buttons — nằm cuối card header */}
-            <div className="flex flex-col sm:flex-row gap-3 mt-6">
-              <button
-                // onClick={() => !deadlinePassed && setShowApplyModal(true)}
-                onClick={handleApplyClick}
-                disabled={deadlinePassed}
-                className={`flex-1 py-3.5 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${
-                  deadlinePassed
-                    ? "bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed"
-                    : "bg-[#00c853] hover:bg-[#00b04a] text-white shadow-lg shadow-green-500/20"
-                }`}
-              >
-                <HiPaperAirplane className="text-lg -rotate-45" />
-                {deadlinePassed ? "Đã hết hạn ứng tuyển" : "Ứng tuyển ngay"}
-              </button>
+            {!isRecruiter && (
+              <div className="flex flex-col sm:flex-row gap-3 mt-6">
+                <button
+                  onClick={handleApplyClick}
+                  disabled={deadlinePassed}
+                  className={`flex-1 py-3.5 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${
+                    deadlinePassed
+                      ? "bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed"
+                      : "bg-[#00c853] hover:bg-[#00b04a] text-white shadow-lg shadow-green-500/20"
+                  }`}
+                >
+                  <HiPaperAirplane className="text-lg -rotate-45" />
+                  {deadlinePassed ? "Đã hết hạn ứng tuyển" : "Ứng tuyển ngay"}
+                </button>
 
-              <button
-                onClick={toggleSaveJob}
-                disabled={isLoading}
-                className={`sm:w-auto px-6 py-3.5 border-2 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer ${
-                  isSaved
-                    ? "bg-red-50 border-red-500 text-red-500 dark:bg-red-500/10" // Màu khi đã lưu
-                    : "bg-background border-card-border text-text-main hover:border-[#00c853]" // Màu khi chưa lưu
-                }`}
-              >
-                {isSaved ? "Đã lưu việc làm" : "Lưu việc làm"}
-              </button>
-            </div>
+                <button
+                  onClick={toggleSaveJob}
+                  disabled={isLoading}
+                  className={`sm:w-auto px-6 py-3.5 border-2 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer ${
+                    isSaved
+                      ? "bg-red-50 border-red-500 text-red-500 dark:bg-red-500/10"
+                      : "bg-background border-card-border text-text-main hover:border-[#00c853]"
+                  }`}
+                >
+                  {isSaved ? "Đã lưu việc làm" : "Lưu việc làm"}
+                </button>
+              </div>
+            )}
           </div>
 
           {/* 2. MÔ TẢ CÔNG VIỆC */}

@@ -19,6 +19,7 @@ import { aiMatchService } from "@/services/ai-match.service";
 import toast from "react-hot-toast";
 import AIAnalysisDashboard from "./AIAnalysisDashboard";
 import AIConsultantChat from "./AIConsultantChat";
+import { useAuth } from "@/context/AuthContext";
 
 const AIMatchButton = ({ jobId, jobTitle }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,6 +28,7 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [scanProgress, setScanProgress] = useState(0);
   const [scanMessage, setScanMessage] = useState("Đang phân tích CV...");
+  const { isRecruiter } = useAuth();
 
   // State cho danh sách CV (giống hệt ApplyModal)
   const [resumes, setResumes] = useState([]);
@@ -209,6 +211,8 @@ const AIMatchButton = ({ jobId, jobTitle }) => {
       setPreviewUrl(url);
     }
   };
+
+  if (isRecruiter) return null; 
 
   return (
     <>

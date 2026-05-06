@@ -18,7 +18,7 @@ import RoleSelectionModal from "@/components/features/auth/RoleSelectionModal";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
 const Header = () => {
-  const { isAuthenticated, user, logout, isCandidate } = useAuth();
+  const { isAuthenticated, user, logout, isCandidate, isRecruiter } = useAuth();
   const router = useRouter();
 
   const [isVisible, setIsVisible] = useState(true);
@@ -95,6 +95,8 @@ const Header = () => {
       //router.push("/login");
     }
   };
+
+  if (isRecruiter) return null;
 
   return (
     <>
