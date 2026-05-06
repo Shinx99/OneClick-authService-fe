@@ -167,58 +167,60 @@ const JobPostingForm = ({ jobId }) => {
   };
 
   // ===== SUBMIT =====
-  const onSubmit = async (formData) => {
-    setIsSubmitting(true);
-    try {
-      const payload = {
-        ...formData,
-        salaryMin: formData.salaryMin ? Number(formData.salaryMin) : 0,
-        salaryMax: formData.salaryMax ? Number(formData.salaryMax) : 0,
-        experienceMinYear: formData.experienceMinYear
-          ? Number(formData.experienceMinYear)
-          : 0,
-        skillNames: skills.length > 0 ? skills : undefined,
-      };
+  // ===== SUBMIT =====
+const onSubmit = async (formData) => {
+  setIsSubmitting(true);
+  try {
+    const payload = {
+      ...formData,
+      salaryMin: formData.salaryMin ? Number(formData.salaryMin) : 0,
+      salaryMax: formData.salaryMax ? Number(formData.salaryMax) : 0,
+      experienceMinYear: formData.experienceMinYear
+        ? Number(formData.experienceMinYear)
+        : 0,
+      skillNames: skills.length > 0 ? skills : undefined,
+    };
 
-      // Remove empty string fields to let BE keep old values on update
-      Object.keys(payload).forEach((key) => {
-        if (payload[key] === "" || payload[key] === undefined) {
-          delete payload[key];
-        }
-      });
-
-      let resultJobId = jobId;
-
-      if (isEditMode) {
-        await jobService.updateJob(jobId, payload);
-        toast.success("Cập nhật bài đăng thành công!");
-      } else {
-        const res = await jobService.createJob(payload);
-        resultJobId = res.data?.jobId;
-        toast.success("Tạo bài đăng thành công!");
-      }
-
-      // Upload image if a new file was selected
-      if (imageFile && resultJobId) {
-        try {
-          await jobService.uploadJobImage(resultJobId, imageFile);
-          toast.success("Ảnh đã được upload thành công!");
-        } catch (imgErr) {
-          console.error("Image upload error:", imgErr);
-          toast.error("Bài đăng đã lưu nhưng upload ảnh thất bại");
-        }
-      }
-
-      router.push("/employer/job-posting");
-    } catch (err) {
-      console.error("Submit error:", err);
-      const msg =
-        err.response?.data?.message || "Có lỗi xảy ra, vui lòng thử lại";
-      toast.error(msg);
-    } finally {
-      setIsSubmitting(false);
+    // Chỉ xóa skillNames nếu undefined, KHÔNG xóa các field khác
+    if (payload.skillNames === undefined) {
+      delete payload.skillNames;
     }
-  };
+
+    // Đảm bảo province và commune luôn được gửi (có thể là chuỗi rỗng)
+    // Không xóa bất kỳ field nào khác
+
+    let resultJobId = jobId;
+
+    if (isEditMode) {
+      await jobService.updateJob(jobId, payload);
+      toast.success("Cập nhật bài đăng thành công!");
+    } else {
+      const res = await jobService.createJob(payload);
+      resultJobId = res.data?.jobId;
+      toast.success("Tạo bài đăng thành công!");
+    }
+
+    // Upload image if a new file was selected
+    if (imageFile && resultJobId) {
+      try {
+        await jobService.uploadJobImage(resultJobId, imageFile);
+        toast.success("Ảnh đã được upload thành công!");
+      } catch (imgErr) {
+        console.error("Image upload error:", imgErr);
+        toast.error("Bài đăng đã lưu nhưng upload ảnh thất bại");
+      }
+    }
+
+    router.push("/employer/job-posting");
+  } catch (err) {
+    console.error("Submit error:", err);
+    const msg =
+      err.response?.data?.message || "Có lỗi xảy ra, vui lòng thử lại";
+    toast.error(msg);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   // ===== RESET =====
   const handleReset = () => {

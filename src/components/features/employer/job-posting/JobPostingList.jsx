@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import {
@@ -10,10 +10,9 @@ import {
   MdChevronLeft,
   MdChevronRight,
 } from "react-icons/md";
-import { FaUsers } from "react-icons/fa"; // Thêm icon Users
-import { useJobs } from "@/hooks/useJobs";
+import { FaUsers, FaBriefcase } from "react-icons/fa";
 import { jobService } from "@/services/job.service";
-import Link from "next/link"; // Quan trọng: Thêm Link
+import Link from "next/link";
 
 // ===== STATUS MAPPING =====
 const STATUS_MAP = {
@@ -29,7 +28,14 @@ const STATUS_MAP = {
     label: "Đã đóng",
     cls: "bg-slate-100 text-slate-500 border-slate-200",
   },
-  deleted: { label: "Đã xóa", cls: "bg-red-50 text-red-500 border-red-200" },
+  rejected: {
+    label: "Bị từ chối",
+    cls: "bg-red-50 text-red-600 border-red-200",
+  },
+  deleted: { 
+    label: "Đã xóa", 
+    cls: "bg-gray-100 text-gray-500 border-gray-200" 
+  },
 };
 
 const JOB_TYPE_LABELS = {
@@ -55,41 +61,142 @@ const JobPostingList = () => {
   const router = useRouter();
   const [keyword, setKeyword] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [page, setPage] = useState(0);
-  const [deleteTarget, setDeleteTarget] = useState(null);
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  const filters = {
-    keyword: keyword || undefined,
-    status: statusFilter || undefined,
-    page,
+  const [currentPage, setCurrentPage] = useState(0); // Đổi tên cho rõ
+  const [closeTarget, setCloseTarget] = useState(null); 
+  const [isClosing, setIsClosing] = useState(false);    
+  // State cho dữ liệu
+  const [jobs, setJobs] = useState([]);
+  const [pagination, setPagination] = useState({
+    page: 0,
     size: 10,
-    sortBy: "createdAt",
-    sortDir: "desc",
-  };
+    totalElements: 0,
+    totalPages: 0,
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const { jobs, pagination, isLoading, error, refetch } = useJobs(filters);
+  
 
-  // ===== DELETE =====
-  const handleDelete = async () => {
-    if (!deleteTarget) return;
-    setIsDeleting(true);
+  // Fetch jobs từ API
+  const fetchJobs = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
     try {
-      await jobService.deleteJob(deleteTarget.jobId);
-      toast.success("Đã xóa bài đăng thành công!");
-      setDeleteTarget(null);
-      refetch();
+      const validPage = isNaN(currentPage) || currentPage < 0 ? 0 : currentPage;
+      
+      const params = {
+        page: validPage,
+        size: 10,
+        sortBy: "createdAt",
+        sortDir: "desc",
+      };
+      
+      if (keyword && keyword.trim()) params.keyword = keyword.trim();
+      if (statusFilter) params.status = statusFilter;
+      
+      const response = await jobService.getEmployerJobsForManagement(params);
+      
+      setJobs(response.content || []);
+      setPagination({
+        page: response.page ?? 0,
+        size: response.size ?? 10,
+        totalElements: response.totalElements ?? 0,
+        totalPages: response.totalPages ?? 0,
+      });
+      
+      // Đồng bộ currentPage với response.page
+      if (response.page !== undefined && response.page !== currentPage) {
+        setCurrentPage(response.page);
+      }
     } catch (err) {
-      console.error("Delete error:", err);
-      toast.error(err.response?.data?.message || "Không thể xóa bài đăng");
+      console.error("Fetch jobs error:", err);
+      setError(err.message || "Không thể tải danh sách công việc");
+      toast.error("Không thể tải danh sách công việc");
     } finally {
-      setIsDeleting(false);
+      setIsLoading(false);
+    }
+  }, [currentPage, keyword, statusFilter]);
+
+  useEffect(() => {
+    fetchJobs();
+  }, [fetchJobs]);
+
+
+  // ===== CLOSE =====
+  const handleClose = async () => {
+    if (!closeTarget) return;
+    setIsClosing(true);
+    try {
+      // Gọi API update job status thành "closed"
+      await jobService.updateJobStatus(closeTarget.jobId, { status: "closed" });
+      toast.success("Đã đóng bài đăng thành công!");
+      setCloseTarget(null);
+      fetchJobs(); // Refresh danh sách
+    } catch (err) {
+      console.error("Close error:", err);
+      toast.error(err.response?.data?.message || "Không thể đóng bài đăng");
+    } finally {
+      setIsClosing(false);
     }
   };
 
   const handleSearchChange = (e) => {
     setKeyword(e.target.value);
-    setPage(0);
+    setCurrentPage(0);
+  };
+
+  const handleStatusChange = (e) => {
+    setStatusFilter(e.target.value);
+    setCurrentPage(0);
+  };
+
+  // Xử lý chuyển trang
+  // Xử lý chuyển trang - SỬA LẠI CÁC HÀM NÀY
+  const goToPrevPage = () => {
+    const newPage = pagination.page - 1;
+    if (newPage >= 0) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  const goToNextPage = () => {
+    const newPage = pagination.page + 1;
+    if (newPage < pagination.totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  const goToPage = (newPage) => {
+    if (newPage >= 0 && newPage < pagination.totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  // Tạo mảng số trang hiển thị
+  const getPageNumbers = () => {
+    const totalPages = pagination.totalPages;
+    const currentPageNum = pagination.page;
+    const maxVisible = 5;
+    
+    if (totalPages <= maxVisible) {
+      return Array.from({ length: totalPages }, (_, i) => i);
+    }
+    
+    if (currentPageNum < 3) {
+      return [0, 1, 2, 3, 4];
+    }
+    
+    if (currentPageNum > totalPages - 4) {
+      return Array.from({ length: maxVisible }, (_, i) => totalPages - maxVisible + i);
+    }
+    
+    return [
+      currentPageNum - 2,
+      currentPageNum - 1,
+      currentPageNum,
+      currentPageNum + 1,
+      currentPageNum + 2,
+    ];
   };
 
   return (
@@ -110,16 +217,14 @@ const JobPostingList = () => {
             </div>
             <select
               value={statusFilter}
-              onChange={(e) => {
-                setStatusFilter(e.target.value);
-                setPage(0);
-              }}
+              onChange={handleStatusChange}
               className="px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border-2 border-slate-100 dark:border-slate-700 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 focus:outline-none focus:border-emerald-500 cursor-pointer appearance-none"
             >
               <option value="">Tất cả trạng thái</option>
               <option value="active">Đang tuyển</option>
               <option value="pending">Chờ duyệt</option>
               <option value="closed">Đã đóng</option>
+              <option value="rejected">Bị từ chối</option>
             </select>
           </div>
         </div>
@@ -138,7 +243,7 @@ const JobPostingList = () => {
           <div className="flex flex-col items-center justify-center py-20 gap-3">
             <p className="text-sm text-rose-500 font-bold">{error}</p>
             <button
-              onClick={refetch}
+              onClick={fetchJobs}
               className="px-6 py-2 text-sm font-bold text-emerald-600 bg-emerald-50 rounded-xl hover:bg-emerald-100 transition-colors"
             >
               Thử lại
@@ -192,19 +297,16 @@ const JobPostingList = () => {
                       key={job.jobId}
                       className="hover:bg-slate-50 dark:hover:bg-slate-800/20 transition-colors group"
                     >
-                      {/* Cột 1: Thông tin Job */}
                       <td className="px-6 py-5">
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 flex items-center justify-center shrink-0 overflow-hidden">
                             {job.imgUrl ? (
-                              // eslint-disable-next-line @next/next/no-img-element
                               <img
                                 src={job.imgUrl}
                                 alt=""
                                 className="w-full h-full object-cover"
                               />
                             ) : (
-                              // eslint-disable-next-line react/jsx-no-undef
                               <FaBriefcase className="text-emerald-500 text-lg" />
                             )}
                           </div>
@@ -212,7 +314,7 @@ const JobPostingList = () => {
                             <p
                               onClick={() =>
                                 router.push(
-                                  `/employer/job-posting/edit/${job.jobId}`,
+                                  `/employer/job-posting/edit/${job.jobId}`
                                 )
                               }
                               className="text-[15px] font-bold text-slate-800 dark:text-white group-hover:text-emerald-600 transition-colors cursor-pointer line-clamp-1"
@@ -225,41 +327,33 @@ const JobPostingList = () => {
                           </div>
                         </div>
                       </td>
-
                       <td className="px-6 py-5 text-[13px] font-medium text-slate-600">
                         {JOB_TYPE_LABELS[job.jobType?.toLowerCase()] ||
                           job.jobType ||
                           "—"}
-                      </td>
-
+                       </td>
                       <td className="px-6 py-5 text-[13px] font-medium text-slate-600">
                         {job.province || "—"}
-                      </td>
-
+                       </td>
                       <td className="px-6 py-5">
                         <span
                           className={`inline-flex px-3 py-1.5 rounded-lg text-[11px] font-bold border ${status.cls}`}
                         >
                           {status.label}
                         </span>
-                      </td>
-
-                      {/* CỘT QUAN TRỌNG: LINK SANG KANBAN BOARD */}
+                       </td>
                       <td className="px-6 py-5 text-center">
                         <Link
                           href={`/employer/candidate?jobId=${job.jobId}`}
-                          onClick={(e) => e.stopPropagation()} // Chặn click lan ra dòng
+                          onClick={(e) => e.stopPropagation()}
                           className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 dark:bg-indigo-500/10 dark:hover:bg-indigo-500/20 dark:text-indigo-400 rounded-xl text-[13px] font-bold transition-all hover:scale-105"
                         >
                           <FaUsers size={16} /> {totalApp} CV
-                          {/* Highlight nếu có CV */}
                           {totalApp > 0 && (
                             <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse ml-1"></span>
                           )}
                         </Link>
-                      </td>
-
-                      {/* Thao tác */}
+                       </td>
                       <td className="px-6 py-5">
                         <div className="flex items-center justify-end gap-2">
                           <button
@@ -274,7 +368,7 @@ const JobPostingList = () => {
                           <button
                             onClick={() =>
                               router.push(
-                                `/employer/job-posting/edit/${job.jobId}`,
+                                `/employer/job-posting/edit/${job.jobId}`
                               )
                             }
                             title="Chỉnh sửa"
@@ -283,14 +377,14 @@ const JobPostingList = () => {
                             <MdOutlineEdit className="w-5 h-5" />
                           </button>
                           <button
-                            onClick={() => setDeleteTarget(job)}
-                            title="Xóa"
-                            className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all"
+                            onClick={() => setCloseTarget(job)}
+                            title="Đóng tin"
+                            className="p-2 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-xl transition-all"
                           >
                             <MdOutlineDelete className="w-5 h-5" />
                           </button>
                         </div>
-                      </td>
+                       </td>
                     </tr>
                   );
                 })}
@@ -299,26 +393,49 @@ const JobPostingList = () => {
           </div>
         )}
 
-        {/* Footer Pagination */}
-        {!isLoading && !error && jobs.length > 0 && (
+        {/* Footer Pagination - Dùng inline functions */}
+        {!isLoading && !error && jobs.length > 0 && pagination.totalPages > 1 && (
           <div className="flex items-center justify-between p-6 border-t-2 border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-transparent">
             <p className="text-[13px] font-medium text-slate-500">
-              Trang {pagination.page + 1} / {pagination.totalPages} · Tổng{" "}
-              {pagination.totalElements} tin
+              Hiển thị {jobs.length} / {pagination.totalElements} tin · 
+              Trang {pagination.page + 1} / {pagination.totalPages}
             </p>
             <div className="flex items-center gap-1">
+              {/* Nút Trước */}
               <button
-                onClick={() => setPage((p) => Math.max(0, p - 1))}
+                onClick={() => {
+                  if (pagination.page > 0) {
+                    setCurrentPage(pagination.page - 1);
+                  }
+                }}
                 disabled={pagination.page === 0}
                 className="flex items-center gap-1 px-4 py-2 text-[13px] font-bold text-slate-600 bg-white border-2 border-slate-100 rounded-xl hover:bg-slate-50 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <MdChevronLeft className="w-5 h-5" /> Trước
               </button>
 
+              {/* Các số trang */}
+              {getPageNumbers().map((pageNum) => (
+                <button
+                  key={pageNum}
+                  onClick={() => setCurrentPage(pageNum)}
+                  className={`w-9 h-9 rounded-xl text-sm font-bold transition-all ${
+                    pageNum === currentPage  // ← Dùng currentPage thay vì pagination.page
+                      ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20"
+                      : "text-slate-600 bg-white border-2 border-slate-100 hover:bg-slate-50"
+                  }`}
+                >
+                  {pageNum + 1}
+                </button>
+              ))}
+
+              {/* Nút Tiếp */}
               <button
-                onClick={() =>
-                  setPage((p) => Math.min(pagination.totalPages - 1, p + 1))
-                }
+                onClick={() => {
+                  if (pagination.page < pagination.totalPages - 1) {
+                    setCurrentPage(pagination.page + 1);
+                  }
+                }}
                 disabled={pagination.page >= pagination.totalPages - 1}
                 className="flex items-center gap-1 px-4 py-2 text-[13px] font-bold text-slate-600 bg-white border-2 border-slate-100 rounded-xl hover:bg-slate-50 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
               >
@@ -329,42 +446,42 @@ const JobPostingList = () => {
         )}
       </div>
 
-      {/* ===== MODAL XÓA (Giữ nguyên logic của bạn) ===== */}
-      {deleteTarget && (
+      {/* Modal Xóa */}
+      {closeTarget && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            onClick={() => !isDeleting && setDeleteTarget(null)}
+            onClick={() => !isClosing && setCloseTarget(null)}
           />
           <div className="relative bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200 text-center">
-            <div className="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4">
               <MdOutlineDelete size={32} />
             </div>
             <h3 className="text-xl font-bold text-slate-800 mb-2">
-              Xác nhận xóa tin
+              Xác nhận đóng tin
             </h3>
             <p className="text-[14px] text-slate-500 mb-8 leading-relaxed">
-              Bạn có chắc muốn xóa bài đăng <br />
-              <strong className="text-slate-800">{deleteTarget.title}</strong>?
-              <br /> Hành động này không thể hoàn tác.
+              Bạn có chắc muốn đóng bài đăng <br />
+              <strong className="text-slate-800">{closeTarget.title}</strong>?
+              <br /> Bài đăng sẽ chuyển sang trạng thái "Đã đóng" và không còn hiển thị trên trang công khai.
             </p>
             <div className="flex gap-3">
               <button
-                onClick={() => setDeleteTarget(null)}
-                disabled={isDeleting}
+                onClick={() => setCloseTarget(null)}
+                disabled={isClosing}
                 className="flex-1 px-4 py-3 text-[14px] font-bold text-slate-600 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors"
               >
                 Hủy bỏ
               </button>
               <button
-                onClick={handleDelete}
-                disabled={isDeleting}
-                className="flex-1 px-4 py-3 text-[14px] font-bold text-white bg-rose-500 rounded-xl hover:bg-rose-600 transition-colors flex justify-center items-center gap-2"
+                onClick={handleClose}
+                disabled={isClosing}
+                className="flex-1 px-4 py-3 text-[14px] font-bold text-white bg-amber-500 rounded-xl hover:bg-amber-600 transition-colors flex justify-center items-center gap-2"
               >
-                {isDeleting ? (
+                {isClosing ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
-                  "Xóa bài đăng"
+                  "Đóng bài đăng"
                 )}
               </button>
             </div>

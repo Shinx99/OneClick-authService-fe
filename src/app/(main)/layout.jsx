@@ -19,6 +19,8 @@ export default function MainLayout({ children }) {
   // Danh sách route cho phép recruiter truy cập (không redirect)
   const allowedRoutesForRecruiter = [
     '/CVMarket/ResumePublicDetail',
+    '/jobs',
+     '/jobs/', 
   ];
   const allowedRoutesForAdmin = [
     '/admin',
