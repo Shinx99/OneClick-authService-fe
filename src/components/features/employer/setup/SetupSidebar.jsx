@@ -24,11 +24,11 @@ export default function SetupSidebar({ flowMode, onBack }) {
   const handleBack = () => {
     // Sau khi đã tạo company xong (pending) → đi thẳng dashboard
     if (flowMode === "pending") {
-      router.push("/employer/dashboard");
+      router.push("/employer/job-posting");
       return;
     }
     if (flowMode !== "select") onBack?.();
-    else router.push("/employer/dashboard");
+    else router.push("/employer/job-posting");
   };
 
   return (
@@ -40,7 +40,11 @@ export default function SetupSidebar({ flowMode, onBack }) {
       {/* Logo */}
       <div className="flex items-center gap-3 mb-12 relative z-10">
         <div className="w-11 h-11 bg-[#e8f5e9] rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/10">
-          <svg className="w-7 h-7 text-[#00c853]" viewBox="0 0 24 24" fill="currentColor">
+          <svg
+            className="w-7 h-7 text-[#00c853]"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
             <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,11 17,8 17,8Z" />
           </svg>
         </div>
@@ -83,10 +87,10 @@ export default function SetupSidebar({ flowMode, onBack }) {
         >
           <span className="text-lg">←</span>
           {flowMode === "pending"
-            ? "Về Dashboard"
+            ? "Quay lại"
             : flowMode !== "select"
               ? "Quay lại lựa chọn"
-              : "Về Dashboard"}
+              : "Quay lại"}
         </button>
       </div>
     </div>

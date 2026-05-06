@@ -35,11 +35,7 @@ const JOB_TYPE_OPTIONS = [
   { value: "internship", label: "Thực tập" },
 ];
 
-const STATUS_OPTIONS = [
-  { value: "active", label: "Đang tuyển" },
-  { value: "pending", label: "Chờ duyệt" },
-  { value: "closed", label: "Đã đóng" },
-];
+const STATUS_OPTIONS = [{ value: "active", label: "Đang tuyển" }];
 
 // ===== STYLES =====
 const inputClass =
@@ -168,59 +164,59 @@ const JobPostingForm = ({ jobId }) => {
 
   // ===== SUBMIT =====
   // ===== SUBMIT =====
-const onSubmit = async (formData) => {
-  setIsSubmitting(true);
-  try {
-    const payload = {
-      ...formData,
-      salaryMin: formData.salaryMin ? Number(formData.salaryMin) : 0,
-      salaryMax: formData.salaryMax ? Number(formData.salaryMax) : 0,
-      experienceMinYear: formData.experienceMinYear
-        ? Number(formData.experienceMinYear)
-        : 0,
-      skillNames: skills.length > 0 ? skills : undefined,
-    };
+  const onSubmit = async (formData) => {
+    setIsSubmitting(true);
+    try {
+      const payload = {
+        ...formData,
+        salaryMin: formData.salaryMin ? Number(formData.salaryMin) : 0,
+        salaryMax: formData.salaryMax ? Number(formData.salaryMax) : 0,
+        experienceMinYear: formData.experienceMinYear
+          ? Number(formData.experienceMinYear)
+          : 0,
+        skillNames: skills.length > 0 ? skills : undefined,
+      };
 
-    // Chỉ xóa skillNames nếu undefined, KHÔNG xóa các field khác
-    if (payload.skillNames === undefined) {
-      delete payload.skillNames;
-    }
-
-    // Đảm bảo province và commune luôn được gửi (có thể là chuỗi rỗng)
-    // Không xóa bất kỳ field nào khác
-
-    let resultJobId = jobId;
-
-    if (isEditMode) {
-      await jobService.updateJob(jobId, payload);
-      toast.success("Cập nhật bài đăng thành công!");
-    } else {
-      const res = await jobService.createJob(payload);
-      resultJobId = res.data?.jobId;
-      toast.success("Tạo bài đăng thành công!");
-    }
-
-    // Upload image if a new file was selected
-    if (imageFile && resultJobId) {
-      try {
-        await jobService.uploadJobImage(resultJobId, imageFile);
-        toast.success("Ảnh đã được upload thành công!");
-      } catch (imgErr) {
-        console.error("Image upload error:", imgErr);
-        toast.error("Bài đăng đã lưu nhưng upload ảnh thất bại");
+      // Chỉ xóa skillNames nếu undefined, KHÔNG xóa các field khác
+      if (payload.skillNames === undefined) {
+        delete payload.skillNames;
       }
-    }
 
-    router.push("/employer/job-posting");
-  } catch (err) {
-    console.error("Submit error:", err);
-    const msg =
-      err.response?.data?.message || "Có lỗi xảy ra, vui lòng thử lại";
-    toast.error(msg);
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+      // Đảm bảo province và commune luôn được gửi (có thể là chuỗi rỗng)
+      // Không xóa bất kỳ field nào khác
+
+      let resultJobId = jobId;
+
+      if (isEditMode) {
+        await jobService.updateJob(jobId, payload);
+        toast.success("Cập nhật bài đăng thành công!");
+      } else {
+        const res = await jobService.createJob(payload);
+        resultJobId = res.data?.jobId;
+        toast.success("Tạo bài đăng thành công!");
+      }
+
+      // Upload image if a new file was selected
+      if (imageFile && resultJobId) {
+        try {
+          await jobService.uploadJobImage(resultJobId, imageFile);
+          toast.success("Ảnh đã được upload thành công!");
+        } catch (imgErr) {
+          console.error("Image upload error:", imgErr);
+          toast.error("Bài đăng đã lưu nhưng upload ảnh thất bại");
+        }
+      }
+
+      router.push("/employer/job-posting");
+    } catch (err) {
+      console.error("Submit error:", err);
+      const msg =
+        err.response?.data?.message || "Có lỗi xảy ra, vui lòng thử lại";
+      toast.error(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   // ===== RESET =====
   const handleReset = () => {
@@ -298,10 +294,12 @@ const onSubmit = async (formData) => {
             {/* Title */}
             <div className="col-span-2">
               <label className={labelClass}>
-                Chức danh <span className="text-red-500">*</span>
+                Vị trí ứng tuyển <span className="text-red-500">*</span>
               </label>
               <input
-                {...register("title", { required: "Vui lòng nhập chức danh" })}
+                {...register("title", {
+                  required: "Vui lòng nhập vị trí ứng tuyển",
+                })}
                 placeholder="VD: Senior Java Backend Developer"
                 className={inputClass}
               />
@@ -313,7 +311,10 @@ const onSubmit = async (formData) => {
             {/* Level */}
             <div>
               <label className={labelClass}>Cấp bậc</label>
-              <select {...register("level")} className={`${inputClass} text-slate-600`}>
+              <select
+                {...register("level")}
+                className={`${inputClass} text-slate-600`}
+              >
                 <option value="">Chọn cấp bậc</option>
                 {LEVEL_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -326,7 +327,10 @@ const onSubmit = async (formData) => {
             {/* Job Type */}
             <div>
               <label className={labelClass}>Hình thức làm việc</label>
-              <select {...register("jobType")} className={`${inputClass} text-slate-600`}>
+              <select
+                {...register("jobType")}
+                className={`${inputClass} text-slate-600`}
+              >
                 <option value="">Chọn hình thức</option>
                 {JOB_TYPE_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -349,7 +353,10 @@ const onSubmit = async (formData) => {
             {/* Status */}
             <div>
               <label className={labelClass}>Trạng thái</label>
-              <select {...register("status")} className={`${inputClass} text-slate-600`}>
+              <select
+                {...register("status")}
+                className={`${inputClass} text-slate-600`}
+              >
                 {STATUS_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
                     {opt.label}
@@ -387,7 +394,9 @@ const onSubmit = async (formData) => {
                 Mô tả công việc <span className="text-red-500">*</span>
               </label>
               <textarea
-                {...register("description", { required: "Vui lòng nhập mô tả" })}
+                {...register("description", {
+                  required: "Vui lòng nhập mô tả",
+                })}
                 placeholder="Mô tả vai trò và các trách nhiệm chính..."
                 rows={5}
                 className={`${inputClass} resize-none`}
@@ -403,7 +412,9 @@ const onSubmit = async (formData) => {
                 Yêu cầu ứng viên <span className="text-red-500">*</span>
               </label>
               <textarea
-                {...register("requirement", { required: "Vui lòng nhập yêu cầu" })}
+                {...register("requirement", {
+                  required: "Vui lòng nhập yêu cầu",
+                })}
                 placeholder="Liệt kê các kỹ năng, kinh nghiệm yêu cầu..."
                 rows={5}
                 className={`${inputClass} resize-none`}
@@ -426,24 +437,24 @@ const onSubmit = async (formData) => {
           <div className="grid grid-cols-2 gap-4">
             {/* Salary Min */}
             <div>
-              <label className={labelClass}>Lương tối thiểu (VNĐ)</label>
+              <label className={labelClass}>Lương tối thiểu ($)</label>
               <input
                 type="number"
                 min="0"
                 {...register("salaryMin")}
-                placeholder="VD: 15000000"
+                placeholder="VD: 1500"
                 className={inputClass}
               />
             </div>
 
             {/* Salary Max */}
             <div>
-              <label className={labelClass}>Lương tối đa (VNĐ)</label>
+              <label className={labelClass}>Lương tối đa ($)</label>
               <input
                 type="number"
                 min="0"
                 {...register("salaryMax")}
-                placeholder="VD: 30000000"
+                placeholder="VD: 3000"
                 className={inputClass}
               />
             </div>

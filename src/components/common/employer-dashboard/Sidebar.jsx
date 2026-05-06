@@ -52,11 +52,11 @@ const navItems = [
     href: "/employer/company-profile",
     icon: MdOutlineBusiness,
   },
-  {
-    name: "Thương hiệu cá nhân",
-    href: "/employer/social-profile",
-    icon: MdOutlinePublic,
-  },
+  // {
+  //   name: "Thương hiệu cá nhân",
+  //   href: "/employer/social-profile",
+  //   icon: MdOutlinePublic,
+  // },
   {
     name: "Cài đặt tài khoản",
     href: "/employer/setting",
@@ -88,7 +88,10 @@ const Sidebar = () => {
       <div>
         {/* Logo */}
         <div className="pt-6 pb-8 flex items-center px-6">
-          <Link href="/employer/dashboard" className="flex items-center gap-3">
+          <Link
+            href="/employer/job-posting"
+            className="flex items-center gap-3"
+          >
             <div className="w-9 h-9 bg-[#e8f5e9] rounded-full flex items-center justify-center shrink-0">
               <svg className="w-6 h-6 text-[#00c853]" viewBox="0 0 24 24">
                 <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,11 17,8 17,8Z" />
@@ -118,16 +121,18 @@ const Sidebar = () => {
                       onClick={() =>
                         setOpenMenu(openMenu === item.name ? null : item.name)
                       }
-                      className={`w-full flex items-center rounded-xl gap-3 px-4 py-3 transition-colors ${isParentActive
-                        ? "text-emerald-400"
-                        : "text-slate-400 hover:bg-white/5 hover:text-white"
-                        }`}
+                      className={`w-full flex items-center rounded-xl gap-3 px-4 py-3 transition-colors ${
+                        isParentActive
+                          ? "text-emerald-400"
+                          : "text-slate-400 hover:bg-white/5 hover:text-white"
+                      }`}
                     >
                       <Icon className="w-5 h-5 shrink-0" />
                       <span className="flex-1 text-left">{item.name}</span>
                       <MdChevronRight
-                        className={`transition-transform duration-200 ${openMenu === item.name ? "rotate-90" : ""
-                          }`}
+                        className={`transition-transform duration-200 ${
+                          openMenu === item.name ? "rotate-90" : ""
+                        }`}
                       />
                     </button>
 
@@ -140,10 +145,11 @@ const Sidebar = () => {
                             <li key={child.name}>
                               <Link
                                 href={child.href}
-                                className={`block px-4 py-2 rounded-lg text-sm transition-colors ${isActive
-                                  ? "bg-emerald-500/10 text-emerald-400 font-medium"
-                                  : "text-slate-400 hover:bg-white/5 hover:text-white"
-                                  }`}
+                                className={`block px-4 py-2 rounded-lg text-sm transition-colors ${
+                                  isActive
+                                    ? "bg-emerald-500/10 text-emerald-400 font-medium"
+                                    : "text-slate-400 hover:bg-white/5 hover:text-white"
+                                }`}
                               >
                                 {child.name}
                               </Link>
@@ -164,10 +170,11 @@ const Sidebar = () => {
                 <li key={item.name}>
                   <Link
                     href={item.href}
-                    className={`flex items-center rounded-xl gap-3 px-4 py-3 transition-colors ${isActive
-                      ? "bg-emerald-500/10 text-emerald-400 font-medium"
-                      : "text-slate-400 hover:bg-white/5 hover:text-white"
-                      }`}
+                    className={`flex items-center rounded-xl gap-3 px-4 py-3 transition-colors ${
+                      isActive
+                        ? "bg-emerald-500/10 text-emerald-400 font-medium"
+                        : "text-slate-400 hover:bg-white/5 hover:text-white"
+                    }`}
                   >
                     <Icon className="w-5 h-5 shrink-0" />
                     <span>{item.name}</span>
