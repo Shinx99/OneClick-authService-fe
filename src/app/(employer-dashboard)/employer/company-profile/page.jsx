@@ -16,9 +16,9 @@ export default function CompanyProfilePage() {
       </div>
 
       <CompanyProfileForm />
-      <CompanyDescription />
+      {/* <CompanyDescription />
       <BenefitsPerks />
-      <CulturePhotos />
+      <CulturePhotos /> */}
     </div>
   );
 }

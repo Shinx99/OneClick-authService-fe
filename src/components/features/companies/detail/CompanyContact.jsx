@@ -1,6 +1,6 @@
 import React from "react";
 import { FaGlobe, FaUsers, FaMapMarkerAlt } from "react-icons/fa";
-
+import FormatLocationDisplay from "@/utils/FormatLocation";
 const CompanyContact = ({ contact = {} }) => {
   return (
     <div className="bg-card-bg p-6 rounded-3xl border border-card-border space-y-6 transition-all shadow-sm hover:shadow-md">
@@ -55,9 +55,12 @@ const CompanyContact = ({ contact = {} }) => {
             <p className="text-[10px] text-gray-600 font-black uppercase tracking-wider">
               Địa chỉ
             </p>
-            <p className="text-sm font-medium text-text-muted leading-snug">
-              {contact.address || "Đang cập nhật địa chỉ..."}
-            </p>
+            <div className="flex items-center gap-2 text-gray-400 text-xs mb-5 font-medium">
+              <p>
+                {FormatLocationDisplay(contact.provinceCode) ||
+                  "Đang cập nhật địa chỉ..."}
+              </p>
+            </div>
           </div>
         </div>
       </div>
