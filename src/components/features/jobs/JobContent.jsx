@@ -201,7 +201,7 @@ const JobContent = ({ data }) => {
       });
 
       // Nếu là employer, chuyển hướng về trang chủ hoặc register candidate
-      if (user?.roles === "recruiter") {
+      if (user?.roles?.includes("recruiter") || user?.roles?.includes("ROLE_recruiter")) {
         setTimeout(() => {
           router.push("/");
         }, 1500);
@@ -399,11 +399,10 @@ const JobContent = ({ data }) => {
                 <button
                   onClick={handleApplyClick}
                   disabled={deadlinePassed}
-                  className={`flex-1 py-3.5 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${
-                    deadlinePassed
-                      ? "bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed"
-                      : "bg-[#00c853] hover:bg-[#00b04a] text-white shadow-lg shadow-green-500/20"
-                  }`}
+                  className={`flex-1 py-3.5 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${deadlinePassed
+                    ? "bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed"
+                    : "bg-[#00c853] hover:bg-[#00b04a] text-white shadow-lg shadow-green-500/20"
+                    }`}
                 >
                   <HiPaperAirplane className="text-lg -rotate-45" />
                   {deadlinePassed ? "Đã hết hạn ứng tuyển" : "Ứng tuyển ngay"}
@@ -412,14 +411,14 @@ const JobContent = ({ data }) => {
                 <button
                   onClick={toggleSaveJob}
                   disabled={isLoading}
-                  className={`sm:w-auto px-6 py-3.5 border-2 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer ${
-                    isSaved
-                      ? "bg-red-50 border-red-500 text-red-500 dark:bg-red-500/10"
-                      : "bg-background border-card-border text-text-main hover:border-[#00c853]"
-                  }`}
+                  className={`sm:w-auto px-6 py-3.5 border-2 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer ${isSaved
+                    ? "bg-red-50 border-red-500 text-red-500 dark:bg-red-500/10"
+                    : "bg-background border-card-border text-text-main hover:border-[#00c853]"
+                    }`}
                 >
                   {isSaved ? "Đã lưu việc làm" : "Lưu việc làm"}
                 </button>
+
               </div>
             )}
           </div>
@@ -511,35 +510,39 @@ const JobContent = ({ data }) => {
             {/* AI Phân tích hồ sơ */}
             <AIMatchButton jobId={data.jobId} jobTitle={data.title} />
 
+
             {/* Company Card nhỏ */}
-            <div className="bg-card-bg rounded-[24px] p-5 border-2 border-card-border">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-12 h-12 shrink-0 rounded-xl border-2 border-card-border overflow-hidden relative bg-background flex items-center justify-center">
-                  <Image
-                    src={companyLogo}
-                    alt={`Logo ${companyName}`}
-                    fill
-                    className="object-contain p-1.5"
-                  />
+            {!isRecruiter && (
+              <div className="bg-card-bg rounded-[24px] p-5 border-2 border-card-border">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 shrink-0 rounded-xl border-2 border-card-border overflow-hidden relative bg-background flex items-center justify-center">
+                    <Image
+                      src={companyLogo}
+                      alt={`Logo ${companyName}`}
+                      fill
+                      className="object-contain p-1.5"
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[13px] font-bold text-text-main truncate">
+                      {companyName}
+                    </p>
+                    <p className="text-[11px] text-text-muted">
+                      {formatLocation(data.province, data.commune)}
+                    </p>
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <p className="text-[13px] font-bold text-text-main truncate">
-                    {companyName}
-                  </p>
-                  <p className="text-[11px] text-text-muted">
-                    {formatLocation(data.province, data.commune)}
-                  </p>
-                </div>
+                {data.companyId && (
+                  <Link
+                    href={`/companies/${data.companyId}`}
+                    className="block text-center text-[13px] font-bold text-[#00c853] hover:underline py-2 rounded-xl bg-emerald-500/5 hover:bg-emerald-500/10 transition-colors"
+                  >
+                    Xem trang công ty
+                  </Link>
+                )}
               </div>
-              {data.companyId && (
-                <Link
-                  href={`/companies/${data.companyId}`}
-                  className="block text-center text-[13px] font-bold text-[#00c853] hover:underline py-2 rounded-xl bg-emerald-500/5 hover:bg-emerald-500/10 transition-colors"
-                >
-                  Xem trang công ty
-                </Link>
-              )}
-            </div>
+            )}
+
           </div>
         </div>
       </div>
@@ -549,7 +552,7 @@ const JobContent = ({ data }) => {
         <ApplyModal
           job={{ id: data.jobId, company: companyName, title: data.title }}
           onClose={() => setShowApplyModal(false)}
-          //onSuccess={handleApplySuccess}
+        //onSuccess={handleApplySuccess}
         />
       )}
     </>
