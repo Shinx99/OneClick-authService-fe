@@ -10,7 +10,10 @@ import { FaCheckCircle, FaClock, FaArrowRight } from "react-icons/fa";
  * @param {string}  companyName - Tên công ty
  * @param {string}  flowType    - 'create' | 'join'
  */
-export default function PendingApprovalScreen({ companyName, flowType = "create" }) {
+export default function PendingApprovalScreen({
+  companyName,
+  flowType = "create",
+}) {
   const router = useRouter();
   const isJoin = flowType === "join";
 
@@ -89,18 +92,16 @@ export default function PendingApprovalScreen({ companyName, flowType = "create"
             <p className="text-[13px] font-semibold text-text-muted">
               Bắt đầu tuyển dụng
             </p>
-            <p className="text-[11px] text-text-muted">
-              Mở khoá sau khi duyệt
-            </p>
+            <p className="text-[11px] text-text-muted">Mở khoá sau khi duyệt</p>
           </div>
         </div>
       </div>
 
       <button
-        onClick={() => router.push("/employer/dashboard")}
+        onClick={() => router.push("/employer/job-posting")}
         className="px-10 py-4 bg-emerald-600 text-white text-[13px] uppercase tracking-widest font-medium rounded-xl hover:bg-emerald-700 transition-all active:scale-95 shadow-lg shadow-emerald-500/20 flex items-center gap-2"
       >
-        Về Dashboard <FaArrowRight size={12} />
+        Quay lại <FaArrowRight size={12} />
       </button>
     </div>
   );

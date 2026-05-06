@@ -149,7 +149,7 @@ export function useCreateCompany({ onSuccess } = {}) {
         toast.error("Bạn đã có công ty, chuyển tới Dashboard...", {
           id: "setup",
         });
-        setTimeout(() => router.push("/employer/dashboard"), 1200);
+        setTimeout(() => router.push("/employer/job-posting"), 1200);
         return;
       }
       if (/hasn't verified profile/i.test(message)) {
@@ -159,7 +159,7 @@ export function useCreateCompany({ onSuccess } = {}) {
           "Hồ sơ employer chưa sẵn sàng, vui lòng đăng nhập lại.",
           { id: "setup" },
         );
-        setTimeout(() => router.push("/employer/dashboard"), 1200);
+        setTimeout(() => router.push("/employer/job-posting"), 1200);
         return;
       }
 
