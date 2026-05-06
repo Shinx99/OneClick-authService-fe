@@ -12,6 +12,7 @@ import {
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
 import ChatQuickReplies from "./ChatQuickReplies";
+import ChatHandoffBanner from "./ChatHandoffBanner"; 
 import { useAuth } from "@/context/AuthContext";
 import { useChat } from "./hooks/useChat";
 
@@ -37,11 +38,16 @@ export default function ChatWidget({ isMinimized, onMinimize, onClose }) {
     closeAndCreateNew, 
     createNewConversation,
     showHandoffBanner, 
+    setShowHandoffBanner,
   } = useChat();
 
   const handleQuickReply = (message) => {
     setInput(message);
     setTimeout(() => sendCurrentMessage(), 100);
+  };
+
+  const handleHideHandoffBanner = () => {
+    setShowHandoffBanner(false);
   };
 
   return (
@@ -97,12 +103,21 @@ export default function ChatWidget({ isMinimized, onMinimize, onClose }) {
       {/* BODY AREA */}
       {!isMinimized && mode === "ai" && (
         <div className="flex flex-1 flex-col overflow-hidden bg-background">
-          {/* ChatQuickReplies tự quản lý việc ẩn sau 10s */}
-          <ChatQuickReplies
-            userType={userType}
-            mode={mode}
-            onSelect={handleQuickReply}
-          />
+          {/* Quick Replies - chỉ hiển thị khi mode AI */}
+          {showHandoffBanner ? (
+            <div className="px-4 pt-3">
+              <ChatHandoffBanner 
+                onClose={handleHideHandoffBanner}
+                // autoCloseSeconds={15}
+              />
+            </div>
+          ) : (
+            <ChatQuickReplies
+              userType={userType}
+              mode={mode}
+              onSelect={handleQuickReply}
+            />
+          )}
 
           <ChatMessages
             messages={messages}
@@ -110,7 +125,7 @@ export default function ChatWidget({ isMinimized, onMinimize, onClose }) {
             loadingMore={loadingMore}
             hasMore={hasMore}
             onLoadMore={loadMoreMessages}
-            showHandoffBanner={showHandoffBanner}
+            showHandoffBanner={false}
           />
           <ChatInput
             value={input}
@@ -128,13 +143,24 @@ export default function ChatWidget({ isMinimized, onMinimize, onClose }) {
       {/* Khi không phải mode AI, chỉ hiển thị messages và input */}
       {!isMinimized && mode !== "ai" && (
         <div className="flex flex-1 flex-col overflow-hidden bg-background">
+          
+          {/* Hiển thị banner nếu đang chờ admin */}
+          {showHandoffBanner && (
+            <div className="px-4 pt-3">
+              <ChatHandoffBanner 
+                onClose={handleHideHandoffBanner}
+                // autoCloseSeconds={15}
+              />
+            </div>
+          )}
+          
           <ChatMessages
             messages={messages}
             loading={loading}
             loadingMore={loadingMore}
             hasMore={hasMore}
             onLoadMore={loadMoreMessages}
-            showHandoffBanner={showHandoffBanner}
+            showHandoffBanner={false}
           />
           <ChatInput
             value={input}

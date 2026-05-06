@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { closeUserConversation } from "@/services/chat.service"; 
 import {
   FaUserCircle,
   FaCog,
@@ -27,7 +28,15 @@ const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Giữ nguyên State quản lý việc đóng/mở của các mục trong Dropdown [cite: 32]
+  //  state initializer
+  // const [conversationId, setConversationId] = useState(() => {
+  //   if (typeof window !== 'undefined') {
+  //     return localStorage.getItem('currentConversationId') || null;
+  //   }
+  //   return null;
+  // });
+
+  //  State quản lý việc đóng/mở của các mục trong Dropdown [cite: 32]
   const [openSections, setOpenSections] = useState({
     jobs: true,
     cv: true,
@@ -87,6 +96,22 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
+
+      const conversationId = localStorage.getItem('currentConversationId');
+
+      // Đóng conversation nếu có
+      if (conversationId) {
+        console.log("🔒 Closing conversation before logout:", conversationId);
+        try {
+          await closeUserConversation(conversationId);
+          console.log("✅ Conversation closed successfully");
+          // Xóa conversationId khỏi localStorage
+          localStorage.removeItem('currentConversationId');
+        } catch (chatError) {
+          console.error("Failed to close conversation:", chatError);
+        }
+      }
+
       await logout();
     } catch (error) {
       console.log("Lỗi trong quá trình đăng xuất:", error);

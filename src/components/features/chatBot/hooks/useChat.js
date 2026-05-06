@@ -25,6 +25,14 @@ export function useChat() {
   const [showHandoffBanner, setShowHandoffBanner] = useState(false);
   const bannerTimeoutRef = useRef(null);
 
+   // Lưu conversationId vào localStorage khi thay đổi
+  useEffect(() => {
+    if (conversationId && !isAdminRoute) {
+      localStorage.setItem('currentConversationId', conversationId);
+      console.log("💾 Saved conversationId to localStorage:", conversationId);
+    }
+  }, [conversationId, isAdminRoute]);
+
   // Parse messages từ API
   const parseMessages = useCallback((msgs) => {
     if (!msgs || !msgs.length) return [];
@@ -157,6 +165,9 @@ export function useChat() {
       const result = response?.data?.data || response?.data;
       
       console.log("Closed conversation:", conversationId);
+
+           // Xóa conversationId khỏi localStorage
+      localStorage.removeItem('currentConversationId');
       
       // Cập nhật messages và mode
       if (result?.messages) {
@@ -467,13 +478,13 @@ export function useChat() {
       setMode("waiting");
       setShowHandoffBanner(true);
 
-      // Tự động ẩn sau 30 giây nếu admin không claim
+      // Tự động ẩn sau 20 giây nếu admin không claim
       if (bannerTimeoutRef.current) {
         clearTimeout(bannerTimeoutRef.current);
       }
       bannerTimeoutRef.current = setTimeout(() => {
         setShowHandoffBanner(false);
-      }, 30000);
+      }, 20000);
 
     } catch (error) {
       console.error("Request handoff failed:", error);
@@ -516,5 +527,6 @@ export function useChat() {
     closeCurrentConversation,
     closeAndCreateNew,
     showHandoffBanner,
+    setShowHandoffBanner,
   };
 }
