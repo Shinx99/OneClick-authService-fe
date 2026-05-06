@@ -406,9 +406,11 @@ const JobPostingList = () => {
                 onClick={() => {
                   if (pagination.page > 0) {
                     setCurrentPage(pagination.page - 1);
-                  }
+                  }else{
+                    toast.error("Bạn đang ở trang đầu tiên");}
+                
                 }}
-                disabled={pagination.page === 0}
+                disabled={pagination.page <= 0}
                 className="flex items-center gap-1 px-4 py-2 text-[13px] font-bold text-slate-600 bg-white border-2 border-slate-100 rounded-xl hover:bg-slate-50 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <MdChevronLeft className="w-5 h-5" /> Trước
@@ -463,7 +465,8 @@ const JobPostingList = () => {
             <p className="text-[14px] text-slate-500 mb-8 leading-relaxed">
               Bạn có chắc muốn đóng bài đăng <br />
               <strong className="text-slate-800">{closeTarget.title}</strong>?
-              <br /> Bài đăng sẽ chuyển sang trạng thái "Đã đóng" và không còn hiển thị trên trang công khai.
+              <br /> 
+              Bài đăng sẽ chuyển sang trạng thái &quot;Đã đóng&quot; và không còn hiển thị trên trang công khai.
             </p>
             <div className="flex gap-3">
               <button
