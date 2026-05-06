@@ -5,19 +5,7 @@ import { MdOutlineCameraAlt } from "react-icons/md";
 import { FiEdit2, FiSave, FiX } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { companyService } from "@/services/company.service";
-
-const INDUSTRY_OPTIONS = [
-  "Phát triển phần mềm",
-  "Tài chính & Ngân hàng",
-  "Marketing",
-  "Y tế",
-  "Giáo dục",
-  "Thương mại điện tử",
-  "Bất động sản",
-  "Sản xuất",
-  "Logistics",
-  "Khác",
-];
+import { INDUSTRIES } from "@/utils/Industries";
 
 const SIZE_OPTIONS = [
   { value: "1-50", label: "1-50 nhân viên" },
@@ -206,10 +194,9 @@ const CompanyProfileForm = () => {
     }[status] || null;
 
   const inputClass = (disabled) =>
-    `w-full px-4 py-2.5 border rounded-lg text-sm transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 ${
-      disabled
-        ? "bg-slate-50 border-slate-200 text-slate-700 cursor-not-allowed"
-        : "bg-white border-slate-300 text-slate-700"
+    `w-full px-4 py-2.5 border rounded-lg text-sm transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 ${disabled
+      ? "bg-slate-50 border-slate-200 text-slate-700 cursor-not-allowed"
+      : "bg-white border-slate-300 text-slate-700"
     }`;
 
   return (
@@ -401,9 +388,9 @@ const CompanyProfileForm = () => {
               className={inputClass(!editMode)}
             >
               <option value="">-- Chọn ngành --</option>
-              {INDUSTRY_OPTIONS.map((ind) => (
-                <option key={ind} value={ind}>
-                  {ind}
+              {INDUSTRIES.map((item) => (
+                <option key={item.value} value={item.value}>
+                  {item.label}
                 </option>
               ))}
             </select>
@@ -454,7 +441,7 @@ const CompanyProfileForm = () => {
             />
           </div>
 
-          <div className="col-span-2">
+          {/* <div className="col-span-2">
             <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
               Giấy phép kinh doanh (URL)
             </label>
@@ -482,7 +469,7 @@ const CompanyProfileForm = () => {
               disabled={!editMode}
               className={inputClass(!editMode)}
             />
-          </div>
+          </div> */}
 
           <div className="col-span-2">
             <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
